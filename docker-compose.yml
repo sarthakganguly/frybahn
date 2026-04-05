@@ -1,0 +1,18 @@
+services:
+  game-portal:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: gamevault
+    ports:
+      - "90:90"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:90/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    labels:
+      - "com.gamevault.description=GameVault Browser Gaming Portal"
+      - "com.gamevault.version=1.0.0"

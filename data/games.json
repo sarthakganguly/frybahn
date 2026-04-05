@@ -1,0 +1,32 @@
+[
+  {
+    "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "title": "Pac-Man Classic",
+    "slug": "pacman",
+    "category": "arcade",
+    "thumbnail": "",
+    "emoji": "👾",
+    "description": "Navigate the maze, eat all the dots, and avoid the ghosts in this timeless arcade classic.",
+    "players": 48210,
+    "rating": 4.7,
+    "badge": "popular",
+    "path": "/games/pacman/index.html",
+    "isPlayable": true,
+    "license": "MIT"
+  },
+  {
+    "id": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+    "title": "Tetris",
+    "slug": "tetris",
+    "category": "puzzle",
+    "thumbnail": "",
+    "emoji": "🟦",
+    "description": "Stack falling blocks to clear lines and rack up points in the legendary puzzle game.",
+    "players": 62400,
+    "rating": 4.9,
+    "badge": "trending",
+    "path": "/games/tetris/index.html",
+    "isPlayable": true,
+    "license": "MIT"
+  }
+]
