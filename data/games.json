@@ -28,5 +28,50 @@
     "path": "/games/tetris/index.html",
     "isPlayable": true,
     "license": "MIT"
+  },
+  {
+    "id": "c3d4e5f6-a7b8-9012-cdef-123456789012",
+    "title": "2048",
+    "slug": "2048",
+    "category": "puzzle",
+    "thumbnail": "",
+    "emoji": "🔢",
+    "description": "Join the numbers and get to the 2048 tile in this highly addictive sliding puzzle.",
+    "players": 142000,
+    "rating": 4.8,
+    "badge": "popular",
+    "path": "/games/2048/index.html",
+    "isPlayable": true,
+    "license": "MIT"
+  },
+  {
+    "id": "e5f6a7b8-c9d0-1234-ef01-345678901234",
+    "title": "Hextris",
+    "slug": "hextris",
+    "category": "puzzle",
+    "thumbnail": "",
+    "emoji": "🛑",
+    "description": "Rotate the hexagon to prevent the blocks from stacking outside the outer grey hexagon.",
+    "players": 55000,
+    "rating": 4.7,
+    "badge": "new",
+    "path": "/games/hextris/index.html",
+    "isPlayable": true,
+    "license": "GPL-3.0"
+  },
+  {
+    "id": "f6a7b8c9-d0e1-2345-f012-456789012345",
+    "title": "Retro Racer",
+    "slug": "racer",
+    "category": "racing",
+    "thumbnail": "",
+    "emoji": "🏎️",
+    "description": "A classic pseudo-3D arcade racing game inspired by OutRun. Shift gears and dodge traffic!",
+    "players": 72500,
+    "rating": 4.8,
+    "badge": "popular",
+    "path": "/games/retro-racer/index.html",
+    "isPlayable": true,
+    "license": "MIT"
   }
 ]
