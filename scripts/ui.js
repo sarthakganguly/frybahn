@@ -5,7 +5,7 @@
 import state from './state.js';
 import { escapeHtml, formatPlayers, qs, qsa } from './utils.js';
 import { groupByCategory, getCategories } from './gameLoader.js';
-import { openGame } from './app.js';
+import { navigate } from './router.js';
 
 // ── RENDER GAME CARD ────────────────────
 
@@ -40,11 +40,11 @@ export function renderCard(game) {
     </div>
   `;
 
-  card.addEventListener('click', () => openGame(game));
+  card.addEventListener('click', () => navigate(`/play/${game.slug}`));
   card.addEventListener('keydown', e => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
-      openGame(game);
+      navigate(`/play/${game.slug}`);
     }
   });
 
@@ -156,7 +156,8 @@ function handleKeyNav(e) {
   const overlay = qs('.game-overlay');
   if (overlay && overlay.classList.contains('open')) {
     if (e.key === 'Escape') {
-      import('./app.js').then(({ closeGame }) => closeGame());
+      // Replace the closeGame() import with router navigation
+      import('./router.js').then(({ navigate }) => navigate('/'));
     }
     return;
   }
