@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: gamevault
+    container_name: freibahn
     ports:
       - "90:90"
     restart: unless-stopped
@@ -14,5 +14,5 @@ services:
       retries: 3
       start_period: 5s
     labels:
-      - "com.gamevault.description=GameVault Browser Gaming Portal"
-      - "com.gamevault.version=1.0.0"
+      - "com.freibahn.description=Freibahn Browser Gaming Portal"
+      - "com.freibahn.version=1.0.0"

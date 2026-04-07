@@ -156,8 +156,7 @@ function handleKeyNav(e) {
   const overlay = qs('.game-overlay');
   if (overlay && overlay.classList.contains('open')) {
     if (e.key === 'Escape') {
-      // Replace the closeGame() import with router navigation
-      import('./router.js').then(({ navigate }) => navigate('/'));
+      navigate('/');
     }
     return;
   }

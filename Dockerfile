@@ -1,5 +1,5 @@
 # =========================================
-# GameVault — Dockerfile
+# Freibahn — Dockerfile
 # nginx:alpine static file server
 # =========================================
 
