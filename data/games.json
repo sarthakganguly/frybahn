@@ -150,7 +150,7 @@
     "license": "MIT"
   },
   {
-    "id": "c4d5e6f7-a8b9-c0d1-e2f3-a4b5c6d7e8f9",
+    "id": "c4d5e6f7-a8b9-c0d1-e2f3-a4b5-c6d7e8f9",
     "title": "Breaklock",
     "slug": "breaklock",
     "category": "puzzle",
@@ -165,7 +165,7 @@
     "license": "MIT"
   },
   {
-    "id": "f9a0b1c2-d3e4-f5a6-b7c8-d9e0f1a2b3c4",
+    "id": "f9a0b1c2-d3e4-f5a6-b7c8-d9e0-f1a2b3c4",
     "title": "Particle Clicker",
     "slug": "particle-clicker",
     "category": "strategy",
@@ -240,7 +240,7 @@
     "license": "MIT"
   },
   {
-    "id": "217ddef0-e7ad-4883-be1f-4f8df8759699",
+    "id": "six-and-seven-id-placeholder",
     "title": "Six and Seven",
     "slug": "six-and-seven",
     "category": "action",
@@ -251,6 +251,81 @@
     "rating": 4.7,
     "badge": "new",
     "path": "/games/six-and-seven/docs/index.html",
+    "isPlayable": true,
+    "license": "MIT"
+  },
+  {
+    "id": "0a35a178-7cdd-47ac-bd86-19116fb1bf96",
+    "title": "Clawstrike",
+    "slug": "clawstrike",
+    "category": "action",
+    "thumbnail": "",
+    "emoji": "🐾",
+    "description": "A fast-paced 2D action platformer. Avenge your human and cut through waves of enemies in this challenging die-and-retry game.",
+    "players": 2100,
+    "rating": 4.8,
+    "badge": "new",
+    "path": "/games/clawstrike/index.html",
+    "isPlayable": true,
+    "license": "MIT"
+  },
+  {
+    "id": "d573354b-dd50-4ab7-a195-2828dbe9c87a",
+    "title": "Battle Commander",
+    "slug": "battle-commander",
+    "category": "strategy",
+    "thumbnail": "",
+    "emoji": "⚔️",
+    "description": "Lead your army to victory in this tactical medieval battle simulator. Strategic planning and resource management are key to conquest.",
+    "players": 1800,
+    "rating": 4.7,
+    "badge": "new",
+    "path": "/games/battle-commander/index.html",
+    "isPlayable": true,
+    "license": "MIT"
+  },
+  {
+    "id": "95a79166-8a14-415b-bd5d-3d136254bbfa",
+    "title": "Triskaideka",
+    "slug": "triskaideka",
+    "category": "arcade",
+    "thumbnail": "",
+    "emoji": "👾",
+    "description": "AARGH! Triskaideka Attacks! A retro-style space shooter challenge. Defend the galaxy in this fast-paced arcade experience.",
+    "players": 1400,
+    "rating": 4.6,
+    "badge": "new",
+    "path": "/games/triskaideka/index.html",
+    "isPlayable": true,
+    "license": "MIT"
+  },
+  {
+    "id": "98037f5d-0c98-41ea-8932-574bc143df7d",
+    "title": "Thirteen Terrible Stunts",
+    "slug": "stunts",
+    "category": "arcade",
+    "thumbnail": "",
+    "emoji": "🎪",
+    "description": "A collection of 13 fast-paced microgames featuring daring stunts. Can you survive them all in this 2024 JS13K entry?",
+    "players": 1600,
+    "rating": 4.5,
+    "badge": "new",
+    "path": "/games/stunts/index.html",
+    "isPlayable": true,
+    "license": "MIT"
+  },
+  {
+    "id": "f8e88e29-7008-4f0c-b6fb-95a0f1a9e08a",
+    "title": "Witchcat",
+    "slug": "witchcat",
+    "category": "action",
+    "thumbnail": "",
+    "emoji": "🧙",
+    "description": "Guide the witch's cat through magical levels in this 2025 JS13K entry. Use feline agility and magic to overcome obstacles.",
+    "players": 1900,
+    "rating": 4.6,
+    "badge": "new",
+    "path": "/games/witchcat/index.html",
     "isPlayable": true,
     "license": "MIT"
   }
