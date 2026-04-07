@@ -1,4 +1,4 @@
-# 🎮 GameVault — Browser Gaming Portal
+# 🎮 Freibahn — Browser Gaming Portal
 
 A lightweight, PlayStation-style browser gaming portal. No login required. Runs entirely as a static site via nginx in Docker.
 
@@ -32,7 +32,7 @@ docker build -t game-portal .
 docker run -p 90:90 game-portal
 
 # Run detached
-docker run -d -p 90:90 --name gamevault game-portal
+docker run -d -p 90:90 --name Freibahn game-portal
 ```
 
 ---
@@ -207,10 +207,10 @@ docker compose up -d --build  # Rebuild after changes
 ### CLI commands
 
 ```bash
-docker run -d -p 90:90 --name gamevault game-portal   # Run detached
-docker logs -f gamevault                               # Stream logs
-docker stop gamevault                                  # Stop
-docker rm gamevault                                    # Remove
+docker run -d -p 90:90 --name Freibahn game-portal   # Run detached
+docker logs -f Freibahn                               # Stream logs
+docker stop Freibahn                                  # Stop
+docker rm Freibahn                                    # Remove
 ```
 
 ---
