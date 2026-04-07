@@ -1,0 +1,47 @@
+import { lightRadial } from "../core/utils";
+export default class Splode {
+    /**
+     * Creates an instance of Splode.
+     * @constructor 
+     * @param {number} x - The x-coordinate of the explosion center.
+     * @param {number} y - The y-coordinate of the explosion center.
+     * @param {number} life - The lifespan of the explosion.
+     * @param {number} color - The color of the explosion.
+     */
+    constructor(x, y, life, color) {
+      this.x = x;
+      this.y = y;
+      this.lifeMax = life;
+      this.life = life;
+      this.alive = true;
+      this.color = color;
+    }
+  
+    /**
+     * Updates the explosion's state.
+     */
+    update() {
+      if (!this.alive) return;
+      if (this.life > 0) {
+        this.life -= 1;
+      } else {
+        this.alive = false;
+      }
+    }
+  
+    /**
+     * Draws the explosion on the buffer.
+     * @param {RetroBuffer} buffer - The RetroBuffer instance to draw on.
+     * @param {object} view - The current view offset {x, y}.
+     */
+    draw(buffer, view) {
+      buffer.pat = buffer.dither[15 - Math.floor((this.life / this.lifeMax) * 15)];
+      for (let i = Math.floor(this.life / 10); i > 0; i--) {
+        buffer.lCircle(this.x - view.x, this.y - view.y, this.lifeMax - this.life - i, this.color, 0);
+        lightRadial(this.x - view.x, this.y - view.y, this.lifeMax - this.life - i, [3,3,0]);
+      }
+      buffer.lCircle(this.x - view.x, this.y - view.y, this.lifeMax - this.life, this.color, 0);
+      buffer.pat = buffer.dither[0];
+    }
+  }
+  

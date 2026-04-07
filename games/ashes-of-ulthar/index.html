@@ -1,0 +1,4591 @@
+<html><head><meta charset="utf8"><style>body,html{width:100vw;height:100vh;margin:0;padding:0;background-color:#0a1a2f;display:flex;justify-content:center;align-items:center}#canvas{aspect-ratio:48/27;width:100%;height:100%;image-rendering:pixelated;object-fit:contain}.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%{transform:rotate(0)}20%{transform:rotate(-25deg)}40%{transform:rotate(10deg)}60%{transform:rotate(-25deg)}80%{transform:rotate(10deg)}100%{transform:rotate(0)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}.github-corner{position:absolute;top:0;border:0;right:0;opacity:1;transition:2s ease}.github-corner.hidden{opacity:0;transition:1s ease;cursor:not-allowed}</style></head><body><canvas id="canvas"></canvas><!-- GitHub hover icon --> <a href="https://github.com/elliot-nelson/js13k-2025-ashes-of-ulthar" class="github-corner hidden" aria-label="View source on GitHub" title="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#d1cb95; color:#0a1a2f" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><script>(function () {
+    'use strict';
+
+    /* -*- mode: javascript; tab-width: 4; indent-tabs-mode: nil; -*-
+    *
+    * Copyright (c) 2011-2013 Marcus Geelnard
+    *
+    * This software is provided 'as-is', without any express or implied
+    * warranty. In no event will the authors be held liable for any damages
+    * arising from the use of this software.
+    *
+    * Permission is granted to anyone to use this software for any purpose,
+    * including commercial applications, and to alter it and redistribute it
+    * freely, subject to the following restrictions:
+    *
+    * 1. The origin of this software must not be misrepresented; you must not
+    *    claim that you wrote the original software. If you use this software
+    *    in a product, an acknowledgment in the product documentation would be
+    *    appreciated but is not required.
+    *
+    * 2. Altered source versions must be plainly marked as such, and must not be
+    *    misrepresented as being the original software.
+    *
+    * 3. This notice may not be removed or altered from any source
+    *    distribution.
+    *
+    */
+
+    // Some general notes and recommendations:
+    //  * This code uses modern ECMAScript features, such as ** instead of
+    //    Math.pow(). You may have to modify the code to make it work on older
+    //    browsers.
+    //  * If you're not using all the functionality (e.g. not all oscillator types,
+    //    or certain effects), you can reduce the size of the player routine even
+    //    further by deleting the code.
+
+
+    const CPlayer = function() {
+
+        //--------------------------------------------------------------------------
+        // Private methods
+        //--------------------------------------------------------------------------
+
+        // Oscillators
+        var osc_sin = function (value) {
+            return Math.sin(value * 6.283184);
+        };
+
+        var osc_saw = function (value) {
+            return 2 * (value % 1) - 1;
+        };
+
+        var osc_square = function (value) {
+            return (value % 1) < 0.5 ? 1 : -1;
+        };
+
+        var osc_tri = function (value) {
+            var v2 = (value % 1) * 4;
+            if(v2 < 2) return v2 - 1;
+            return 3 - v2;
+        };
+
+        var getnotefreq = function (n) {
+            // 174.61.. / 44100 = 0.003959503758 (F3)
+            return 0.003959503758 * (2 ** ((n - 128) / 12));
+        };
+
+        var createNote = function (instr, n, rowLen) {
+            var osc1 = mOscillators[instr.i[0]],
+                o1vol = instr.i[1],
+                o1xenv = instr.i[3]/32,
+                osc2 = mOscillators[instr.i[4]],
+                o2vol = instr.i[5],
+                o2xenv = instr.i[8]/32,
+                noiseVol = instr.i[9],
+                attack = instr.i[10] * instr.i[10] * 4,
+                sustain = instr.i[11] * instr.i[11] * 4,
+                release = instr.i[12] * instr.i[12] * 4,
+                releaseInv = 1 / release,
+                expDecay = -instr.i[13]/16,
+                arp = instr.i[14],
+                arpInterval = rowLen * (2 **(2 - instr.i[15]));
+
+            var noteBuf = new Int32Array(attack + sustain + release);
+
+            // Re-trig oscillators
+            var c1 = 0, c2 = 0;
+
+            // Local variables.
+            var j, j2, e, rsample, o1t, o2t;
+
+            // Generate one note (attack + sustain + release)
+            for (j = 0, j2 = 0; j < attack + sustain + release; j++, j2++) {
+                if (j2 >= 0) {
+                    // Switch arpeggio note.
+                    arp = (arp >> 8) | ((arp & 255) << 4);
+                    j2 -= arpInterval;
+
+                    // Calculate note frequencies for the oscillators
+                    o1t = getnotefreq(n + (arp & 15) + instr.i[2] - 128);
+                    o2t = getnotefreq(n + (arp & 15) + instr.i[6] - 128) * (1 + 0.0008 * instr.i[7]);
+                }
+
+                // Envelope
+                e = 1;
+                if (j < attack) {
+                    e = j / attack;
+                } else if (j >= attack + sustain) {
+                    e = (j - attack - sustain) * releaseInv;
+                    e = (1 - e) * (3 ** (expDecay * e));
+                }
+
+                // Oscillator 1
+                c1 += o1t * e ** o1xenv;
+                rsample = osc1(c1) * o1vol;
+
+                // Oscillator 2
+                c2 += o2t * e ** o2xenv;
+                rsample += osc2(c2) * o2vol;
+
+                // Noise oscillator
+                if (noiseVol) {
+                    rsample += (2 * Math.random() - 1) * noiseVol;
+                }
+
+                // Add to (mono) channel buffer
+                noteBuf[j] = (80 * rsample * e) | 0;
+            }
+
+            return noteBuf;
+        };
+
+
+        //--------------------------------------------------------------------------
+        // Private members
+        //--------------------------------------------------------------------------
+
+        // Array of oscillator functions
+        var mOscillators = [
+            osc_sin,
+            osc_square,
+            osc_saw,
+            osc_tri
+        ];
+
+        // Private variables set up by init()
+        var mSong, mLastRow, mCurrentCol, mNumWords, mMixBuf;
+
+
+        //--------------------------------------------------------------------------
+        // Initialization
+        //--------------------------------------------------------------------------
+
+        this.init = function (song) {
+            // Define the song
+            mSong = song;
+
+            // Init iteration state variables
+            mLastRow = song.endPattern;
+            mCurrentCol = 0;
+
+            // Prepare song info
+            mNumWords =  song.rowLen * song.patternLen * (mLastRow + 1) * 2;
+
+            // Create work buffer (initially cleared)
+            mMixBuf = new Int32Array(mNumWords);
+        };
+
+
+        //--------------------------------------------------------------------------
+        // Public methods
+        //--------------------------------------------------------------------------
+
+        // Generate audio data for a single track
+        this.generate = function () {
+            // Local variables
+            var i, j, p, row, col, n, cp,
+                k, t, rsample, rowStartSample, f;
+
+            // Put performance critical items in local variables
+            var chnBuf = new Int32Array(mNumWords),
+                instr = mSong.songData[mCurrentCol],
+                rowLen = mSong.rowLen,
+                patternLen = mSong.patternLen;
+
+            // Clear effect state
+            var low = 0, band = 0, high;
+            var lsample, filterActive = false;
+
+            // Clear note cache.
+            var noteCache = [];
+
+             // Patterns
+             for (p = 0; p <= mLastRow; ++p) {
+                cp = instr.p[p];
+
+                // Pattern rows
+                for (row = 0; row < patternLen; ++row) {
+                    // Execute effect command.
+                    var cmdNo = cp ? instr.c[cp - 1].f[row] : 0;
+                    if (cmdNo) {
+                        instr.i[cmdNo - 1] = instr.c[cp - 1].f[row + patternLen] || 0;
+
+                        // Clear the note cache since the instrument has changed.
+                        if (cmdNo < 17) {
+                            noteCache = [];
+                        }
+                    }
+
+                    // Put performance critical instrument properties in local variables
+                    var oscLFO = mOscillators[instr.i[16]],
+                        lfoAmt = instr.i[17] / 512,
+                        lfoFreq = (2 ** (instr.i[18] - 9)) / rowLen,
+                        fxLFO = instr.i[19],
+                        fxFilter = instr.i[20],
+                        fxFreq = instr.i[21] * 43.23529 * 3.141592 / 44100,
+                        q = 1 - instr.i[22] / 255,
+                        dist = instr.i[23] * 1e-5,
+                        drive = instr.i[24] / 32,
+                        panAmt = instr.i[25] / 512,
+                        panFreq = 6.283184 * (2 ** (instr.i[26] - 9)) / rowLen,
+                        dlyAmt = instr.i[27] / 255,
+                        dly = instr.i[28] * rowLen & -2;  // Must be an even number
+
+                    // Calculate start sample number for this row in the pattern
+                    rowStartSample = (p * patternLen + row) * rowLen;
+
+                    // Generate notes for this pattern row
+                    for (col = 0; col < 4; ++col) {
+                        n = cp ? instr.c[cp - 1].n[row + col * patternLen] : 0;
+                        if (n) {
+                            if (!noteCache[n]) {
+                                noteCache[n] = createNote(instr, n, rowLen);
+                            }
+
+                            // Copy note from the note cache
+                            var noteBuf = noteCache[n];
+                            for (j = 0, i = rowStartSample * 2; j < noteBuf.length; j++, i += 2) {
+                              chnBuf[i] += noteBuf[j];
+                            }
+                        }
+                    }
+
+                    // Perform effects for this pattern row
+                    for (j = 0; j < rowLen; j++) {
+                        // Dry mono-sample
+                        k = (rowStartSample + j) * 2;
+                        rsample = chnBuf[k];
+
+                        // We only do effects if we have some sound input
+                        if (rsample || filterActive) {
+                            // State variable filter
+                            f = fxFreq;
+                            if (fxLFO) {
+                                f *= oscLFO(lfoFreq * k) * lfoAmt + 0.5;
+                            }
+                            f = 1.5 * Math.sin(f);
+                            low += f * band;
+                            high = q * (rsample - band) - low;
+                            band += f * high;
+                            rsample = fxFilter == 3 ? band : fxFilter == 1 ? high : low;
+
+                            // Distortion
+                            if (dist) {
+                                rsample *= dist;
+                                rsample = rsample < 1 ? rsample > -1 ? osc_sin(rsample*.25) : -1 : 1;
+                                rsample /= dist;
+                            }
+
+                            // Drive
+                            rsample *= drive;
+
+                            // Is the filter active (i.e. still audiable)?
+                            filterActive = rsample * rsample > 1e-5;
+
+                            // Panning
+                            t = Math.sin(panFreq * k) * panAmt + 0.5;
+                            lsample = rsample * (1 - t);
+                            rsample *= t;
+                        } else {
+                            lsample = 0;
+                        }
+
+                        // Delay is always done, since it does not need sound input
+                        if (k >= dly) {
+                            // Left channel = left + right[-p] * t
+                            lsample += chnBuf[k-dly+1] * dlyAmt;
+
+                            // Right channel = right + left[-p] * t
+                            rsample += chnBuf[k-dly] * dlyAmt;
+                        }
+
+                        // Store in stereo channel buffer (needed for the delay effect)
+                        chnBuf[k] = lsample | 0;
+                        chnBuf[k+1] = rsample | 0;
+
+                        // ...and add to stereo mix buffer
+                        mMixBuf[k] += lsample | 0;
+                        mMixBuf[k+1] += rsample | 0;
+                    }
+                }
+            }
+
+            // Next iteration. Return progress (1.0 == done!).
+            mCurrentCol++;
+            return mCurrentCol / mSong.numChannels;
+        };
+
+        // Create a AudioBuffer from the generated audio data
+        this.createAudioBuffer = function(context) {
+            var buffer = context.createBuffer(2, mNumWords / 2, 44100);
+            for (var i = 0; i < 2; i ++) {
+                var data = buffer.getChannelData(i);
+                for (var j = i; j < mNumWords; j += 2) {
+                    data[j >> 1] = mMixBuf[j] / 65536;
+                }
+            }
+            return buffer;
+        };
+
+        // Create a WAVE formatted Uint8Array from the generated audio data
+        this.createWave = function() {
+            // Create WAVE header
+            var headerLen = 44;
+            var l1 = headerLen + mNumWords * 2 - 8;
+            var l2 = l1 - 36;
+            var wave = new Uint8Array(headerLen + mNumWords * 2);
+            wave.set(
+                [82,73,70,70,
+                 l1 & 255,(l1 >> 8) & 255,(l1 >> 16) & 255,(l1 >> 24) & 255,
+                 87,65,86,69,102,109,116,32,16,0,0,0,1,0,2,0,
+                 68,172,0,0,16,177,2,0,4,0,16,0,100,97,116,97,
+                 l2 & 255,(l2 >> 8) & 255,(l2 >> 16) & 255,(l2 >> 24) & 255]
+            );
+
+            // Append actual wave data
+            for (var i = 0, idx = headerLen; i < mNumWords; ++i) {
+                // Note: We clamp here
+                var y = mMixBuf[i];
+                y = y < -32767 ? -32767 : (y > 32767 ? 32767 : y);
+                wave[idx++] = y & 255;
+                wave[idx++] = (y >> 8) & 255;
+            }
+
+            // Return the WAVE formatted typed array
+            return wave;
+        };
+
+        // Get n samples of wave data at time t [s]. Wave data in range [-2,2].
+        this.getData = function(t, n) {
+            var i = 2 * Math.floor(t * 44100);
+            var d = new Array(n);
+            for (var j = 0; j < 2*n; j += 1) {
+                var k = i + j;
+                d[j] = t > 0 && k < mMixBuf.length ? mMixBuf[k] / 32768 : 0;
+            }
+            return d;
+        };
+    };
+
+    // This music has been exported by SoundBox. You can use it with
+        // http://sb.bitsnbites.eu/player-small.js in your own product.
+
+        // See http://sb.bitsnbites.eu/demo.html for an example of how to
+        // use it in a demo.
+
+        // Song data
+        const VillageHusk = {
+          songData: [
+            { // Instrument 3
+              i: [
+              0, // OSC1_WAVEFORM
+              255, // OSC1_VOL
+              116, // OSC1_SEMI
+              79, // OSC1_XENV
+              0, // OSC2_WAVEFORM
+              255, // OSC2_VOL
+              116, // OSC2_SEMI
+              0, // OSC2_DETUNE
+              83, // OSC2_XENV
+              0, // NOISE_VOL
+              4, // ENV_ATTACK
+              6, // ENV_SUSTAIN
+              69, // ENV_RELEASE
+              52, // ENV_EXP_DECAY
+              0, // ARP_CHORD
+              0, // ARP_SPEED
+              0, // LFO_WAVEFORM
+              0, // LFO_AMT
+              0, // LFO_FREQ
+              0, // LFO_FX_FREQ
+              2, // FX_FILTER
+              14, // FX_FREQ
+              0, // FX_RESONANCE
+              0, // FX_DIST
+              32, // FX_DRIVE
+              0, // FX_PAN_AMT
+              0, // FX_PAN_FREQ
+              0, // FX_DELAY_AMT
+              0 // FX_DELAY_TIME
+              ],
+              // Patterns
+              p: [,,,,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
+              // Columns
+              c: [
+                {n: [],
+                 f: []},
+                {n: [,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,127,127,,,,,,127,127,,,,,,127,127,,,,,,127,127],
+                 f: []}
+              ]
+            },
+            { // Instrument 4
+              i: [
+              0, // OSC1_WAVEFORM
+              255, // OSC1_VOL
+              116, // OSC1_SEMI
+              85, // OSC1_XENV
+              0, // OSC2_WAVEFORM
+              255, // OSC2_VOL
+              116, // OSC2_SEMI
+              0, // OSC2_DETUNE
+              37, // OSC2_XENV
+              14, // NOISE_VOL
+              4, // ENV_ATTACK
+              6, // ENV_SUSTAIN
+              73, // ENV_RELEASE
+              99, // ENV_EXP_DECAY
+              0, // ARP_CHORD
+              0, // ARP_SPEED
+              0, // LFO_WAVEFORM
+              0, // LFO_AMT
+              0, // LFO_FREQ
+              0, // LFO_FX_FREQ
+              2, // FX_FILTER
+              136, // FX_FREQ
+              15, // FX_RESONANCE
+              0, // FX_DIST
+              32, // FX_DRIVE
+              0, // FX_PAN_AMT
+              0, // FX_PAN_FREQ
+              66, // FX_DELAY_AMT
+              6 // FX_DELAY_TIME
+              ],
+              // Patterns
+              p: [,,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
+              // Columns
+              c: [
+                {n: [],
+                 f: []},
+                {n: [,,,,,139,,,,,,,139,,,,,,,139,,,,,,,139],
+                 f: []}
+              ]
+            },
+            { // Instrument 5
+              i: [
+              0, // OSC1_WAVEFORM
+              91, // OSC1_VOL
+              128, // OSC1_SEMI
+              0, // OSC1_XENV
+              0, // OSC2_WAVEFORM
+              95, // OSC2_VOL
+              128, // OSC2_SEMI
+              12, // OSC2_DETUNE
+              0, // OSC2_XENV
+              0, // NOISE_VOL
+              12, // ENV_ATTACK
+              0, // ENV_SUSTAIN
+              72, // ENV_RELEASE
+              0, // ENV_EXP_DECAY
+              0, // ARP_CHORD
+              0, // ARP_SPEED
+              0, // LFO_WAVEFORM
+              0, // LFO_AMT
+              0, // LFO_FREQ
+              0, // LFO_FX_FREQ
+              2, // FX_FILTER
+              255, // FX_FREQ
+              0, // FX_RESONANCE
+              0, // FX_DIST
+              32, // FX_DRIVE
+              83, // FX_PAN_AMT
+              3, // FX_PAN_FREQ
+              93, // FX_DELAY_AMT
+              4 // FX_DELAY_TIME
+              ],
+              // Patterns
+              p: [,,3,3,3,3,3,2,3,2,6,3,2,3,6,3,2,3,6,3,2,3,6,3,5,7],
+              // Columns
+              c: [
+                {n: [],
+                 f: []},
+                {n: [132,,132,,132,,,132,,,,,,,127,,139,,127,,,127,,,127,,,,135,,135,,135,,,135,,131,,127,,,130,,130,,130,,,130,,,130,,,,139,,139,,139,,,139,,135,,131,,,134,,134,,134,,,134,,,134,,,,,,,,,,,140,,,,135,,129,,,,,,,,135,,,138,,135],
+                 f: []},
+                {n: [127,,127,,127,,,127,,,,,,,127,,139,,127,,,127,,,127,,,,130,,130,,130,,,130,,,,,,,130,,130,,130,,,130,,,130,,,,134,,134,,134,,,134,,,,,,,134,,134,,134,,,134,,,134,,,,,,,,,,,135,,,,,,,,,,,,,,135,,,138,,135],
+                 f: []},
+                {n: [127,,127,,127,,,127,,,,139,127,,127,,139,,127,,,127,,,133,,133,,130,,130,,130,,,130,,,,,130,,130,,130,,130,,,130,,139,136,,136,,134,,134,,134,,,134,,,,,134,,134,,134,,134,,,134,,,140,,140,,,,,,,,,135,,,,,137,,,,,,,,,135,,,141,,,137],
+                 f: []},
+                {n: [127,,127,,127,,,133,,133,,130,,,127,,,,127,,,,,,,,,,130,,132,,130,,,136,,136,,133,,,130,,130,,,,,,,,,,,,134,,134,,134,,139,,,140,,137,,,134,,134,,,,,,,,,,,,,,,,,,,141,,,,,,135,,,,,,,,135,,,138],
+                 f: []},
+                {n: [127,,127,,127,,,133,,133,,130,,,127,,139,,127,,,127,,,127,,,,130,,132,,130,,,136,,136,,133,,,130,,130,,130,,,130,,,130,,,,134,,134,,134,,139,,,140,,137,,,134,,134,,134,,,134,,,134,,,,,,,,,,,141,,,,,,135,,,,,,,,135,,,138,,135],
+                 f: []},
+                {n: [127,,127,,127,,,127,,127,,127,,,,,,,,,,,,,,,,,130,,134,,130,,,130,,130,,130,,,,,,,,,,,,,,,,,,,,,,,,,,135,,138],
+                 f: []}
+              ]
+            },
+            { // Instrument 6
+              i: [
+              2, // OSC1_WAVEFORM
+              40, // OSC1_VOL
+              140, // OSC1_SEMI
+              64, // OSC1_XENV
+              0, // OSC2_WAVEFORM
+              0, // OSC2_VOL
+              140, // OSC2_SEMI
+              0, // OSC2_DETUNE
+              0, // OSC2_XENV
+              192, // NOISE_VOL
+              7, // ENV_ATTACK
+              21, // ENV_SUSTAIN
+              0, // ENV_RELEASE
+              0, // ENV_EXP_DECAY
+              0, // ARP_CHORD
+              0, // ARP_SPEED
+              0, // LFO_WAVEFORM
+              0, // LFO_AMT
+              0, // LFO_FREQ
+              0, // LFO_FX_FREQ
+              3, // FX_FILTER
+              161, // FX_FREQ
+              192, // FX_RESONANCE
+              5, // FX_DIST
+              27, // FX_DRIVE
+              0, // FX_PAN_AMT
+              7, // FX_PAN_FREQ
+              25, // FX_DELAY_AMT
+              1 // FX_DELAY_TIME
+              ],
+              // Patterns
+              p: [,,,,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
+              // Columns
+              c: [
+                {n: [],
+                 f: []},
+                {n: [127,,127,,127,,,127,,127,,127,,,127,,127,,127,,,127,,127,,127],
+                 f: []}
+              ]
+            },
+            { // Instrument 7
+              i: [
+              2, // OSC1_WAVEFORM
+              192, // OSC1_VOL
+              128, // OSC1_SEMI
+              0, // OSC1_XENV
+              2, // OSC2_WAVEFORM
+              192, // OSC2_VOL
+              140, // OSC2_SEMI
+              18, // OSC2_DETUNE
+              0, // OSC2_XENV
+              0, // NOISE_VOL
+              27, // ENV_ATTACK
+              115, // ENV_SUSTAIN
+              138, // ENV_RELEASE
+              0, // ENV_EXP_DECAY
+              0, // ARP_CHORD
+              0, // ARP_SPEED
+              0, // LFO_WAVEFORM
+              91, // LFO_AMT
+              6, // LFO_FREQ
+              1, // LFO_FX_FREQ
+              2, // FX_FILTER
+              8, // FX_FREQ
+              92, // FX_RESONANCE
+              21, // FX_DIST
+              32, // FX_DRIVE
+              148, // FX_PAN_AMT
+              5, // FX_PAN_FREQ
+              85, // FX_DELAY_AMT
+              8 // FX_DELAY_TIME
+              ],
+              // Patterns
+              p: [2,3,2,3,,,,,,,,,,,,2,3,2,3,2,3,2,3,2,3,2,3],
+              // Columns
+              c: [
+                {n: [],
+                 f: []},
+                {n: [,,,,,,,127,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,135],
+                 f: []},
+                {n: [,,,,,,,127,,,,,,,,,,,,,,,,,,,,,,,,,,,,130],
+                 f: []}
+              ]
+            },
+          ],
+          rowLen: 10023,   // In sample lengths
+          patternLen: 28,  // Rows per pattern
+          endPattern: 26,  // End pattern
+          numChannels: 5  // Number of channels
+        };
+
+    // This music has been exported by SoundBox. You can use it with
+    // http://sb.bitsnbites.eu/player-small.js in your own product.
+
+    // See http://sb.bitsnbites.eu/demo.html for an example of how to
+    // use it in a demo.
+
+    const SoundEffects = [
+            { // Instrument 5
+              i: [
+              0, // OSC1_WAVEFORM
+              0, // OSC1_VOL
+              140, // OSC1_SEMI
+              0, // OSC1_XENV
+              0, // OSC2_WAVEFORM
+              0, // OSC2_VOL
+              140, // OSC2_SEMI
+              0, // OSC2_DETUNE
+              0, // OSC2_XENV
+              81, // NOISE_VOL
+              4, // ENV_ATTACK
+              10, // ENV_SUSTAIN
+              20, // ENV_RELEASE
+              37, // ENV_EXP_DECAY
+              0, // ARP_CHORD
+              0, // ARP_SPEED
+              0, // LFO_WAVEFORM
+              187, // LFO_AMT
+              5, // LFO_FREQ
+              0, // LFO_FX_FREQ
+              1, // FX_FILTER
+              239, // FX_FREQ
+              135, // FX_RESONANCE
+              0, // FX_DIST
+              32, // FX_DRIVE
+              108, // FX_PAN_AMT
+              5, // FX_PAN_FREQ
+              9, // FX_DELAY_AMT
+              4 // FX_DELAY_TIME
+              ],
+              // Patterns
+              p: [2],
+              // Columns
+              c: [
+                {n: [],
+                 f: []},
+                {n: [151],
+                 f: []}
+              ]
+            },
+            { // Instrument 6
+              i: [
+              0, // OSC1_WAVEFORM
+              255, // OSC1_VOL
+              152, // OSC1_SEMI
+              0, // OSC1_XENV
+              0, // OSC2_WAVEFORM
+              255, // OSC2_VOL
+              152, // OSC2_SEMI
+              12, // OSC2_DETUNE
+              0, // OSC2_XENV
+              0, // NOISE_VOL
+              2, // ENV_ATTACK
+              0, // ENV_SUSTAIN
+              61, // ENV_RELEASE
+              0, // ENV_EXP_DECAY
+              0, // ARP_CHORD
+              0, // ARP_SPEED
+              0, // LFO_WAVEFORM
+              0, // LFO_AMT
+              0, // LFO_FREQ
+              0, // LFO_FX_FREQ
+              2, // FX_FILTER
+              255, // FX_FREQ
+              0, // FX_RESONANCE
+              0, // FX_DIST
+              24, // FX_DRIVE
+              47, // FX_PAN_AMT
+              8, // FX_PAN_FREQ
+              69, // FX_DELAY_AMT
+              2 // FX_DELAY_TIME
+              ],
+              // Patterns
+              p: [2],
+              // Columns
+              c: [
+                {n: [],
+                 f: []},
+                {n: [139],
+                 f: []}
+              ]
+            },
+            { // Instrument 3
+              i: [
+              3, // OSC1_WAVEFORM
+              146, // OSC1_VOL
+              140, // OSC1_SEMI
+              0, // OSC1_XENV
+              1, // OSC2_WAVEFORM
+              224, // OSC2_VOL
+              128, // OSC2_SEMI
+              3, // OSC2_DETUNE
+              0, // OSC2_XENV
+              0, // NOISE_VOL
+              16, // ENV_ATTACK
+              13, // ENV_SUSTAIN
+              3, // ENV_RELEASE
+              0, // ENV_EXP_DECAY
+              0, // ARP_CHORD
+              0, // ARP_SPEED
+              3, // LFO_WAVEFORM
+              179, // LFO_AMT
+              5, // LFO_FREQ
+              0, // LFO_FX_FREQ
+              2, // FX_FILTER
+              124, // FX_FREQ
+              135, // FX_RESONANCE
+              11, // FX_DIST
+              32, // FX_DRIVE
+              150, // FX_PAN_AMT
+              3, // FX_PAN_FREQ
+              28, // FX_DELAY_AMT
+              6 // FX_DELAY_TIME
+              ],
+              // Patterns
+              p: [2],
+              // Columns
+              c: [
+                {n: [],
+                 f: []},
+                {n: [146,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,139],
+                 f: []}
+              ]
+            },
+            { // Instrument 2
+              i: [
+              3, // OSC1_WAVEFORM
+              130, // OSC1_VOL
+              121, // OSC1_SEMI
+              64, // OSC1_XENV
+              2, // OSC2_WAVEFORM
+              117, // OSC2_VOL
+              109, // OSC2_SEMI
+              0, // OSC2_DETUNE
+              32, // OSC2_XENV
+              0, // NOISE_VOL
+              28, // ENV_ATTACK
+              24, // ENV_SUSTAIN
+              60, // ENV_RELEASE
+              0, // ENV_EXP_DECAY
+              0, // ARP_CHORD
+              0, // ARP_SPEED
+              0, // LFO_WAVEFORM
+              0, // LFO_AMT
+              0, // LFO_FREQ
+              0, // LFO_FX_FREQ
+              2, // FX_FILTER
+              255, // FX_FREQ
+              0, // FX_RESONANCE
+              2, // FX_DIST
+              32, // FX_DRIVE
+              83, // FX_PAN_AMT
+              5, // FX_PAN_FREQ
+              92, // FX_DELAY_AMT
+              1 // FX_DELAY_TIME
+              ],
+              // Patterns
+              p: [2],
+              // Columns
+              c: [
+                {n: [],
+                 f: []},
+                {n: [139],
+                 f: []}
+              ]
+            },
+            { // Instrument 0
+              i: [
+              0, // OSC1_WAVEFORM
+              0, // OSC1_VOL
+              140, // OSC1_SEMI
+              0, // OSC1_XENV
+              0, // OSC2_WAVEFORM
+              0, // OSC2_VOL
+              140, // OSC2_SEMI
+              0, // OSC2_DETUNE
+              0, // OSC2_XENV
+              255, // NOISE_VOL
+              113, // ENV_ATTACK
+              75, // ENV_SUSTAIN
+              57, // ENV_RELEASE
+              0, // ENV_EXP_DECAY
+              0, // ARP_CHORD
+              0, // ARP_SPEED
+              0, // LFO_WAVEFORM
+              51, // LFO_AMT
+              2, // LFO_FREQ
+              1, // LFO_FX_FREQ
+              2, // FX_FILTER
+              58, // FX_FREQ
+              239, // FX_RESONANCE
+              0, // FX_DIST
+              32, // FX_DRIVE
+              88, // FX_PAN_AMT
+              1, // FX_PAN_FREQ
+              157, // FX_DELAY_AMT
+              2 // FX_DELAY_TIME
+              ],
+              // Patterns
+              p: [2],
+              // Columns
+              c: [
+                {n: [],
+                 f: []},
+                {n: [139,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,142],
+                 f: []}
+              ]
+            },
+            { // Instrument 4
+              i: [
+              0, // OSC1_WAVEFORM
+              255, // OSC1_VOL
+              116, // OSC1_SEMI
+              64, // OSC1_XENV
+              0, // OSC2_WAVEFORM
+              255, // OSC2_VOL
+              120, // OSC2_SEMI
+              0, // OSC2_DETUNE
+              64, // OSC2_XENV
+              127, // NOISE_VOL
+              4, // ENV_ATTACK
+              6, // ENV_SUSTAIN
+              35, // ENV_RELEASE
+              0, // ENV_EXP_DECAY
+              0, // ARP_CHORD
+              0, // ARP_SPEED
+              0, // LFO_WAVEFORM
+              0, // LFO_AMT
+              0, // LFO_FREQ
+              0, // LFO_FX_FREQ
+              2, // FX_FILTER
+              14, // FX_FREQ
+              0, // FX_RESONANCE
+              10, // FX_DIST
+              32, // FX_DRIVE
+              0, // FX_PAN_AMT
+              0, // FX_PAN_FREQ
+              0, // FX_DELAY_AMT
+              0 // FX_DELAY_TIME
+              ],
+              // Patterns
+              p: [2],
+              // Columns
+              c: [
+                {n: [],
+                 f: []},
+                {n: [127,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,127,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,139],
+                 f: []}
+              ]
+            }
+    ];
+
+    // Audio
+
+
+    const Audio = {
+        init() {
+            Audio.contextCreated = false;
+            Audio.readyToPlay = false;
+            //Audio.musicEnabled = true;
+            //Audio.sfxEnabled = true;
+            //Audio.musicVolume = 0;
+            //Audio.sfxVolume = 0;
+
+            //Audio.sounds = {};
+        },
+
+        initContext() {
+            //console.log('initContext()');
+            if (Audio.contextCreated) return;
+
+            // In Safari, ensure our target AudioContext is created inside a
+            // click or tap event (this ensures we don't interact with it until
+            // after user input).
+            //
+            // Chrome and Firefox are more relaxed, but this approach works for all 3.
+            //ZZFX.x = Audio.ctx = new AudioContext();
+            Audio.ctx = new AudioContext();
+            Audio.gain_ = Audio.ctx.createGain();
+            Audio.gain_.connect(Audio.ctx.destination);
+            //ZZFX.destination = Audio.gain_;
+            //console.log(Audio.ctx);
+
+            Audio.contextCreated = true;
+        },
+
+        initTracks() {
+            // In this game, we ensure the screen that calls this function happens after the
+            // user has interacted at least once (and that interaction called initContext above),
+            // so we know it's safe to interact with the audio context.
+            if (!Audio.musicPlaying) {
+                // Sfx
+
+                // Code golfing for bytes
+                let soundEffects = SoundEffects.map(sfx => ({
+                    songData: [sfx],
+                    rowLen: 3120,   // In sample lengths
+                    patternLen: 32,  // Rows per pattern
+                    endPattern: 0,  // End pattern
+                    numChannels: 1  // Number of channels
+                }));
+
+                Audio.click = this.loadSoundBox(soundEffects[0]);
+                Audio.bell = this.loadSoundBox(soundEffects[1]);
+                Audio.wink = this.loadSoundBox(soundEffects[2]);
+                Audio.explosion = this.loadSoundBox(soundEffects[3]);
+                Audio.wind = this.loadSoundBox(soundEffects[4]);
+                Audio.fail = this.loadSoundBox(soundEffects[5]);
+                Audio.music = this.loadSoundBox(VillageHusk);
+
+                Audio.readyToPlay = true;
+
+                // Start music
+
+                Audio.play(Audio.music, Audio.ctx.currentTime + 0.1, true);
+
+                Audio.musicPlaying = true;
+            }
+        },
+
+        update() {
+            if (!Audio.readyToPlay) return;
+
+            //this.sfxVolume = this.sfxEnabled ? 0.3 : 0;
+            //this.musicVolume = this.musicEnabled ? 1 : 0;
+
+            //ZZFX.volume = this.sfxVolume;
+
+            //if (this.sfxEnabled) {
+                //ZZFX.volume = 0.3;
+            //} else {
+                //ZZFX.volume = 0;
+            //}
+        },
+
+        play(sound, startTime, loop) {
+            if (!Audio.readyToPlay) return;
+            if (!sound) return;
+
+            //ZZFX.play(...sound);
+            //this.sources.explosion.start(Audio.ctx.currentTime);
+
+            let source = Audio.ctx.createBufferSource();
+            source.buffer = sound.buffer;
+            source.loop = loop || false;
+            source.connect(sound.gainNode);
+            source.start(startTime || Audio.ctx.currentTime);
+        },
+
+        // It's important we do pausing and unpausing as specific events and not in general update(),
+        // because update() is triggered by the animation frame trigger which does not run if the
+        // page is not visible. (So, if you want the music to fade in the background, for example,
+        // that's not helpful if it won't work because you aren't looking at the page!)
+
+        pause() {
+            if (Audio.readyToPlay) {
+                Audio.gain_.gain.linearRampToValueAtTime(0, Audio.ctx.currentTime + 1);
+            }
+        },
+
+        unpause() {
+            if (Audio.readyToPlay) {
+                Audio.gain_.gain.linearRampToValueAtTime(1, Audio.ctx.currentTime + 1);
+            }
+        },
+
+        loadSoundBox(exportedSound) {
+            let player = new CPlayer();
+            player.init(exportedSound);
+
+            for (;;) {
+                if (player.generate() === 1) break;
+            }
+
+            let gainNode = Audio.ctx.createGain();
+            gainNode.connect(Audio.gain_);
+
+            let buffer = player.createAudioBuffer(Audio.ctx);
+
+            // Return an object containing the original player, the audio node,
+            // and the source buffer for playback later.
+            return { player, gainNode, buffer };
+        }
+    };
+
+    // Constants
+
+    // The game's desired dimensions in pixels - the actual dimensions can be adjusted
+    // slightly by the Viewport module.
+    const TARGET_GAME_WIDTH = 320;
+    const TARGET_GAME_HEIGHT = 180;
+
+    // Shortcuts for marker locations on screen
+    const INVENTORY_POS = { u: 250, v: 131 };
+
+    // Resource names (for situations where we display on screen)
+    const RESOURCE_NAMES = ['SANITY', 'INFLUENCE', 'WOOD', 'MEAT', 'TORCHES', 'STONE'];
+
+    // Number of "facing left" villager frames (doubled for facing right)
+    const VILLAGER_FRAMES = 10;
+
+    // Flame locations in ritual
+    const SEPTAGRAM_FLAMES = [
+        { u: 39, v: 70 },
+        { u: 10, v: 58 },
+        { u: 3, v: 28 },
+        { u: 22, v: 3 },
+        { u: 57, v: 3 },
+        { u: 76, v: 28 },
+        { u: 69, v: 58 }
+        /*
+        { u: 3, v: 28 },
+        { u: 57, v: 3 },
+        { u: 69, v: 58 },
+        { u: 22, v: 3 },
+        { u: 10, v: 58 },
+        { u: 76, v: 28 },
+        { u: 39, v: 70 }
+         */
+    ];
+
+    // Frames per second (locked)
+    //
+    // Other constants below, like gravity, foot speed, etc., are represented as movement PER FRAME.
+    const FPS = 42;
+
+    const PALETTE = [
+      '#0a1a2f',
+      '#04373b',
+      '#1a644c',
+      '#40985c',
+      '#d1cb95'
+    ];
+
+    // Util
+
+    function angle2vector(r, m) {
+        return { x: Math.cos(r), y: Math.sin(r), m: m || 1 };
+    }
+
+    function clamp(value, min, max) {
+        return value < min ? min : value > max ? max : value;
+    }
+
+    function rgba(r, g, b, a) {
+        return `rgba(${r},${g},${b},${a})`;
+    }
+
+    function createCanvas(width, height) {
+        let canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        let ctx = canvas.getContext('2d');
+        return { canvas, ctx };
+    }
+
+    // SpriteSheet
+
+    /**
+     * This module is generated by `gulp buildAssets`.
+     */
+    const SpriteSheet =
+        /* <generated> */
+    { blackcat: [ [ 0, 0, 24, 36 ] ],
+      button: [ [ 0, 36, 9, 9 ], [ 9, 36, 9, 9 ], [ 18, 36, 9, 9 ] ],
+      font4: [ [ 0, 45, 270, 12 ] ],
+      icons: [ [ 0, 57, 8, 8 ], [ 8, 57, 8, 8 ], [ 16, 57, 8, 8 ], [ 24, 57, 8, 8 ] ],
+      jobselect: [ [ 0, 65, 101, 14 ] ],
+      particle:
+       [ [ 0, 79, 1, 1 ], [ 1, 79, 1, 1 ], [ 2, 79, 1, 1 ], [ 3, 79, 1, 1 ], [ 4, 79, 1, 1 ] ],
+      progressbar: [ [ 0, 80, 90, 1 ] ],
+      ritualflame: [ [ 0, 81, 9, 16 ], [ 9, 81, 9, 16 ], [ 18, 81, 9, 16 ], [ 27, 81, 9, 16 ] ],
+      sanitybar: [ [ 0, 97, 18, 82 ], [ 18, 97, 18, 82 ] ],
+      smallarrows: [ [ 0, 179, 3, 5 ], [ 3, 179, 3, 5 ], [ 6, 179, 3, 5 ], [ 9, 179, 3, 5 ] ],
+      techtree:
+       [ [ 0, 184, 17, 16 ],
+         [ 17, 184, 17, 16 ],
+         [ 34, 184, 17, 16 ],
+         [ 51, 184, 17, 16 ],
+         [ 68, 184, 17, 16 ],
+         [ 85, 184, 17, 16 ],
+         [ 102, 184, 17, 16 ],
+         [ 119, 184, 17, 16 ],
+         [ 136, 184, 17, 16 ],
+         [ 153, 184, 17, 16 ] ],
+      villager:
+       [ [ 0, 200, 11, 22 ],
+         [ 11, 200, 11, 22 ],
+         [ 22, 200, 11, 22 ],
+         [ 33, 200, 11, 22 ],
+         [ 44, 200, 11, 22 ],
+         [ 55, 200, 11, 22 ],
+         [ 66, 200, 11, 22 ],
+         [ 77, 200, 11, 22 ],
+         [ 88, 200, 11, 22 ],
+         [ 99, 200, 11, 22 ] ],
+      villagerchunk:
+       [ [ 0, 222, 9, 9 ],
+         [ 9, 222, 9, 9 ],
+         [ 18, 222, 9, 9 ],
+         [ 27, 222, 9, 9 ],
+         [ 36, 222, 9, 9 ],
+         [ 45, 222, 9, 9 ] ],
+      wink: [ [ 0, 231, 3, 5 ], [ 3, 231, 3, 5 ], [ 6, 231, 3, 5 ], [ 9, 231, 3, 5 ] ],
+      terrain_FG1: [ [ 0, 236, 320, 150 ] ],
+      terrain_FG2: [ [ 0, 386, 320, 150 ] ],
+      terrain_FG3: [ [ 0, 536, 320, 150 ] ] };
+    /* </generated> */
+
+    // Viewport
+
+
+    /**
+     * Viewport
+     *
+     * Represents the game display (for us, a canvas).
+     */
+    const Viewport = {
+        init() {
+            Viewport.canvas = document.getElementById('canvas');
+            Viewport.ctx = Viewport.canvas.getContext('2d');
+            Viewport.resize();
+        },
+
+        // Unlike past years, this canvas does not build in "buffers" to the gameplay canvas,
+        // it locks the output canvas at exactly the desired dimensions, and you'll get black bars
+        // (horizontal or vertical) depending on browser size.
+        //
+        // This may or may not be appropriate for every game, but it works for this one, and is
+        // a little less code :).
+        resize() {
+            let dpr = window.devicePixelRatio,
+                clientWidth = Viewport.canvas.clientWidth,
+                clientHeight = Viewport.canvas.clientHeight;
+
+            // Note: this check is just checking existing dimensions against cached dimensions,
+            // help cut out some work if no resize took place. We DON'T hook into the actual
+            // browser resize event.
+            if (clientWidth !== Viewport.clientWidth || clientHeight !== Viewport.clientHeight) {
+                Viewport.width = TARGET_GAME_WIDTH;
+                Viewport.height = TARGET_GAME_HEIGHT;
+
+                Viewport.clientWidth = clientWidth;
+                Viewport.clientHeight = clientHeight;
+
+                // What is this?
+                //
+                // Basically, imagine if the browser happens to be 640x360 pixels. If you set
+                // your canvas to be size "320x180", and render our pixel art at that size, it
+                // will be UPSCALED to 640x360, causing blurriness that cannot be avoided.
+                //
+                // Instead, we want to render AT LEAST at the actual pixel size. And in fact,
+                // if the actual monitor pixels are 2x or 4x pixels like many modern screens,
+                // we want to render at that scale and DOWNSCALE if necessary.
+                //
+                // TLDR: We set the CANVAS size to something that is AT LEAST AS LARGE as
+                // (ratio between our desired size and browser pixels) multipled by DPR.
+                let pixelScale = Math.ceil(clientWidth * dpr / TARGET_GAME_WIDTH);
+
+                Viewport.canvas.width = TARGET_GAME_WIDTH * pixelScale;
+                Viewport.canvas.height = TARGET_GAME_HEIGHT * pixelScale;
+                Viewport.scale = pixelScale;
+
+                // Make sure to set this every time the canvas changes size.
+                Viewport.ctx.imageSmoothingEnabled = false;
+                Viewport.ctx.webkitImageSmoothingEnabled = false;
+            }
+
+            // We do this every frame, not just on resize, due to browser sometimes "forgetting".
+            Viewport.canvas.style.cursor = 'none';
+        }
+    };
+
+    // Sprite
+
+
+    /**
+     * Sprite
+     *
+     * Encapsulates loading sprite slices from the spritesheet, organizing them, and
+     * modifying them or constructing using primitives. To save space, we use some techniques
+     * like storing only a small slice of an image in the spritesheet, then using code
+     * to duplicate it, add some randomness, etc.
+     */
+    const Sprite = {
+        // This is an exception to the rule, loading the spritesheet is a special action that
+        // happens BEFORE everything is initialized.
+        loadSpritesheet(cb) {
+            // Preloaded option
+            // image.onload = cb;
+            // image.src = SpriteSheet.base64;
+            // Sprite.sheet = image;
+
+            // Dynamic load option
+            let image = new Image();
+            image.onload = () => {
+                Sprite.sheet = image;
+                cb();
+            };
+            image.onerror = () => { cb(); };
+            image.src = 'sprites.png';
+        },
+
+        init() {
+            // Standard (no special ops) sprites
+            Sprite.font = initBasicSprite(SpriteSheet.font4[0]);
+            Sprite.particle = SpriteSheet.particle.map(initBasicSprite);
+            Sprite.blackcat = initBasicSpriteArray(SpriteSheet.blackcat);
+            Sprite.button = initBasicSpriteArray(SpriteSheet.button);
+            //Sprite.influencebar = initBasicSpriteArray(SpriteSheet.influencebar, defaultOpts);
+            Sprite.smallarrows = initBasicSpriteArray(SpriteSheet.smallarrows);
+            Sprite.jobselect = initBasicSpriteArray(SpriteSheet.jobselect);
+            Sprite.progressbar = initBasicSpriteArray(SpriteSheet.progressbar);
+            //Sprite.bigarrows = initBasicSpriteArray(SpriteSheet.bigarrows, defaultOpts);
+            Sprite.icons = initBasicSpriteArray(SpriteSheet.icons);
+            Sprite.wink = initBasicSpriteArray(SpriteSheet.wink);
+            Sprite.techtree = initBasicSpriteArray(SpriteSheet.techtree);
+            Sprite.techtree[1] = initDynamicSprite(recolor(Sprite.techtree[0].img, PALETTE[3]));
+
+            // Ritual
+            Sprite.ritualflame = initBasicSpriteArray(SpriteSheet.ritualflame, { anchor: { x: 4, y: 10 } });
+
+            // Sanity bar handling
+            Sprite.sanitybar = initBasicSpriteArray(SpriteSheet.sanitybar);
+            Sprite.sanitybar[2] = initDynamicSprite(recolor(Sprite.sanitybar[1].img, PALETTE[0]));
+
+            // Terrain handling
+            Sprite.terrain = [
+                initBasicSprite(SpriteSheet.terrain_FG1[0]),
+                initBasicSprite(SpriteSheet.terrain_FG2[0]),
+                initBasicSprite(SpriteSheet.terrain_FG3[0])
+            ];
+            for (let i = 0; i < 3; i++) {
+                Sprite.terrain[i].img = augmentTerrain(Sprite.terrain[i].img, 30, PALETTE[i]);
+            }
+
+            // Villager
+            Sprite.villagerchunk = initBasicSpriteArray(SpriteSheet.villagerchunk, { anchor: { x: 4, y: 4 } });
+            Sprite.villager = initBasicSpriteArray(SpriteSheet.villager, { anchor: { x: 5, y: 21 } });
+            const villagerFrames = Sprite.villager.length;
+            Sprite.villager[1].img = copySpriteFrame(Sprite.villager[0].img, Sprite.villager[1].img, 11, 20);
+            Sprite.villager[7].img = copySpriteFrame(Sprite.villager[6].img, Sprite.villager[7].img, 11, 20);
+            Sprite.villager[9].img = copySpriteFrame(Sprite.villager[8].img, Sprite.villager[9].img, 11, 20);
+            for (let i = 0; i < villagerFrames; i++) {
+                Sprite.villager[i + villagerFrames] = initDynamicSprite(flipHorizontal(Sprite.villager[i].img), { anchor: { x: 5, y: 21 } });
+            }
+            Sprite.villager[2].anchor =
+              Sprite.villager[3].anchor =
+              Sprite.villager[5].anchor = { x: 16, y: 21 };
+            Sprite.villager[2 + villagerFrames].anchor =
+              Sprite.villager[3 + villagerFrames].anchor =
+              Sprite.villager[5 + villagerFrames].anchor = { x: -6, y: 21 };
+        },
+
+        /**
+         * A small helper that draws a sprite onto a canvas, respecting the anchor point of
+         * the sprite. Note that the canvas should be PRE-TRANSLATED and PRE-ROTATED, if
+         * that's appropriate!
+         */
+        drawSprite(ctx, sprite, u, v) {
+            ctx.drawImage(sprite.img, u - sprite.anchor.x, v - sprite.anchor.y);
+        },
+
+        drawViewportSprite(sprite, pos, rotation) {
+            let { u, v } = this.viewportSprite2uv(
+                sprite,
+                pos
+            );
+            if (rotation) {
+                Viewport.ctx.save();
+                Viewport.ctx.translate(u + sprite.anchor.x, v + sprite.anchor.y);
+                Viewport.ctx.rotate(rotation);
+                Viewport.ctx.drawImage(
+                    sprite.img,
+                    -sprite.anchor.x,
+                    -sprite.anchor.y
+                );
+                Viewport.ctx.restore();
+            } else {
+                Viewport.ctx.drawImage(sprite.img, u, v);
+            }
+        },
+
+        viewportSprite2uv(sprite, pos) {
+            return {
+                u: pos.u - sprite.anchor.x,
+                v: pos.v - sprite.anchor.y
+            };
+            /*
+            // HACK TODO
+            if (pos.u) {
+                return {
+                    u: pos.u - sprite.anchor.x,
+                    v: pos.v - sprite.anchor.y
+                };
+            }
+
+            return {
+                u: pos.x - sprite.anchor.x - (0) Camera.pos.x + Viewport.center.u,
+                v: pos.y - sprite.anchor.y - (0) Camera.pos.y + Viewport.center.v
+            };
+            */
+        }
+    };
+
+    // Sprite utility functions
+
+    function initBasicSpriteArray(data, opts) {
+        return data.map(element => initBasicSprite(element, opts));
+    }
+
+    function initBasicSprite(data, opts) {
+        return initDynamicSprite(loadCacheSlice(...data), opts);
+    }
+
+    function initDynamicSprite(source, opts) {
+        if (typeof opts !== 'object') {
+            opts = {};
+        }
+
+        if (!opts.anchor) opts.anchor = { x: 0, y: 0 };
+
+        return {
+            img: source,
+            ...opts
+        };
+    }
+
+    function loadCacheSlice(x, y, w, h) {
+        const source = Sprite.sheet;
+        const sliceCanvas = createCanvas(w, h);
+        sliceCanvas.ctx.drawImage(source, x, y, w, h, 0, 0, w, h);
+        return sliceCanvas.canvas;
+    }
+
+    function flipHorizontal(source) {
+        let canvas = createCanvas(source.width, source.height);
+        canvas.ctx.translate(source.width, 0);
+        canvas.ctx.scale(-1, 1);
+        canvas.ctx.drawImage(source, 0, 0);
+        return canvas.canvas;
+    }
+
+    function copySpriteFrame(source, dest, w, h) {
+        let canvas = createCanvas(dest.width, dest.height);
+        canvas.ctx.drawImage(dest, 0, 0);
+        canvas.ctx.drawImage(source, 0, 0, w, h, 0, 0, w, h);
+        return canvas.canvas;
+    }
+
+    function augmentTerrain(source, lines, color) {
+        let canvas = createCanvas(320, 180);
+        canvas.ctx.drawImage(source, 0, 0);
+        canvas.ctx.fillStyle = color;
+        canvas.ctx.fillRect(0, 180 - lines, 320, lines);
+        return canvas.canvas;
+    }
+
+    function recolor(source, color) {
+        let canvas = createCanvas(source.width, source.height);
+        canvas.ctx.fillStyle = color;
+        canvas.ctx.fillRect(0, 0, source.width, source.height);
+        canvas.ctx.globalCompositeOperation = 'destination-in';
+        canvas.ctx.drawImage(source, 0, 0);
+        return canvas.canvas;
+    }
+
+    // Text
+
+
+    const C_WIDTH = 5;
+    const C_HEIGHT = 5;
+    const FONT_SHEET_C_WIDTH = 6;
+    const FONT_SHEET_WIDTH = 270;
+    const DEFAULT_C_SHIFT = 5;
+
+    // Very simple variable-width font implementation. The characters in the font strip
+    // are left-aligned in their 5x5 pixel boxes, so in order to have variable width,
+    // we just need to note the characters that AREN'T full width. Anything not in
+    // this list has full shift (5+1 = 6 pixels).
+    const C_SHIFT = {
+        10: 0, // LF (\n)
+        32: 3, // Space ( )
+        33: 3, // Bang (!)
+        39: 2, // Apostrophe (')
+        40: 3, // Open Paren (
+        41: 3, // Close Paren )
+        44: 3, // Comma (,)
+        46: 3, // Period (.)
+        47: 6, // Slash (/)
+        73: 2, // I
+        77: 6, // M
+        84: 6, // T
+        86: 6, // V
+        87: 6, // W
+        88: 6, // X
+        89: 6, // Y
+        91: 4, // [ (s)
+        109: 6, // m (up)
+        111: 6, // o (down),
+        108: 7,
+        114: 7,
+        1108: 10, // left arrow key
+        1114: 10, // right arrow key
+        1069: 6, // E
+        1083: 6, // S
+        1067: 10  // C
+    };
+
+    const C_ICONS = {
+    };
+
+    const Text = {
+        init() {
+            Text.white = Sprite.font.img;
+            //Text.black = recolor(Text.white, rgba(0, 0, 0, 1));
+            //Text.shadow = recolor(Text.white, rgba(44, 27, 46, 1));
+
+            //Text.tan = recolor(Text.white, rgba(209, 180, 140, 1));
+            //Text.pig = recolor(Text.white, rgba(227, 66, 98, 1));
+            //Text.duotone = recolorDuotone(Text.white, '#f2b63d', '#fff4e0');
+            //Text.duotone_red = recolorDuotone(Text.white, '#ffaa5e', '#ffd4a3', rgba(255, 0, 0, 0.7));
+
+            Text.palette = PALETTE.map(color => recolor(Text.white, color));
+
+            C_ICONS[1108] = Sprite.button[0];
+            C_ICONS[1114] = Sprite.button[0];
+            C_ICONS[1069] = Sprite.button[0];
+            C_ICONS[1083] = Sprite.button[0];
+            C_ICONS[1067] = Sprite.button[0];
+
+            Text.cache = {};
+        },
+
+        drawText(ctx, text, u, v, scale = 1, font = Text.white) {
+            let fgfont = font;
+            let highlightsRemaining = 0;
+
+            for (let c of this.charactersToDraw(text, scale)) {
+                fgfont = font;
+                if (c.c > 1000) {
+                    highlightsRemaining = c.c - 1000 - 48;
+                    continue;
+                }
+                if (C_ICONS[c.c]) {
+                    ctx.drawImage(
+                        C_ICONS[c.c].img,
+                        u + c.u,
+                        v + c.v - Math.floor((C_ICONS[c.c].img.height) / 2) + 2
+                    );
+                    c.c -= 1000;
+                    c.u += 2;
+                }
+                let k = (c.c - 32) * FONT_SHEET_C_WIDTH;
+                if (highlightsRemaining > 0) {
+                    highlightsRemaining--;
+                    ctx.drawImage(
+                        Text.getHighlight(c.c),
+                        0, 0,
+                        C_WIDTH + 2,
+                        C_HEIGHT + 2,
+                        u + c.u - 1,
+                        v + c.v - 1,
+                        (C_WIDTH + 2) * scale,
+                        (C_HEIGHT + 2) * scale
+                    );
+                } else {
+                    ctx.drawImage(
+                        fgfont,
+                        k % FONT_SHEET_WIDTH,
+                        (k / FONT_SHEET_WIDTH | 0) * FONT_SHEET_C_WIDTH,
+                        C_WIDTH,
+                        C_HEIGHT,
+                        u + c.u,
+                        v + c.v,
+                        C_WIDTH * scale,
+                        C_HEIGHT * scale
+                    );
+                }
+            }
+        },
+
+        drawParagraph(ctx, text, u, v, width, scale = 1, font = Text.white, shadow) {
+            const lines = this.breakParagraph(text, width, scale);
+
+            for (let i = 0; i < lines.length; i++) {
+                this.drawText(ctx, lines[i], u, v + i * (C_HEIGHT + 2) * scale, scale, font, shadow);
+            }
+        },
+
+        breakParagraph(text, width, scale = 1) {
+            const lines = [];
+            let line = '';
+            const words = text.split(' ');
+            while (words.length > 0) {
+                const lineWidth = this.measure(line + ' ' + words[0], scale).w;
+                if (lineWidth > width) {
+                    lines.push(line);
+                    line = '';
+                }
+                line = (line.length > 0 ? line + ' ' : '') + words.shift();
+            }
+            if (line.length > 0) {
+                lines.push(line);
+            }
+            return lines;
+        },
+
+        measure(text, scale = 1) {
+            let w = 0, h = 0;
+
+            for (let c of this.charactersToDraw(text, scale)) {
+                w = Math.max(w, c.u + (C_SHIFT[c.c] || DEFAULT_C_SHIFT) * scale);
+                h = c.v + (C_HEIGHT + 2) * scale;
+            }
+
+            return { w, h };
+        },
+
+        *charactersToDraw(text, scale = 1) {
+            let u = 0, v = 0;
+
+            for (let idx = 0; idx < text.length; idx++) {
+                let c = text.charCodeAt(idx);
+
+                if (c === 10) {
+                    // Newline
+                    u = 0;
+                    v += (C_HEIGHT + 2) * scale;
+                    continue;
+                }
+
+                if (c === 92) {
+                    // Backslash
+                    idx++;
+                    if (text.charCodeAt(idx) === 104) {
+                        // h
+                        idx++;
+                        c = 1000 + text.charCodeAt(idx);
+                        C_SHIFT[c] = 0;
+                    }
+                }
+
+                yield { c, u, v };
+
+                u += (C_SHIFT[c] ?? DEFAULT_C_SHIFT) * scale;
+            }
+        },
+
+        getHighlight(c) {
+            if (!Text.cache[c]) {
+                let w = C_SHIFT[c] ?? DEFAULT_C_SHIFT + 2;
+                let h = C_HEIGHT + 2;
+                let canvas = createCanvas(w,h);
+
+                Text.drawText(canvas.ctx, String.fromCharCode(c), 0, 0, 1, Text.palette[4]);
+                Text.drawText(canvas.ctx, String.fromCharCode(c), 1, 0, 1, Text.palette[4]);
+                Text.drawText(canvas.ctx, String.fromCharCode(c), 2, 0, 1, Text.palette[4]);
+                Text.drawText(canvas.ctx, String.fromCharCode(c), 0, 1, 1, Text.palette[4]);
+                Text.drawText(canvas.ctx, String.fromCharCode(c), 2, 1, 1, Text.palette[4]);
+                Text.drawText(canvas.ctx, String.fromCharCode(c), 0, 2, 1, Text.palette[4]);
+                Text.drawText(canvas.ctx, String.fromCharCode(c), 1, 2, 1, Text.palette[4]);
+                Text.drawText(canvas.ctx, String.fromCharCode(c), 2, 2, 1, Text.palette[4]);
+
+                Text.drawText(canvas.ctx, String.fromCharCode(c), 1, 1, 1, Text.palette[0]);
+
+                Text.cache[c] = canvas.canvas;
+            }
+
+            return Text.cache[c];
+        }
+    };
+
+    /*export function createProgressBar(text, color) {
+        let w = Text.measure(text, 1).w - 1;
+        let canvas = createCanvas(w, 1);
+        canvas.ctx.fillStyle = color;
+        canvas.ctx.fillRect(0, 0, w, 1);
+        return canvas.canvas;
+    }
+    */
+
+    // KeyboardAdapter
+
+
+    const KeyboardAdapter = {
+        init() {
+            KeyboardAdapter.held = [];
+
+            window.addEventListener('keydown', event => {
+                //let k = KeyboardAdapter.map[event.code];
+                // Uncomment to debug key presses
+                // console.log(event.key, event.keyCode, event.code, k);
+
+                // Hack to ensure we initialize audio after user interacts with game
+                Audio.initContext();
+
+                //if (Input.Action.includes(event.code)) {
+                //if (k) {
+                //    KeyboardAdapter.held[k] = true;
+                  KeyboardAdapter.held[event.code] = true;
+                //}
+            });
+
+            window.addEventListener('keyup', event => {
+                //let k = KeyboardAdapter.map[event.code];
+                //if (k) {
+                //    KeyboardAdapter.held[k] = false;
+                //}
+                KeyboardAdapter.held[event.code] = false;
+
+                /*if (event.key >= '1' && event.key <= '9') {
+                    game.nextLevel = Number(event.key) - 1;
+                    game.screens.pop();
+                }*/
+            });
+
+            KeyboardAdapter.reset();
+        },
+
+        //update() {
+            // For keyboards, we want to convert the state of the various arrow keys being held down
+            // into a directional vector. We use the browser's event to handle the held state of
+            // the other action buttons, so we don't need to process them here.
+            /*let state =
+                (KeyboardAdapter.held[Input.Action.UP] ? 1 : 0) +
+                (KeyboardAdapter.held[Input.Action.DOWN] ? 2 : 0) +
+                (KeyboardAdapter.held[Input.Action.LEFT] ? 4 : 0) +
+                (KeyboardAdapter.held[Input.Action.RIGHT] ? 8 : 0);*/
+
+            //KeyboardAdapter.direction = KeyboardAdapter.arrowDirections[state];
+        //},
+
+        reset() {
+            //KeyboardAdapter.direction = 0;
+            for (let action of Input.Action) {
+                KeyboardAdapter.held[action] = false;
+            }
+            //KeyboardAdapter.held = [];
+            //KeyboardAdapter.held.length = 0;
+        }
+    };
+
+    // Input
+
+
+    const Input = {
+        // Game Inputs
+
+        // Extreme hack
+        //
+        Action: [
+            'ArrowUp',
+            'ArrowLeft',
+            'ArrowDown',
+            'ArrowRight',
+            'Escape',
+            'Space',
+            'KeyV',
+            'KeyH',
+            //'KeyA',
+            'KeyS',
+            //'KeyB',
+            //'KeyT',
+            //'KeyM',
+            'KeyF',
+            'KeyC'
+        ],
+
+        init() {
+            // A vector representing the direction the user is pressing/facing,
+            // separate from pressing and releasing inputs. Treating "direction"
+            // separately makes it easier to handle gamepad sticks.
+            //this.direction = { x: 0, y: 0, m: 0 };
+
+            // "Pressed" means an input was pressed THIS FRAME.
+            this.pressed = {};
+
+            // "Released" means an input was released THIS FRAME.
+            this.released = {};
+
+            // "Held" means an input is held down. The input was "Pressed" either
+            // this frame or in a past frame, and has not been "Released" yet.
+            this.held = {};
+
+            KeyboardAdapter.init();
+        },
+
+        update() {
+            // We could have some kind of "input adapter toggle", but it's easier to just treat all inputs
+            // as valid -- if you're pressing the "attack" button on either gamepad or keyboard, then you're
+            // attacking. For directional input, we instead check whether there's movement on the thumbstick,
+            // and we use it if there is -- otherwise we try to extract movement from the keyboard instead.
+
+            //KeyboardAdapter.update();
+
+            for (let action of Input.Action) {
+                let held = KeyboardAdapter.held[action];
+                this.pressed[action] = !this.held[action] && held;
+                this.released[action] = this.held[action] && !held;
+
+                this.held[action] = held;
+            }
+
+            //this.pointer = pointerAdapter.pointer;
+            //this.direction = KeyboardAdapter.direction;
+            //this.direction = this.gamepad.direction.m > 0 ? this.gamepad.direction : this.keyboard.direction;
+        }
+    };
+
+    // AshParticle
+
+
+    class AshParticle {
+        constructor() {
+            this.t = -1;
+            this.d = 60;
+
+            this.pos = { u: Math.random() * 320, v: Math.random() * 200 };
+            this.layer = Math.floor(Math.random() * 3) + 1;
+            this.alpha = 1;
+        }
+
+        update() {
+            if (++this.t === this.d) {
+                this.cull = true;
+            }
+
+            if (this.t > 36) {
+                this.alpha -= 0.02;
+            }
+
+            this.pos.v += 0.1;
+
+            if (Math.random() < 0.05) {
+                this.pos.u += 0.5;
+            }
+        }
+
+        draw() {
+            Viewport.ctx.globalAlpha = this.alpha;
+            Viewport.ctx.drawImage(Sprite.particle[this.layer - 1].img, Math.floor(this.pos.u), Math.floor(this.pos.v));
+            Viewport.ctx.globalAlpha = 1;
+        }
+    }
+
+    // SacrificeParticle
+
+
+    class SacrificeParticle {
+        constructor(villager) {
+            this.t = -1;
+            this.d = 30;
+            this.villager = villager;
+        }
+
+        update() {
+            if (++this.t === this.d) {
+                game.gameScene.grant([10]);
+                this.cull = true;
+            }
+
+            if (this.t >= 24 && this.t <= 27) {
+                this.villager.spawnChunks();
+            }
+            if (this.t === 24) {
+                Audio.play(Audio.explosion);
+            }
+
+            this.villager.pos.v -= 0.2;
+        }
+
+        draw() {
+            let u = this.villager.pos.u;
+            let v = Math.floor(this.villager.pos.v);
+
+            if (this.t >= 0 && this.t < 15) {
+                let shake = (this.t % 3) - 1;
+                Sprite.drawViewportSprite(Sprite.villager[0], { u: u + shake, v });
+            } else if (this.t >= 15 && this.t <= 25) {
+                // fake a "fat villager" to save sprite size
+                // ideally we wouldn't expand the head, only the body,
+                // but it's not worth the extra hassle
+                Sprite.drawViewportSprite(Sprite.villager[0], { u, v });
+                Sprite.drawViewportSprite(Sprite.villager[0], { u: u - 1, v });
+                Sprite.drawViewportSprite(Sprite.villager[0], { u: u + 1, v });
+            }
+        }
+    }
+
+    // Button
+
+
+    class Button {
+        constructor(u, v, hotkey, text) {
+            this.u = u;
+            this.v = v;
+            this.hotkey = hotkey;
+            this.text = text;
+            this.visible = false;
+            this.active = false;
+        }
+
+        update() { }
+
+        draw() {
+            if (this.visible) {
+                const frame = this.active ? 0 : 2;
+                const colorIndex = this.active ? 4 : 2;
+                const bgColorIndex = this.active ? 0 : 2;
+                Viewport.ctx.drawImage(Sprite.button[frame].img, this.u, this.v);
+                Text.drawText(Viewport.ctx, this.hotkey, this.u + 2, this.v + 2, 1, Text.palette[bgColorIndex]);
+                Text.drawText(Viewport.ctx, this.text.toUpperCase(), this.u + 11, this.v + 2, 1, Text.palette[colorIndex]);
+            }
+        }
+    }
+
+    // TweenChain
+
+
+    class TweenChain {
+        constructor(tweenArray) {
+            this.t = -1;
+            this.tweenArray = tweenArray;
+        }
+
+        payCosts() {
+            if (game.gameScene.payCosts(this.cost)) {
+                this.paid = true;
+            } else {
+                game.gameScene.grant([-1]);
+                Audio.play(Audio.fail);
+            }
+        }
+
+        completeTask() {
+            if (this.paid) game.gameScene.grant(this.grant);
+        }
+
+        update() {
+            this.t++;
+
+            if (this.t < this.tweenArray[0].t1) {
+                this.value = this.tweenArray[0].v1;
+                this.facing = (this.tweenArray[0].v2 - this.tweenArray[0].v1 >= 0 ? 1 : 0);
+                return;
+            }
+
+            if (this.t >= this.tweenArray[this.tweenArray.length - 1].t2) {
+                this.value = this.tweenArray[this.tweenArray.length - 1].v2;
+                this.facing = (this.tweenArray[this.tweenArray.length - 1].v2 - this.tweenArray[this.tweenArray.length - 1].v1 >= 0 ? 1 : 0);
+                this.finished = true;
+                return;
+            }
+
+            for (let i = 0; i < this.tweenArray.length; i++) {
+                if (this.t >= this.tweenArray[i].t1 && this.t < this.tweenArray[i].t2) {
+                    if (i === 1 && !this.attemptedPayment) {
+                        this.attemptedPayment = true;
+                        this.payCosts();
+                        if (!this.paid) {
+                            this.t = this.tweenArray[2].t1;
+                            continue;
+                        }
+                    }
+
+                    // A tween chain can have an "undefined" start value, which means
+                    // just inherit the last value of the previous tween.
+                    if (this.tweenArray[i].v1 === undefined) {
+                        this.tweenArray[i].v1 = this.tweenArray[i - 1].v2;
+                    }
+                    if (this.tweenArray[i].v2 === undefined) {
+                        this.tweenArray[i].v2 = this.tweenArray[i].v1;
+                    }
+
+                    // Apply stagger on the fly; this allows for randomization of the DESTINATION
+                    // (we assume the start point does not move).
+                    if (this.tweenArray[i].stagger) {
+                        this.tweenArray[i].v2 += Math.floor(Math.random() * this.tweenArray[i].stagger - this.tweenArray[i].stagger / 2);
+                        this.tweenArray[i].stagger = undefined;
+                    }
+
+                    this.value = (this.tweenArray[i].v2 - this.tweenArray[i].v1)
+                        * (this.t - this.tweenArray[i].t1)
+                        / (this.tweenArray[i].t2 - this.tweenArray[i].t1)
+                        + this.tweenArray[i].v1;
+
+                    // For every frame, we provide a utility "facing" value: 1 if the current
+                    // movement trends RIGHT, 0 if the current movement trends LEFT.
+                    this.facing = (this.tweenArray[i].v2 - this.tweenArray[i].v1 >= 0 ? 1 : 0);
+                    break;
+                }
+            }
+        }
+    }
+
+    // HeightMapData
+    //
+    // This file is generated by `gulp buildAssets`.
+
+    const HeightMapData =
+    /* <generated-data> */
+    [ [],
+      [ 149,
+        149,
+        149,
+        149,
+        149,
+        149,
+        149,
+        149,
+        149,
+        148,
+        148,
+        148,
+        148,
+        148,
+        148,
+        147,
+        147,
+        147,
+        146,
+        146,
+        146,
+        145,
+        145,
+        144,
+        144,
+        144,
+        143,
+        143,
+        142,
+        141,
+        141,
+        141,
+        140,
+        140,
+        140,
+        139,
+        139,
+        139,
+        139,
+        139,
+        138,
+        138,
+        138,
+        138,
+        138,
+        138,
+        137,
+        137,
+        137,
+        137,
+        137,
+        137,
+        137,
+        137,
+        136,
+        136,
+        136,
+        135,
+        135,
+        135,
+        134,
+        134,
+        134,
+        134,
+        134,
+        134,
+        134,
+        134,
+        134,
+        134,
+        134,
+        134,
+        134,
+        134,
+        134,
+        134,
+        134,
+        134,
+        134,
+        134,
+        134,
+        134,
+        134,
+        134,
+        134,
+        134,
+        134,
+        134,
+        134,
+        134,
+        134,
+        134,
+        134,
+        134,
+        134,
+        134,
+        134,
+        134,
+        134,
+        134,
+        134,
+        134,
+        134,
+        134,
+        134,
+        135,
+        135,
+        136,
+        136,
+        136,
+        137,
+        137,
+        137,
+        138,
+        139,
+        139,
+        140,
+        140,
+        140,
+        140,
+        141,
+        141,
+        141,
+        141,
+        141,
+        141,
+        142,
+        142,
+        143,
+        143,
+        143,
+        143,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        145,
+        145,
+        146,
+        145,
+        145,
+        145,
+        145,
+        145,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        145,
+        146,
+        146,
+        147,
+        147,
+        148,
+        148,
+        149,
+        149,
+        149,
+        149,
+        149,
+        149,
+        149,
+        149,
+        149,
+        149,
+        149,
+        149,
+        149,
+        149,
+        149,
+        149,
+        149,
+        149,
+        148,
+        148,
+        148,
+        148,
+        148,
+        148,
+        148,
+        148,
+        148,
+        148,
+        148,
+        148,
+        147,
+        147,
+        147,
+        147,
+        147,
+        147,
+        147,
+        147,
+        147,
+        147,
+        147,
+        147,
+        147,
+        147,
+        147,
+        147,
+        147,
+        147,
+        147,
+        147,
+        147,
+        148,
+        148,
+        149,
+        149,
+        149,
+        149,
+        150,
+        150,
+        150,
+        150,
+        151,
+        151,
+        152,
+        152,
+        152,
+        153,
+        153,
+        153,
+        154,
+        154,
+        154,
+        154,
+        154,
+        154,
+        153,
+        153,
+        153,
+        153,
+        152,
+        152,
+        152,
+        152,
+        151,
+        151,
+        151,
+        151,
+        151,
+        151,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        149,
+        149,
+        149,
+        149,
+        149,
+        149,
+        149,
+        149,
+        149,
+        149,
+        149,
+        149,
+        149,
+        149,
+        149,
+        149,
+        149,
+        149,
+        149,
+        149,
+        149,
+        149,
+        149,
+        149,
+        149,
+        149,
+        149,
+        149 ],
+      [ 126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        127,
+        128,
+        128,
+        129,
+        129,
+        129,
+        130,
+        130,
+        131,
+        131,
+        131,
+        131,
+        131,
+        131,
+        131,
+        131,
+        131,
+        131,
+        131,
+        131,
+        131,
+        131,
+        131,
+        131,
+        131,
+        131,
+        131,
+        131,
+        131,
+        131,
+        131,
+        131,
+        131,
+        131,
+        131,
+        131,
+        131,
+        131,
+        131,
+        131,
+        131,
+        131,
+        131,
+        131,
+        131,
+        131,
+        131,
+        131,
+        131,
+        131,
+        131,
+        131,
+        132,
+        132,
+        132,
+        132,
+        132,
+        132,
+        133,
+        133,
+        133,
+        133,
+        133,
+        134,
+        134,
+        135,
+        136,
+        136,
+        137,
+        138,
+        138,
+        139,
+        139,
+        139,
+        140,
+        140,
+        140,
+        140,
+        139,
+        139,
+        139,
+        139,
+        139,
+        139,
+        138,
+        138,
+        138,
+        138,
+        138,
+        137,
+        137,
+        137,
+        137,
+        137,
+        137,
+        137,
+        137,
+        137,
+        137,
+        137,
+        137,
+        138,
+        138,
+        138,
+        138,
+        138,
+        138,
+        138,
+        138,
+        138,
+        138,
+        138,
+        138,
+        138,
+        138,
+        138,
+        138,
+        138,
+        138,
+        138,
+        138,
+        138,
+        138,
+        138,
+        138,
+        138,
+        138,
+        138,
+        139,
+        139,
+        139,
+        139,
+        140,
+        140,
+        141,
+        141,
+        141,
+        142,
+        142,
+        142,
+        143,
+        143,
+        143,
+        143,
+        143,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        143,
+        143,
+        143,
+        143,
+        143,
+        143,
+        143,
+        142,
+        142,
+        142,
+        142,
+        142,
+        142,
+        142,
+        142,
+        142,
+        142,
+        142,
+        142,
+        142,
+        142,
+        142,
+        142,
+        142,
+        143,
+        143,
+        143,
+        143,
+        143,
+        143,
+        143,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        145,
+        145,
+        145,
+        145,
+        145,
+        145,
+        145,
+        146,
+        145,
+        145,
+        145,
+        145,
+        144,
+        144,
+        144,
+        143,
+        143,
+        143,
+        143,
+        143,
+        143,
+        143,
+        143,
+        143,
+        143,
+        143,
+        143,
+        143,
+        143,
+        143,
+        143,
+        143,
+        143,
+        143,
+        143,
+        143,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        143,
+        143,
+        143,
+        143,
+        143,
+        143,
+        143,
+        143,
+        143,
+        143,
+        143,
+        143,
+        143,
+        143,
+        143,
+        143,
+        143,
+        143,
+        143,
+        143,
+        143,
+        143,
+        143,
+        143,
+        143,
+        143,
+        143 ],
+      [ 0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        131,
+        130,
+        130,
+        130,
+        129,
+        129,
+        129,
+        129,
+        128,
+        128,
+        127,
+        127,
+        127,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        126,
+        118,
+        110,
+        103,
+        102,
+        102,
+        102,
+        101,
+        101,
+        101,
+        100,
+        100,
+        100,
+        99,
+        99,
+        99,
+        98,
+        98,
+        98,
+        97,
+        97,
+        97,
+        97,
+        96,
+        96,
+        96,
+        95,
+        95,
+        95,
+        95,
+        95,
+        95,
+        95,
+        95,
+        95,
+        95,
+        95,
+        95,
+        95,
+        95,
+        95,
+        103,
+        111,
+        119,
+        119,
+        119,
+        119,
+        119,
+        119,
+        119,
+        119,
+        119,
+        119,
+        119,
+        119,
+        119,
+        119,
+        119,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        121,
+        121,
+        121,
+        121,
+        121,
+        121,
+        121,
+        121,
+        121,
+        121,
+        121,
+        121,
+        121,
+        121,
+        121,
+        121,
+        121,
+        121,
+        121,
+        121,
+        121,
+        121,
+        121,
+        121,
+        121,
+        121,
+        121,
+        121,
+        121,
+        121,
+        121,
+        121,
+        121,
+        121 ] ]
+    /* </generated-data> */
+    ;
+
+    // VillagerChunkParticle
+
+
+    class VillagerChunkParticle {
+        constructor(pos) {
+            this.t = -1;
+            this.d = 30;
+
+            this.angle = Math.random() * Math.PI + Math.PI;
+            this.vector = angle2vector(this.angle);
+            this.m = 50 + Math.random() * 25;
+            this.a = Math.random() * Math.PI * 2;
+            this.ad = 0.1;
+
+            this.pos = { u: pos.u, v: pos.v - 12 };
+            this.pos.u += this.vector.x * 3;
+            this.pos.v += this.vector.y * 3;
+
+            this.frame = Math.floor(Math.random() * 6);
+        }
+
+        update() {
+            if (++this.t === this.d) {
+                this.cull = true;
+            }
+
+            this.pos.u += (this.m / this.d) * this.vector.x;
+            this.pos.v += (this.m / this.d) * this.vector.y;
+            this.vector.x *= 0.95;
+            this.vector.y *= 0.95;
+            this.vector.y += 0.05;
+
+            this.a += this.ad;
+        }
+
+        draw() {
+            Sprite.drawViewportSprite(Sprite.villagerchunk[this.frame], this.pos, this.a);
+        }
+    }
+
+    // Villager
+
+
+    const IDLE = 0;
+    const WOODCUTTER = 1;
+    const BUTCHER = 2;
+    const TALLOWER = 3;
+    const STONECUTTER = 4;
+    const CANTOR = 5;
+
+    class IdleTask extends TweenChain {
+        constructor() {
+            super([
+                { t1: 0, t2: 30, v1: 0, v2: 0 }
+            ]);
+            this.frame = 0;
+            this.layer = 1;
+            this.cost = [];
+            this.grant = [];
+        }
+    }
+
+    class SillyTask extends TweenChain {
+        constructor(uValue) {
+            super([
+                { t1: 0, t2: 120, v1: uValue, v2: 0 }
+            ]);
+            this.frame = 0;
+            this.layer = 1;
+            this.cost = [];
+            this.grant = [];
+        }
+    }
+
+    class WoodcutterTask extends TweenChain {
+        constructor() {
+            super([
+                { t1: 0, t2: 120, v1: 0, v2: 140, stagger: 15 },
+                { t1: 120, t2: 180, v1: undefined, v2: 140, stagger: 15 },
+                { t1: 180, t2: 300, v1: undefined, v2: 0 }
+            ]);
+            this.layer = 1;
+            this.frame = 0;
+            this.cost = [0, 0, 0, 1];
+            this.grant = [0, 0, game.gameScene.tech.woodplus.unlocked ? 7 : 5];
+        }
+
+        update() {
+            super.update();
+
+            const facing = (this.t > 130 && this.t < 170) ? (Math.floor(this.t / 10) % 2) : this.facing;
+
+            this.frame = Math.floor((this.t + 1) / 8) % 2 + facing * VILLAGER_FRAMES;
+            this.equipmentframe = (this.t > 60 && this.t < 210) ? 2 + facing * VILLAGER_FRAMES : undefined;
+        }
+    }
+
+    class ButcherTask extends TweenChain {
+        constructor() {
+            super([
+                { t1: 0, t2: 120, v1: 0, v2: -76, stagger: 20 },
+                { t1: 120, t2: 180, v1: undefined, v2: -76, stagger: 20 },
+                { t1: 180, t2: 300, v1: undefined, v2: 0 }
+            ]);
+            this.layer = 1;
+            this.frame = 0;
+            this.cost = [];
+            this.grant = [0, 0, 0, game.gameScene.tech.meatplus.unlocked ? 7 : 5];
+        }
+
+        update() {
+            super.update();
+
+            const facing = (this.t > 140 && this.t < 160) ? (Math.floor(this.t / 10) % 2) : this.facing;
+
+            this.frame = Math.floor((this.t + 1) / 8) % 2 + facing * VILLAGER_FRAMES;
+            this.equipmentframe = (this.t > 60 && this.t < 210) ? 3 + facing * VILLAGER_FRAMES : undefined;
+        }
+    }
+
+    class TallowerTask extends TweenChain {
+        constructor() {
+            super([
+                { t1: 0, t2: 120, v1: 0, v2: 47 },
+                { t1: 120, t2: 180, v1: 47, v2: 47 },
+                { t1: 180, t2: 300, v1: 47, v2: 0 }
+            ]);
+            this.layer = 2;
+            this.frame = 0;
+            this.cost = [0, 0, 2, 3];
+            this.grant = [0, 0, 0, 0, game.gameScene.tech.torchplus.unlocked ? 2 : 1];
+        }
+
+        update() {
+            super.update();
+
+            const facing = (this.t > 140 && this.t < 160) ? (Math.floor(this.t / 10) % 2) : this.facing;
+
+            this.frame = Math.floor((this.t + 1) / 8) % 2 + 6 + facing * VILLAGER_FRAMES;
+        }
+    }
+
+    class StonecutterTask extends TweenChain {
+        constructor() {
+            super([
+                { t1: 0, t2: 120, v1: 0, v2: -141 },
+                { t1: 120, t2: 180, v1: -141, v2: -141 },
+                { t1: 180, t2: 300, v1: -141, v2: 0 }
+            ]);
+            this.layer = 1;
+            this.frame = 0;
+            this.cost = [0, 0, 0, 1, 1];
+            this.grant = [0, 0, 0, 0, 0, game.gameScene.tech.stoneplus.unlocked ? 7 : 5];
+        }
+
+        update() {
+            super.update();
+
+            const facing = (this.t > 140 && this.t < 160) ? (Math.floor(this.t / 10) % 2) : this.facing;
+
+            this.frame = Math.floor((this.t + 1) / 8) % 2 + facing * VILLAGER_FRAMES;
+            this.equipmentframe = (this.t > 60 && this.t < 210) ? 5 + facing * VILLAGER_FRAMES : undefined;
+        }
+    }
+
+    class CantorTask extends TweenChain {
+        constructor() {
+            super([
+                { t1: 0, t2: 120, v1: 135, v2: 70, stagger: 15 },
+                { t1: 120, t2: 180, v1: undefined, v2: undefined },
+                { t1: 180, t2: 300, v1: undefined, v2: 135 }
+            ]);
+            this.layer = 3;
+            this.frame = 0;
+            this.cost = [0, 0, 3, 3, 1, 3];
+            this.grant = [game.gameScene.tech.cantorplus.unlocked ? 2 : 1];
+        }
+
+        update() {
+            super.update();
+
+            //const facing = (this.t > 140 && this.t < 160) ? (Math.floor(this.t / 10) % 2) : this.facing;
+            const facing = (this.t > 120 && this.t < 180) ? 0 : this.facing;
+
+            this.frame = Math.floor((this.t + 1) / 8) % 2 + facing * VILLAGER_FRAMES + 8;
+        }
+    }
+
+    const TaskClass = {
+        [WOODCUTTER]: WoodcutterTask,
+        [BUTCHER]: ButcherTask,
+        [TALLOWER]: TallowerTask,
+        [STONECUTTER]: StonecutterTask,
+        [CANTOR]: CantorTask,
+        [IDLE]: IdleTask
+    };
+
+    class Villager {
+        static JOB_NAMES = ['', 'WOODCUTTER', 'BUTCHER', 'TALLOWER', 'STONEMASON', 'CANTOR'];
+
+        constructor(job) {
+            this.job = job;
+            this.t = 0;
+            this.pos = { u: 0, v: 0 };
+        }
+
+        update() {
+            if (!this.task) {
+                this.task = new TaskClass[this.job]();
+            }
+
+            this.task.update();
+
+            this.layer = this.task.layer;
+            this.pos.u = 160 + this.task.value;
+            this.pos.v = HeightMapData[this.layer][Math.floor(this.pos.u)] - 32 + 1;
+            this.frame = this.task.frame || 0;
+            this.equipmentframe = this.task.equipmentframe;
+
+            if (this.task.finished) {
+                this.task.completeTask();
+                this.task = undefined;
+            }
+        }
+
+        draw(terrainY = 0) {
+            Sprite.drawViewportSprite(Sprite.villager[this.frame], { u: this.pos.u, v: this.pos.v + terrainY });
+
+            if (this.equipmentframe > -1) {
+                Sprite.drawViewportSprite(Sprite.villager[this.equipmentframe], { u: this.pos.u, v: this.pos.v + terrainY });
+            }
+        }
+
+        newTask() {
+            return new TaskClass[this.job]();
+        }
+
+        spawnChunks() {
+            game.gameScene.entities.push(new VillagerChunkParticle(this.pos));
+            game.gameScene.entities.push(new VillagerChunkParticle(this.pos));
+            game.gameScene.entities.push(new VillagerChunkParticle(this.pos));
+            game.gameScene.entities.push(new VillagerChunkParticle(this.pos));
+            game.gameScene.entities.push(new VillagerChunkParticle(this.pos));
+        }
+    }
+
+    // WinkParticle
+
+
+    class WinkParticle {
+        constructor() {
+            this.t = -1;
+            this.d = 15;
+            this.frame = 3;
+            this.layer = 1;
+        }
+
+        update() {
+            if (++this.t === this.d) {
+                this.cull = true;
+            }
+
+            if (this.t === 2) {
+                this.frame = 0;
+            } else if (this.t === 6) {
+                this.frame++;
+            } else if (this.t === 8) {
+                this.frame++;
+            } else if (this.t === 10) {
+                this.frame++;
+            }
+        }
+
+        draw() {
+            Viewport.ctx.drawImage(Sprite.wink[this.frame].img, 160 + 11 - 1, 73 - 30 + 9 - 2);
+        }
+    }
+
+    // ScreenShake
+
+    class ScreenShake {
+        // This is a slightly truncated version of ScreenShake... only support 1 amplitude.
+        constructor(frames, hAmplitude) {
+            this.frames = frames;
+            this.hAmplitude = hAmplitude;
+            this.hSamples = [];
+            this.vSamples = [];
+
+            var sampleCount = frames / 2;
+            for (let i = 0; i <= sampleCount; i++) {
+                this.hSamples.push(Math.random() * 2 - 1);
+                this.vSamples.push(Math.random() * 2 - 1);
+            }
+            this.frame = -1;
+        }
+
+        update() {
+            this.frame++;
+            if (this.frame >= this.frames) {
+                this.x = 0;
+                this.y = 0;
+                return false;
+            }
+
+            // https://jonny.morrill.me/en/blog/gamedev-how-to-implement-a-camera-shake-effect/
+            // let s = (this.frames / 10) * (this.frame / this.frames);
+            let s = this.frame / 2;
+            let s0 = s | 0;
+            let s1 = s0 + 1;
+            let decay = 1 - this.frame / this.frames;
+
+            this.x =
+                this.hAmplitude *
+                decay *
+                (this.hSamples[s0] +
+                    (s - s0) * (this.hSamples[s1] - this.hSamples[s0]));
+            this.y =
+                this.hAmplitude *
+                decay *
+                (this.vSamples[s0] +
+                    (s - s0) * (this.vSamples[s1] - this.vSamples[s0]));
+
+            return true;
+        }
+    }
+
+    // HelpScene
+
+
+    class HelpScene {
+        static pagesUnlocked = 5;
+        static help = [
+            {
+                title: 'SANITY',
+                text: 'Bring freedom to the village before sanity erodes completely.',
+                arrow: [180, 38, 306, 30]
+            },
+            {
+                title: 'INFLUENCE',
+                text: 'Exert influence to recruit villagers. Each villager requires additional influence.'
+                //arrow: [132, 38, 126, 8]
+            },
+            {
+                title: 'JOBS',
+                text: 'Use arrow keys to switch jobs and assign recruited villagers. You can move villagers you have already recruited between jobs.',
+                arrow: [160, 80, 70, 127]
+            },
+            {
+                title: 'RESOURCES',
+                text: 'Resources are produced and consumed each turn by each job.',
+                arrow: [160, 70, 210, 126]
+            },
+            {
+                title: 'CODEX',
+                text: 'Unlock jobs, upgrades and abilities in the Codex.'
+            }
+        ];
+
+        constructor(page) {
+            this.page = page || 0;
+            this.t = 0;
+        }
+
+        update() {
+            this.t++;
+            this.bounceX = Math.floor(Math.cos(this.t / 8) * 3);
+
+            if (Input.pressed['ArrowRight']) {
+                this.page = (this.page + 1) % HelpScene.pagesUnlocked;
+            }
+
+            if (Input.pressed['ArrowLeft']) {
+                this.page = (this.page + HelpScene.pagesUnlocked - 1) % HelpScene.pagesUnlocked;
+            }
+
+            if (Input.pressed['Escape'] || Input.pressed['KeyH']) {
+                game.scenes.pop();
+            }
+        }
+
+        draw() {
+            Viewport.ctx.fillStyle = rgba(0, 0, 0, 0.66);
+            Viewport.ctx.fillRect(0, 0, Viewport.width, Viewport.height);
+
+            const page = HelpScene.help[this.page];
+
+            const titleText = page.title.toUpperCase();
+            const titleWidth = Text.measure(titleText, 1).w;
+            Text.drawText(Viewport.ctx, titleText, (Viewport.width - titleWidth) / 2, 35, 1, Text.palette[4]);
+            Text.drawParagraph(Viewport.ctx, page.text.toUpperCase(), 80, 50, 180, 1, Text.palette[4]);
+
+            Viewport.ctx.strokeStyle = PALETTE[4];
+            Viewport.ctx.beginPath();
+            if (page.arrow) {
+                Viewport.ctx.moveTo(page.arrow[0], page.arrow[1]);
+                Viewport.ctx.lineTo(page.arrow[2], page.arrow[3]);
+            }
+            Viewport.ctx.stroke();
+
+            const helpText = `HELP PAGE ${this.page + 1}/${HelpScene.pagesUnlocked}    \\h1l \\h1r MORE HELP    \\h1H / \\h3ESC BACK`;
+            const helpWidth = Text.measure(helpText, 1).w;
+            Text.drawText(Viewport.ctx, helpText, (Viewport.width - helpWidth) / 2, 170, 1, Text.palette[4]);
+        }
+    }
+
+    // TechScene
+
+
+    class TechScene {
+        constructor(tech) {
+            this.tech = tech;
+            this.t = 0;
+
+            let lastNode = game.gameScene.lastTech || Object.values(this.tech)[0];
+            this.pos = { x: lastNode.x, y: lastNode.y };
+        }
+
+        update() {
+            game.gameScene.update(false);
+
+            this.t++;
+            this.bounceX = Math.floor(Math.cos(this.t / 8) * 3);
+
+            game.gameScene.lastTech = this.pos;
+
+            if (Input.pressed['ArrowRight']) {
+                this.move(1, 0);
+            }
+            if (Input.pressed['ArrowLeft']) {
+                this.move(-1, 0);
+            }
+            if (Input.pressed['ArrowUp']) {
+                this.move(0, -1);
+            }
+            if (Input.pressed['ArrowDown']) {
+                this.move(0, 1);
+            }
+
+            if (Input.pressed['Space']) {
+                if (game.gameScene.buyTech(game.gameScene.getTechNode(this.pos.x, this.pos.y))) {
+                    Audio.play(Audio.wink);
+                } else {
+                    Audio.play(Audio.fail);
+                }
+            }
+
+            if (Input.pressed['Escape'] || Input.pressed['KeyC']) {
+                game.scenes.pop();
+            }
+        }
+
+        draw() {
+            Viewport.ctx.fillStyle = rgba(0, 0, 0, 0.72);
+            Viewport.ctx.fillRect(0, 0, Viewport.width, Viewport.height);
+
+            let centerx = 80 - 11;
+            let centery = 90 - 9;
+            let offsetx = (-this.pos.x) * 23;
+            let offsety = (-this.pos.y) * 19;
+
+            let cardx = 180;
+            let cardy = 40;
+
+            for (let node of Object.values(this.tech)) {
+                if (node && node.visible && Math.abs(node.x - this.pos.x) <= 2 && Math.abs(node.y - this.pos.y) <= 2) {
+                    let bgColor = node.unlocked ? 1 : 0;
+
+                    Viewport.ctx.drawImage(Sprite.techtree[bgColor].img, offsetx + centerx + node.x * 23, offsety + centery + node.y * 19);
+
+                    if (node.sprite) {
+                        Viewport.ctx.drawImage(Sprite.techtree[node.sprite].img, offsetx + centerx + node.x * 23, offsety + centery + node.y * 19);
+                    }
+
+                    if (node.x == this.pos.x && node.y == this.pos.y) {
+                        Viewport.ctx.drawImage(Sprite.techtree[2].img, offsetx + centerx + node.x * 23, offsety + centery + node.y * 19);
+
+                        Text.drawText(Viewport.ctx, node.title.toUpperCase(), cardx, cardy, 1, Text.palette[4]);
+                        Text.drawParagraph(Viewport.ctx, node.description.toUpperCase(), cardx, cardy + 10, 132, 1, Text.palette[3]);
+
+                        if (node.unlocked) {
+                            Text.drawText(Viewport.ctx, 'UNLOCKED', cardx, cardy+40, 1, Text.palette[4]);
+                        } else {
+                            let costColor = game.gameScene.canAffordCosts(node.unlockCost) ? 4 : 2;
+
+                            let unlockCostTextArray = [];
+                            for (let i = 0; i < node.unlockCost.length; i++) {
+                                if (node.unlockCost[i]) unlockCostTextArray.push('' + node.unlockCost[i] + ' ' + RESOURCE_NAMES[i]);
+                            }
+
+                            Text.drawText(Viewport.ctx, 'UNLOCK:', cardx, cardy+40, 1, Text.palette[3]);
+                            Text.drawParagraph(Viewport.ctx, unlockCostTextArray.join('\n'), cardx + 56, cardy+40, 132 - 56, 1, Text.palette[costColor]);
+                        }
+
+                        let perText = node.perTurn ? 'PER TURN:' : 'PER USE:';
+                        Text.drawText(Viewport.ctx, perText, cardx, cardy+70, 1, Text.palette[3]);
+                        Text.drawParagraph(Viewport.ctx, (node.perTurn || node.perUse).toUpperCase(), cardx + 56, cardy+70, 132 - 56, 1, Text.palette[4]);
+                    }
+                }
+            }
+
+            //const helpText = `\\l\\r MOVE    \\SPACE UNLOCK     \\E\\S\\C BACK`;
+            const helpText = 'ARROWS TO MOVE   \\h5SPACE TO UNLOCK   \\h1C / \\h3ESC BACK';
+            const helpWidth = Text.measure(helpText, 1).w;
+            Text.drawText(Viewport.ctx, helpText, (Viewport.width - helpWidth) / 2, 170, 1, Text.palette[4]);
+        }
+
+        move(dx, dy) {
+            Audio.play(Audio.click);
+            if (game.gameScene.getTechNode(this.pos.x + dx, this.pos.y + dy)?.visible) {
+                this.pos.x += dx;
+                this.pos.y += dy;
+            }
+        }
+    }
+
+    // PauseScene
+
+
+    class PauseScene {
+        constructor() {
+            this.t = 0;
+        }
+
+        update() {
+            this.t++;
+
+            if (Input.pressed['Escape']) {
+                game.scenes.pop();
+            }
+        }
+
+        draw() {
+            Viewport.ctx.fillStyle = rgba(0, 0, 0, 0.72);
+            Viewport.ctx.fillRect(0, 0, Viewport.width, Viewport.height);
+
+            let text = 'PAUSED - PRESS ESC TO CONTINUE';
+            let width = Text.measure(text, 1).w;
+
+            Text.drawText(Viewport.ctx, text, (Viewport.width - width) / 2, 80, 1, Text.palette[3]);
+        }
+    }
+
+    // GameOverScene
+
+
+    class GameOverScene {
+        constructor(victory, stats) {
+            this.victory = victory;
+            this.stats = stats;
+
+            let s = [0, 0, 0, 0, 0, 0, 0];
+
+            this.scorelines = [
+                ['FREEDOM', 'NO', s[0]],
+                ['SEALS LIT', String(stats.freedom), stats.freedom * 1000],
+                ['WOOD GATHERED', String(stats.woodGathered), clamp(stats.woodGathered, 0, 2000)],
+                ['MEAT BUTCHERED', String(stats.meatGathered), clamp(stats.meatGathered, 0, 2000)],
+                ['TORCHES CRAFTED', String(stats.torchesCrafted), clamp(stats.torchesCrafted, 0, 2000)],
+                ['STONE MINED', String(stats.stoneGathered), clamp(stats.stoneGathered, 0, 2000)],
+                ['TIME', String(stats.seconds), clamp(stats.seconds, 0, 1000)]
+            ];
+
+            if (victory) {
+                this.title = 'VICTORY';
+                this.text = [
+                    'FREEDOM RINGS OUT, NOT JUST FOR ULTHAR,',
+                    'BUT THE ENTIRE PLANET.',
+                    ''
+                ];
+                this.scorelines[0][1] = 'YES';
+                this.scorelines[0][2] = 7000;
+                for (let i = 2; i < 6; i++) {
+                    this.scorelines[i][2] = 2000 - this.scorelines[i][2];
+                }
+                this.scorelines[6][2] = 5000 - (this.scorelines[6][2] * 5);
+            } else {
+                this.title = 'GAME OVER';
+                this.text = [
+                    'THE LAST SPARK OF SANITY FADES IN ULTHAR, AND WITH IT',
+                    'ANY HOPE OF FREEDOM FOR YOU AND YOUR KIN.',
+                    '',
+                ];
+            }
+
+            this.t = 0;
+            this.finalScore = 0;
+            this.displayedScore = 0;
+            this.linesDisplayed = 0;
+        }
+
+        update() {
+            this.t++;
+
+            if (Input.pressed['Space']) {
+                Audio.play(Audio.click);
+                if (this.t > 210) {
+                    game.scenes.pop();
+                    game.scenes.push(new GameScene());
+                } else {
+                    this.t = 210;
+                    while (this.linesDisplayed < 7) {
+                        this.linesDisplayed++;
+                        this.finalScore += this.scorelines[this.linesDisplayed - 1][2];
+                    }
+                    this.displayedScore = this.finalScore;
+                }
+            }
+
+            if (this.t % 15 === 0 && this.t <= 210) {
+                Audio.play(Audio.click);
+            }
+
+            if (this.t > 0 && (this.t % 30) === 0 && this.linesDisplayed < 7) {
+                this.linesDisplayed++;
+                this.finalScore += this.scorelines[this.linesDisplayed - 1][2];
+            }
+
+            if (this.displayedScore < this.finalScore) {
+                this.displayedScore += Math.ceil((this.finalScore - this.displayedScore) * 0.1);
+            }
+        }
+
+        draw() {
+            Viewport.ctx.fillStyle = PALETTE[0];
+            Viewport.ctx.fillRect(0, 0, Viewport.width, Viewport.height);
+
+            const gameOverWidth = Text.measure(this.title, 2).w;
+            Text.drawText(Viewport.ctx, this.title, (Viewport.width - gameOverWidth) / 2, 10, 2, Text.palette[4]);
+
+            let y = 0;
+
+            for (y = 0; y < this.text.length; y++) {
+                let width = Text.measure(this.text[y], 1).w;
+                Text.drawText(Viewport.ctx, this.text[y], (Viewport.width - width) / 2, 32 + y * 10, 1, Text.palette[4]);
+            }
+
+            y += 0.5;
+
+            let displayed = clamp(this.t / 15, 0, 14);
+            for (let i = 0; i < displayed; i++) {
+                let idx = Math.floor(i / 2);
+                let column = i % 2;
+                if (column === 0) {
+                    Text.drawText(Viewport.ctx, this.scorelines[idx][0], 70, 32 + y * 10, 1, Text.palette[3]);
+                }
+                if (column === 1) {
+                    let width = Text.measure(this.scorelines[idx][1], 1).w;
+                    Text.drawText(Viewport.ctx, this.scorelines[idx][1], 250 - width, 32 + y * 10, 1, Text.palette[4]);
+                    y++;
+                }
+            }
+
+            y = 11;
+            Text.drawText(Viewport.ctx, 'FINAL SCORE', 70, 32 + y * 10, 1, Text.palette[3]);
+            let width = Text.measure(String(this.displayedScore), 1).w;
+            Text.drawText(Viewport.ctx, String(this.displayedScore), 250 - width, 32 + y * 10, 1, Text.palette[4]);
+
+            if (this.t > 210) {
+                let text = 'PRESS SPACE TO PLAY AGAIN';
+                let width = Text.measure(text, 1).w;
+                Text.drawText(Viewport.ctx, text, 160 - width / 2, 165, 1, Text.palette[4], Text.palette[1]);
+            }
+        }
+    }
+
+    // TechTree
+
+    const TechTree = {
+        create() {
+            return {
+                // Job path
+                woodcutter: {
+                    title: 'Woodcutters',
+                    description: 'Recruit villagers to gather wood.',
+                    perTurn: '-1 Meat\n+5 Wood',
+                    // Automatically handed out. Not necessarily because I want it that way,
+                    // more because it would take extra code bytes to handle the UI when
+                    // no jobs were unlocked yet.
+                    unlockCost: [],
+                    x: 4, y: 4,
+                    sprite: 3,
+                    d: true, l: true, u: true
+                },
+                butcher: {
+                    title: 'Butchers',
+                    description: 'Recruit villagers to gather meat.',
+                    perTurn: '-1 Meat\n+5 Meat',
+                    unlockCost: [0, 0, 10],
+                    x: 4, y: 5,
+                    sprite: 4,
+                    d: true, r: true
+                },
+                tallower: {
+                    title: 'Tallowers',
+                    description: 'Recruit villagers to render fat and make torches.',
+                    perTurn: '-3 Meat\n-2 Wood\n+1 Torch',
+                    unlockCost: [0, 0, 10, 5],
+                    x: 4, y: 6,
+                    sprite: 5,
+                    d: true, l: true
+                },
+                stonecutter: {
+                    title: 'Stonemasons',
+                    description: 'Recruit villagers to gather stone.',
+                    perTurn: '-1 Meat\n-1 Torch\n+5 Stone',
+                    unlockCost: [0, 0, 15, 15],
+                    x: 4, y: 7,
+                    sprite: 6,
+                    d: true, r: true
+                },
+                cantor: {
+                    title: 'Cantors',
+                    description: 'Soothe the old ones with song and sacrifice.',
+                    unlockCost: [0, 0, 40, 30],
+                    perTurn: '-3 Wood\n-3 Meat\n-1 Torch\n-3 Stone\n+1 Sanity',
+                    x: 4, y: 8,
+                    sprite: 7,
+                    l: true
+                },
+
+                // Sanity path
+                sacrifice: {
+                    title: 'Sacrificial Lamb',
+                    description: 'Sacrifice villagers to temporarily increase sanity. Long cooldown.',
+                    unlockCost: [0, 0, 20, 20, 5, 10],
+                    perUse: '-1 Villager\n+10 Sanity',
+                    x: 3, y: 4,
+                    sprite: 8,
+                    l: true,
+                    u: true
+                },
+                sacrificeplus: {
+                    title: 'Repeat Offender',
+                    description: 'Shorten sacrifice cooldown.',
+                    unlockCost: [0, 0, 30, 5, 5, 30],
+                    perUse: '-40% Cooldown',
+                    x: 3, y: 3,
+                    sprite: 8,
+                },
+                sanityplus: {
+                    title: 'Resolute',
+                    description: 'The village is more resilient.',
+                    unlockCost: [0, 0, 0, 0, 20],
+                    perTurn: 'Reduce all sanity drain by 20%',
+                    x: 2, y: 4,
+                    sprite: 7,
+                    d: true
+                },
+                sanityplusplus: {
+                    title: 'Resolute+',
+                    description: 'The village is even more resilient.',
+                    unlockCost: [0, 0, 0, 0, 40],
+                    perTurn: 'Reduce all sanity drain by 40%',
+                    x: 2, y: 5,
+                    sprite: 7
+                },
+
+                // Ritual path
+                ritual: {
+                    title: 'The Ritual',
+                    description: 'Unlock Freedom. Increases sanity drain.',
+                    unlockCost: [0, 0, 5, 5, 20, 5],
+                    perUse: '-5 Wood\n-5 Meat\n-20 Torches\n-5 Stone',
+                    x: 4, y: 3,
+                    sprite: 9
+                },
+
+                // Wood upgrades
+                woodplus: {
+                    title: 'Screaming Trees',
+                    description: 'Woodcutters bring back 40% more wood.',
+                    perTurn: '+2 Wood',
+                    unlockCost: [0, 0, 20, 0, 0, 20],
+                    x: 6, y: 7,
+                    sprite: 3
+                },
+
+                // Meat upgrades
+                meatplus: {
+                    title: 'Organ Harvest',
+                    description: 'Butchers bring back 40% more meat.',
+                    perTurn: '+2 Meat',
+                    unlockCost: [0, 0, 20, 0, 0, 20],
+                    x: 5, y: 5,
+                    sprite: 4
+                },
+
+                // Stone upgrades
+                stoneplus: {
+                    title: 'Stone Cold',
+                    description: 'Stonemasons bring back 40% more stone.',
+                    perTurn: '+2 Stone',
+                    unlockCost: [0, 0, 20, 0, 0, 20],
+                    x: 5, y: 7,
+                    sprite: 6,
+                    r: true,
+                },
+
+                // Tallower upgrades
+                torchplus: {
+                    title: 'Hallowed',
+                    description: 'Tallower torch production is doubled.',
+                    perTurn: '+1 Torch',
+                    unlockCost: [0, 0, 30, 30],
+                    x: 3, y: 6,
+                    sprite: 5
+                },
+
+                // Cantor upgrades
+                cantorplus: {
+                    title: 'Chorus',
+                    description: 'Cantor sanity gain is doubled.',
+                    perTurn: '+1 Sanity',
+                    unlockCost: [0, 0, 30, 30, 30, 30],
+                    x: 3, y: 8,
+                    sprite: 7
+                }
+            };
+        }
+    };
+
+    // BlackCat
+
+
+    function drawBlackCat(obj, reset, adjustment) {
+        if (!obj.blackCatX || reset) {
+            obj.blackCatX = [0,1,2,3,4,5,6,7,8].map(x => adjustment * (Math.random() * 12 - 6));
+            obj.blackCatAlpha = [0,1,2,3,4,5,6,7,8].map(x => 1 - adjustment * Math.random());
+        }
+        for (let i = 0; i < 9; i++) {
+            let y = i * 4;
+            Viewport.ctx.globalAlpha = obj.blackCatAlpha[i];
+            Viewport.ctx.drawImage(Sprite.blackcat[0].img, 0, y, 24, 4, 160 + obj.blackCatX[i], 73 - 30 + y, 24, 4);
+        }
+        Viewport.ctx.globalAlpha = 1;
+    }
+
+    // GameScene
+
+
+    const BUTTON_RECRUIT_VILLAGER = 0;
+    const BUTTON_SACRIFICE_VILLAGER = 1;
+    const BUTTON_SUMMON_FREEDOM = 2;
+    const BUTTON_CODEX = 3;
+    const BUTTON_HELP = 4;
+
+    const SANITY = 0;
+    const INFLUENCE = 1;
+    const WOOD = 2;
+    const MEAT = 3;
+    const TORCHES = 4;
+    const STONE = 5;
+
+    class GameScene {
+        constructor() {
+            game.gameScene = this;
+            this.entities = [];
+            this.screenshakes = [];
+
+            // Inventory
+            this.resources = [100, 1, 0, 0, 0, 0];
+            this.resourcesDisplayed = [0, 1, 0, 0, 0, 0];
+            this.gathered = [0, 1, 0, 0, 0, 0];
+
+            // Clock
+            this.t = 0;
+
+            this.villagersRecruited = 0;
+            this.freedom = 0;
+
+            this.buttons = [
+                new Button(5, 3, 'V', 'RECRUIT VILLAGER'),
+                new Button(5, 15, 'S', 'SACRIFICE VILLAGER'),
+                new Button(5, 27, 'F', 'LIGHT FREEDOM'),
+                new Button(275, 156, 'C', 'CODEX'),
+                new Button(275, 168, 'H', 'HELP')
+            ];
+            this.buttons[BUTTON_CODEX].active = true;
+            this.buttons[BUTTON_HELP].visible = true;
+            this.buttons[BUTTON_HELP].active = true;
+
+            //this.recruitProgressBar = createProgressBar('RECRUIT VILLAGER', PALETTE[4]);
+            //this.sacrificeProgressBar = createProgressBar('SACRIFICE VILLAGER', PALETTE[4]);
+
+            this.selectedJob = WOODCUTTER;
+            this.jobsDisplayed = [WOODCUTTER];
+            this.inventoryDisplayed = [WOOD];
+
+            this.villagers = [];
+            this.villagersWithJob = [[], [], [], [], [], [], [], []];
+
+            // These two fake villagers are for laughs
+            let villager = new Villager(IDLE);
+            villager.task = new SillyTask(-50);
+            this.villagers.push(villager);
+            villager = new Villager(IDLE);
+            villager.task = new SillyTask(80);
+            this.villagers.push(villager);
+
+            this.tech = TechTree.create();
+            this.unlockTech(this.tech.woodcutter);
+
+            // DEBUG
+            /*
+            this.unlockTech(this.tech.butcher);
+            this.unlockTech(this.tech.tallower);
+            this.unlockTech(this.tech.stonecutter);
+            this.resources[WOOD] = 50;
+            this.resources[MEAT] = 50;
+            this.resources[TORCHES] = 50;
+            this.resources[STONE] = 50;
+            */
+
+            // The first time a game scene loads, we fade out the GitHub
+            // link so it doesn't distract players.
+            document.getElementsByClassName('github-corner')[0].className = 'github-corner hidden';
+        }
+
+        update(handleInput = true) {
+            this.jobsDisplayed = [WOODCUTTER];
+            this.inventoryDisplayed = [WOOD, MEAT];
+
+            if (this.tech.butcher.unlocked) {
+                this.jobsDisplayed.push(BUTCHER);
+            }
+            if (this.tech.tallower.unlocked) {
+                this.jobsDisplayed.push(TALLOWER);
+                this.inventoryDisplayed.push(TORCHES);
+            }
+            if (this.tech.stonecutter.unlocked) {
+                this.jobsDisplayed.push(STONECUTTER);
+                this.inventoryDisplayed.push(STONE);
+            }
+            if (this.tech.cantor.unlocked) {
+                this.jobsDisplayed.push(CANTOR);
+            }
+
+            // Player input
+
+            if (handleInput) {
+                if (Input.pressed['KeyV']) {
+                    this.recruitVillager();
+                }
+
+                if (Input.pressed['KeyS']) {
+                    this.sacrificeVillager();
+                }
+
+                if (Input.pressed['KeyF']) {
+                    this.lightFreedom();
+                }
+
+                if (Input.pressed['ArrowDown']) {
+                    this.moveJobSelector(1);
+                }
+
+                if (Input.pressed['ArrowUp']) {
+                    this.moveJobSelector(-1);
+                }
+
+                if (Input.pressed['ArrowRight']) {
+                    this.hireVillager(this.selectedJob);
+                }
+
+                if (Input.pressed['ArrowLeft']) {
+                    this.fireVillager(this.selectedJob);
+                }
+
+                if (Input.pressed['Space']) {
+                    this.resources[SANITY] -= 10;
+                }
+
+                if (Input.pressed['KeyC']) {
+                    game.scenes.push(new TechScene(this.tech));
+                }
+
+                if (Input.pressed['KeyH']) {
+                    game.scenes.push(new HelpScene());
+                }
+
+                if (Input.pressed['Escape']) {
+                    game.scenes.push(new PauseScene());
+                }
+            }
+
+            // Game ticks
+
+            this.t++;
+
+            if (!this.nextSanityTick) {
+                this.nextSanityTick = this.t + 12;
+            }
+
+            if (this.t >= this.nextSanityTick) {
+                if (this.villagersRecruited > 0) {
+                    let drain = 0.2 + (this.freedom * 0.15);
+                    if (this.tech.sanityplusplus) {
+                        drain *= 0.6;
+                    } else if (this.tech.sanityplus) {
+                        drain *= 0.8;
+                    }
+                    this.resources[SANITY] -= drain;
+                }
+                this.resources[INFLUENCE] += 0.2;
+                this.nextSanityTick = this.t + 12;
+            }
+
+            if (!this.nextSacrificeTick) {
+                this.nextSacrificeTick = this.t + 3;
+            }
+
+            // Resource ticks
+            // Note: very simple check is designed for small-scale
+            // changes that never have fractions. Sanity and influence
+            // ignore this system.
+
+            for (let i = 2; i < this.resourcesDisplayed.length; i++) {
+                if (this.resourcesDisplayed[i] > this.resources[i]) {
+                    this.resourcesDisplayed[i]--;
+                } else if (this.resourcesDisplayed[i] < this.resources[i]) {
+                    this.resourcesDisplayed[i]++;
+                }
+            }
+
+            // Game "start up" logic - some tick-based init
+            // animations that happen once at start of game.
+
+            if (this.t === 1) {
+                Audio.play(Audio.wind);
+            }
+
+            if (this.t === 36) {
+                this.addScreenShake(new ScreenShake(6, 6));
+                Audio.play(Audio.explosion);
+            }
+            if (this.t >= 36 && this.t <= 38) {
+                this.villagers[0].spawnChunks();
+                this.villagers[1].spawnChunks();
+            }
+            if (this.t === 38) {
+                this.villagers = [];
+                this.resources[MEAT] += 10;
+            }
+
+            // Button UI Elements
+
+            if (this.t === 60) {
+                this.buttons[BUTTON_RECRUIT_VILLAGER].visible = true;
+            }
+            if (this.tech.sacrifice.unlocked) {
+                this.buttons[BUTTON_SACRIFICE_VILLAGER].visible = true;
+            }
+            if (this.tech.ritual.unlocked) {
+                this.buttons[BUTTON_SUMMON_FREEDOM].visible = true;
+            }
+
+            let recruitActive = (this.resources[INFLUENCE] >= this.nextWorkerCost());
+            if (recruitActive && !this.buttons[BUTTON_RECRUIT_VILLAGER].active) {
+                this.buttons[BUTTON_RECRUIT_VILLAGER].active = true;
+                this.buttons[BUTTON_CODEX].visible = true;
+                Audio.play(Audio.bell);
+            }
+
+            let sacrificeActive = (this.t >= this.nextSacrificeTick && this.tech.sacrifice.unlocked);
+            if (sacrificeActive && !this.buttons[BUTTON_SACRIFICE_VILLAGER].active) {
+                this.buttons[BUTTON_SACRIFICE_VILLAGER].active = true;
+                Audio.play(Audio.bell);
+            }
+
+            this.buttons[BUTTON_SUMMON_FREEDOM].active = this.canAffordCosts([0, 0, 5, 5, 20, 5]);
+
+            // Villagers
+
+            for (const villager of this.villagers) {
+                villager.update();
+            }
+
+            // Entities
+
+            if (this.t > 35) {
+                for (const entity of this.entities) {
+                    entity.update();
+                }
+                this.entities = this.entities.filter(entity => !entity.cull);
+            }
+
+            // Ash rain
+
+            if (this.entities.length < 33) {
+                this.entities.push(new AshParticle());
+            }
+
+            // Check for player victory
+
+            if (this.freedom === 7) {
+                this.gameOver(true);
+            }
+
+            // Check for player defeat
+
+            if (this.resources[SANITY] <= 0) {
+                this.gameOver(false);
+            }
+
+            // Increment screenshakes
+
+            for (let i = 0; i < this.screenshakes.length; i++) {
+                if (!this.screenshakes[i].update()) {
+                    this.screenshakes.splice(i, 1);
+                    i--;
+                }
+            }
+        }
+
+        draw() {
+            // Draw screenshakes
+
+            let shakeX = 0, shakeY = 0;
+            this.screenshakes.forEach(shake => {
+                shakeX += shake.x;
+                shakeY += shake.y;
+            });
+            Viewport.ctx.translate(shakeX, shakeY);
+
+            // Fake "slam" (parallax drop at beginning of game)
+
+            let terrainY = this.t > 36 ? 0 : (285 - 285 * this.t / 36);
+
+            // Background
+
+            Viewport.ctx.fillStyle = PALETTE[3];
+            Viewport.ctx.fillRect(0, 0, Viewport.width, Viewport.height);
+
+            // Layer 3 (farthest)
+
+            Viewport.ctx.drawImage(Sprite.terrain[2].img, 0, Math.floor(0 + terrainY * 0.8 * 0.8));
+
+            for (let entity of this.entities) {
+                if (entity.layer === 3) entity.draw();
+            }
+
+            for (let villager of this.villagers) {
+                if (villager.layer === 3) villager.draw();
+            }
+
+            // Layer 2 (middle)
+
+            Viewport.ctx.drawImage(Sprite.terrain[1].img, 0, Math.floor(0 + terrainY * 0.8));
+
+            for (let entity of this.entities) {
+                if (entity.layer === 2) entity.draw();
+            }
+
+            for (let villager of this.villagers) {
+                if (villager.layer === 2) villager.draw();
+            }
+
+            //this.tech.ritual.unlocked = true;
+            if (this.tech.ritual.unlocked) {
+                this.drawRitual();
+            }
+
+            // Layer 1 (closest)
+
+            Viewport.ctx.drawImage(Sprite.terrain[0].img, 0, Math.floor(0 + terrainY));
+
+            // Black cat perch
+
+            let adjustment = this.tech.ritual.unlocked ? 0.1 + (this.freedom * 0.9 / 7) : 0;
+            drawBlackCat(this, this.t % (9 - this.freedom) === 0, adjustment);
+            //Viewport.ctx.drawImage(Sprite.blackcat[0].img, 160, 73 - 30);
+
+            for (let entity of this.entities) {
+                if (entity.layer === 1 || !entity.layer) entity.draw();
+            }
+
+            for (let villager of this.villagers) {
+                if (villager.layer === 1) villager.draw(Math.floor(terrainY));
+            }
+
+            if (this.tech.ritual.unlocked) {
+                let text = '' + this.freedom + '/7';
+                let textWidth = Text.measure(text).w;
+                Text.drawText(Viewport.ctx, text, 170 - textWidth / 2, 99, 1, Text.palette[4]);
+            }
+
+            if (this.t > 40) {
+                if (game.scene === this) {
+                    // Hide button prompts if Help Screen is displayed, to avoid confusion
+                    for (const button of this.buttons) {
+                        button.draw();
+                    }
+                }
+
+                this.drawRecruitProgressBar();
+                this.drawSacrificeProgressBar();
+
+                this.drawSanityBar();
+                //this.drawInfluenceBar();
+                this.drawJobSelectUI();
+                this.drawInventory();
+            }
+        }
+
+        drawSanityBar() {
+            let k = Math.floor((this.resources[SANITY] / 100) * 78);
+            Viewport.ctx.drawImage(Sprite.sanitybar[0].img, 320-18-5, -3);
+            Viewport.ctx.drawImage(Sprite.sanitybar[1].img, 320-18-5, -3);
+            Viewport.ctx.drawImage(Sprite.sanitybar[2].img,
+                0, 2 + (78 - k),
+                18, k,
+                320-18-5, -3 + 2 + (78 - k),
+                18, k
+            );
+        }
+
+        /*drawInfluenceBar() {
+            let k = Math.floor(Math.min(this.resources[INFLUENCE] / this.nextWorkerCost(), 1) * 80);
+            Viewport.ctx.drawImage(Sprite.influencebar[0].img, (320-80)/2, 3);
+            Viewport.ctx.drawImage(Sprite.influencebar[1].img,
+                2, 3,
+                k, 4,
+                (320-80)/2 + 2, 3 + 3,
+                k, 4
+            );
+        }*/
+
+        drawRecruitProgressBar() {
+            if (!this.buttons[BUTTON_RECRUIT_VILLAGER].visible) return;
+            if (this.buttons[BUTTON_RECRUIT_VILLAGER].active) return;
+
+            let x = 5 + 11;
+            let y = 3 + 8;
+            let w = Math.floor(Math.min(this.resources[INFLUENCE] / this.nextWorkerCost(), 1) * 73);
+
+            Viewport.ctx.drawImage(Sprite.progressbar[0].img,
+                0, 0,
+                w, 1,
+                x, y,
+                w, 1
+            );
+        }
+
+        drawSacrificeProgressBar() {
+            if (!this.nextSacrificeTick) return;
+            if (!this.buttons[BUTTON_SACRIFICE_VILLAGER].visible) return;
+            if (this.buttons[BUTTON_SACRIFICE_VILLAGER].active) return;
+
+            let x = 5 + 11;
+            let y = 15 + 8;
+            let t2 = this.nextSacrificeTick;
+            let t1 = this.nextSacrificeTick - 15*60;
+            let w = Math.floor(Math.min((this.t - t1) / (t2 - t1), 1) * 79);
+
+            Viewport.ctx.drawImage(Sprite.progressbar[0].img,
+                0, 0,
+                w, 1,
+                x, y,
+                w, 1
+            );
+        }
+
+        drawJobSelectUI() {
+            const cornerX = 7;
+            const cornerY = 120;
+            const verticalMargin = 10;
+
+            let selectedIdx = 0;
+
+            for (let i = 0; i < this.jobsDisplayed.length; i++) {
+                if (this.selectedJob === this.jobsDisplayed[i]) {
+                    selectedIdx = i;
+                }
+
+                const color = this.selectedJob === this.jobsDisplayed[i] ? Text.palette[3] : Text.palette[2];
+                const numberText = String(this.villagersWithJob[this.jobsDisplayed[i]].length);
+                const width = Text.measure(numberText).w;
+                Text.drawText(Viewport.ctx, Villager.JOB_NAMES[this.jobsDisplayed[i]], cornerX + 5, cornerY + 4 + verticalMargin * i, 1, color);
+                Text.drawText(Viewport.ctx, numberText, cornerX + 92 - width, cornerY + 4 + verticalMargin * i, 1, color);
+            }
+
+            const leftArrow = this.villagersWithJob[this.selectedJob].length > 0 ? 0 : 2;
+            const rightArrow = this.villagersWithJob[IDLE].length > 0 ? 1 : 3;
+
+            Viewport.ctx.drawImage(Sprite.jobselect[0].img, cornerX, cornerY + selectedIdx * verticalMargin);
+            Viewport.ctx.drawImage(Sprite.smallarrows[leftArrow].img, cornerX + 77, cornerY + 4 + selectedIdx * verticalMargin);
+            Viewport.ctx.drawImage(Sprite.smallarrows[rightArrow].img, cornerX + 94, cornerY + 4 + selectedIdx * verticalMargin);
+        }
+
+        drawInventory() {
+            const inventoryIcon = [0, 0, 0, 2, 3, 1];
+
+            for (let i = 0; i < this.inventoryDisplayed.length; i++) {
+                let type = this.inventoryDisplayed[i];
+                let strValue = String(this.resourcesDisplayed[type]);
+                let width = Text.measure(strValue, 1).w;
+
+                Viewport.ctx.drawImage(
+                    Sprite.icons[inventoryIcon[type]].img,
+                    INVENTORY_POS.u - 60,
+                    INVENTORY_POS.v + i*12 - 1
+                );
+                Text.drawText(
+                    Viewport.ctx,
+                    RESOURCE_NAMES[type],
+                    INVENTORY_POS.u - 50,
+                    INVENTORY_POS.v + i*12,
+                    1,
+                    Text.palette[4]
+                );
+                Text.drawText(
+                    Viewport.ctx,
+                    strValue,
+                    INVENTORY_POS.u - width,
+                    INVENTORY_POS.v + i*12,
+                    1,
+                    Text.palette[4]
+                );
+            }
+        }
+
+        drawRitual() {
+            let pos = { u: 160 - 39 + 8, v: 17 + Math.floor(Math.sin(this.t / 12) * 2) };
+
+            Viewport.ctx.strokeStyle = PALETTE[1];
+            Viewport.ctx.beginPath();
+            for (let i = 0; i < 7; i++) {
+                for (let j = 0; j < 7; j++) {
+                    if (j - i === 1 || i - j === 1 || j - i === 6 || i - j === 6) continue;
+                    Viewport.ctx.moveTo(pos.u + SEPTAGRAM_FLAMES[i].u + 0.5, pos.v + SEPTAGRAM_FLAMES[i].v + 0.5);
+                    Viewport.ctx.lineTo(pos.u + SEPTAGRAM_FLAMES[j].u + 0.5, pos.v + SEPTAGRAM_FLAMES[j].v + 0.5);
+                }
+            }
+            Viewport.ctx.stroke();
+
+            for (let i = 0; i < 7; i++) {
+                let i2 = (i * 3 + 3) % 7;
+                let frame = i < this.freedom ? Math.floor((this.t / 6) + i) % 3 : 3;
+                Sprite.drawSprite(Viewport.ctx, Sprite.ritualflame[frame], pos.u + SEPTAGRAM_FLAMES[i2].u, pos.v + SEPTAGRAM_FLAMES[i2].v);
+            }
+        }
+
+        addScreenShake(screenshake) {
+            // This screen shake applies to the entire rendered screen, including GUI
+            this.screenshakes.push(screenshake);
+        }
+
+        moveJobSelector(delta) {
+            let idx = this.jobsDisplayed.indexOf(this.selectedJob);
+            idx = (idx + delta + this.jobsDisplayed.length) % this.jobsDisplayed.length;
+            this.selectedJob = this.jobsDisplayed[idx];
+        }
+
+        recruitVillager() {
+            const cost = this.nextWorkerCost();
+            if (this.resources[INFLUENCE] >= cost) {
+                this.resources[INFLUENCE] -= cost;
+                this.buttons[BUTTON_RECRUIT_VILLAGER].active = false;
+
+                const villager = new Villager(this.selectedJob || WOODCUTTER);
+                this.villagers.push(villager);
+                this.villagersWithJob[villager.job].push(villager);
+                this.villagersRecruited++;
+
+                this.entities.push(new WinkParticle());
+                Audio.play(Audio.wink);
+            } else {
+                this.addScreenShake(new ScreenShake(4, 4));
+                Audio.play(Audio.fail);
+            }
+        }
+
+        hireVillager() {
+            if (this.villagersWithJob[IDLE].length > 0) {
+                const villager = this.villagersWithJob[IDLE].pop();
+                villager.job = this.selectedJob;
+                this.villagersWithJob[this.selectedJob].push(villager);
+                Audio.play(Audio.click);
+            } else {
+                this.addScreenShake(new ScreenShake(4, 4));
+                Audio.play(Audio.fail);
+            }
+        }
+
+        fireVillager() {
+            if (this.villagersWithJob[this.selectedJob].length > 0) {
+                const villager = this.villagersWithJob[this.selectedJob].pop();
+                villager.job = IDLE;
+                this.villagersWithJob[IDLE].push(villager);
+                Audio.play(Audio.click);
+            } else {
+                this.addScreenShake(new ScreenShake(4, 4));
+                Audio.play(Audio.fail);
+            }
+        }
+
+        sacrificeVillager() {
+            let villagerpool = [...this.villagersWithJob[IDLE], ...this.villagersWithJob[this.selectedJob]];
+
+            if (villagerpool.length > 0 && this.t >= this.nextSacrificeTick) {
+                // Sacrifice Villager Logic:
+                //
+                // Take all villagers that are working on the selected job OR in the idle pool.
+                // Sort all of them by progress into their current task.
+                // Select the one with the least progress to sacrifice.
+                //
+                // This doesn't guarantee necessarily that idle villagers will be sacrificed,
+                // but it makes it extremely likely because idle villagers have a very low
+                // average t (total task length is 30 instead of 300).
+                villagerpool.sort((a, b) => (b.task?.t || 0) - (a.task?.t || 0));
+                let villager = villagerpool[0];
+
+                // Ensure villager is removed from appropriate lists
+                this.villagersWithJob[IDLE] = this.villagersWithJob[IDLE].filter(v => v != villager);
+                this.villagersWithJob[this.selectedJob] = this.villagersWithJob[this.selectedJob].filter(v => v != villager);
+                this.villagers = this.villagers.filter(v => v != villager);
+
+                // Effects
+                this.entities.push(new SacrificeParticle(villager));
+                this.entities.push(new WinkParticle());
+                Audio.play(Audio.wink);
+
+                // Next sacrifice timer
+                this.nextSacrificeTick = this.t + (this.tech.sacrificeplus.unlocked ? 9 : 15) * 60;
+                this.buttons[BUTTON_SACRIFICE_VILLAGER].active = false;
+            } else {
+                this.addScreenShake(new ScreenShake(4, 4));
+                Audio.play(Audio.fail);
+            }
+        }
+
+        lightFreedom() {
+            if (this.payCosts([0, 0, 5, 5, 20, 5])) {
+                Audio.play(Audio.wink);
+                this.freedom++;
+            } else {
+                this.addScreenShake(new ScreenShake(4, 4));
+                Audio.play(Audio.fail);
+            }
+        }
+
+        nextWorkerCost() {
+            return Math.floor(3 * Math.pow(1.24, this.villagers.length));
+        }
+
+        gameOver(victory) {
+            const stats = {
+                seconds: Math.floor(this.t / 60),
+                freedom: this.freedom,
+                woodGathered: this.gathered[WOOD],
+                meatGathered: this.gathered[MEAT],
+                torchesCrafted: this.gathered[TORCHES],
+                stoneGathered: this.gathered[STONE],
+            };
+            game.scenes.pop();
+            game.scenes.push(new GameOverScene(victory, stats));
+        }
+
+        getTechNode(x, y) {
+            return Object.values(this.tech).find(node => node.x === x && node.y === y);
+        }
+
+        /**
+         * Unlock tech node immediately without paying costs or validating.
+         */
+        unlockTech(node) {
+            node.visible = true;
+            node.unlocked = true;
+            if (node.r) this.getTechNode(node.x + 1, node.y).visible = true;
+            if (node.l) this.getTechNode(node.x - 1, node.y).visible = true;
+            if (node.u) this.getTechNode(node.x , node.y - 1).visible = true;
+            if (node.d) this.getTechNode(node.x, node.y + 1).visible = true;
+            this.lastUnlock = node;
+        }
+
+        /**
+         * Pay costs for and unlock a tech node, if possible.
+         */
+        buyTech(node) {
+            if (!node.unlocked && this.payCosts(node.unlockCost)) {
+                this.unlockTech(node);
+                return true;
+            }
+            return false;
+        }
+
+        payCosts(arr) {
+            if (!this.canAffordCosts(arr)) return false;
+            for (let i = 0; i < arr.length; i++) {
+                if (arr[i]) this.resources[i] -= arr[i];
+            }
+            return true;
+        }
+
+        canAffordCosts(arr) {
+            for (let i = 0; i < arr.length; i++) {
+                if (arr[i] && this.resources[i] < arr[i]) return false;
+            }
+            return true;
+        }
+
+        grant(arr) {
+            for (let i = 0; i < arr.length; i++) {
+                if (arr[i]) {
+                    this.resources[i] = clamp(this.resources[i] + arr[i], 0, i === 0 ? 100 : 10000);
+                    this.gathered[i] += arr[i];
+                }
+            }
+        }
+    }
+
+    // IntroScene
+
+
+
+
+    class IntroScene {
+        constructor() {
+            this.t = 0;
+            this.fadet = -1;
+            this.entities = [];
+
+            // Fade in GitHub link for first time in intro scene.
+            document.getElementsByClassName('github-corner')[0].className = 'github-corner';
+        }
+
+        update() {
+            this.t++;
+
+            if (this.fadet >= 0) this.fadet++;
+
+            if (this.fadet === 1) {
+                Audio.initTracks();
+            }
+
+            if (this.fadet > 20) {
+                game.scenes.pop();
+
+                const gameScene = new GameScene();
+                game.scenes.push(gameScene);
+                gameScene.entities = this.entities;
+            }
+
+            if (Input.pressed['Space']) {
+                this.fadet = 0;
+            }
+
+            if (this.entities.length < 33) {
+                this.entities.push(new AshParticle());
+            }
+
+            for (let entity of this.entities) {
+                entity.update();
+            }
+
+            this.entities = this.entities.filter(entity => !entity.cull);
+        }
+
+        draw() {
+            Viewport.ctx.fillStyle = PALETTE[0];
+            Viewport.ctx.fillRect(0, 0, Viewport.width, Viewport.height);
+
+            Viewport.ctx.globalAlpha = Math.min(this.t / 20, 1);
+            Viewport.ctx.fillStyle = PALETTE[3];
+            Viewport.ctx.fillRect(0, 0, Viewport.width, Viewport.height);
+            Viewport.ctx.globalAlpha = 1;
+
+            for (let entity of this.entities) {
+                entity.draw();
+            }
+
+            if (this.t > 30) {
+                let adjustment = Math.max(1 - this.t / 54, 0);
+                drawBlackCat(this, this.t % 3 === 0, adjustment);
+            }
+
+            if (this.t > 40) {
+                let title = 'ASHES OF ULTHAR';
+                let titleWidth = Text.measure(title, 2).w;
+                Text.drawText(Viewport.ctx, title, 168 - titleWidth / 2, 13 - this.fadet * 3, 2, Text.palette[4], Text.palette[1]);
+            }
+
+            if (this.t > 48 && this.fadet < 0) {
+                let text = 'PRESS SPACE TO PLAY';
+                let width = Text.measure(text, 1).w;
+                Text.drawText(Viewport.ctx, text, 168 - width / 2, 150, 1, Text.palette[4], Text.palette[1]);
+            }
+        }
+    }
+
+    // Game
+
+
+    /**
+     * Game state.
+     */
+    class Game {
+        init() {
+            Sprite.loadSpritesheet(() => {
+                Viewport.init();
+                Sprite.init();
+                Text.init();
+                Input.init();
+                Audio.init();
+
+                //Camera.init();
+
+                window.addEventListener('blur', () => this.pause());
+                window.addEventListener('focus', () => this.unpause());
+
+                this.reset();
+                this.start();
+            });
+        }
+
+        reset() {
+            this.lastFrame = 0;
+            this.scenes = [new IntroScene()];
+        }
+
+        start() {
+            this.frame = 0;
+            this.framestamps = [0];
+            this.update();
+            window.requestAnimationFrame((xyz) => this.onFrame(xyz));
+        }
+
+        onFrame(currentms) {
+            let delta = (currentms - this.lastFrame) - (1000 / FPS);
+
+            if (delta >= 0) {
+                this.frame++;
+                this.lastFrame = (currentms - delta);
+
+                // The above calculation is right for smoothing out frames, but if
+                // we end up far behind the currentms, we can "fast play" for a long time
+                // which is not desired. Fast-forward if we fall behind more than 5 frames.
+                if (currentms - this.lastFrame > 5 * 1000 / FPS) {
+                    this.lastFrame = currentms;
+                }
+
+                Viewport.resize();
+                this.update();
+                this.draw(Viewport.ctx);
+
+                // this.framestamps.push(currentms);
+                // if (this.framestamps.length >= 120) {
+                //     this.framestamps.shift();
+                // }
+                // this.fps = 1000 / ((this.framestamps[this.framestamps.length - 1] - this.framestamps[0]) / this.framestamps.length);
+            }
+            window.requestAnimationFrame((xyz) => this.onFrame(xyz));
+        }
+
+        update() {
+            // Note that _this_ pause flag means the user isn't looking at the
+            // browser window, and all processing is stopped completely.
+            //
+            // This is separate than hitting ESC in-game and opening the pause scene.
+            // (It's possible for both to be true, e.g. hitting ESC and than alt-tabbing.)
+            if (this.paused) return;
+
+            // Gather user input
+            Input.update();
+
+            // Handle special keys that are screen-independent
+            /*if (Input.pressed['KeyM']) {
+                console.log('KeyM - toggling music');
+                Audio.musicEnabled = !Audio.musicEnabled;
+            }*/
+            /*if (Input.pressed[Input.Action.SFX_TOGGLE]) {
+                Audio.sfxEnabled = !Audio.sfxEnabled;
+            }*/
+
+            // Hand off control to the current "screen" (for example, game screen or menu)
+            this.scene = this.scenes[this.scenes.length - 1];
+            this.scene.update();
+
+            // Do per-frame audio updates
+            Audio.update();
+        }
+
+        draw() {
+            // Reset canvas transform and scale
+            Viewport.ctx.setTransform(1, 0, 0, 1, 0, 0);
+            Viewport.ctx.scale(Viewport.scale, Viewport.scale);
+
+            for (let i = 0; i < this.scenes.length; i++) {
+                this.scenes[i].draw();
+            }
+
+            //Text.drawText(Viewport.ctx, String(this.fps), 15, 15, 1, Text.white);
+        }
+
+        pause() {
+            if (this.paused) return;
+            this.paused = true;
+            Audio.pause();
+            if (this.scene === this.gameScene) {
+                this.scenes.push(new PauseScene());
+            }
+        }
+
+        unpause() {
+            if (!this.paused) return;
+            this.paused = false;
+            Audio.unpause();
+        }
+    }
+
+    const game = new Game();
+
+    /**
+     * Create and launch game.
+     */
+    game.init();
+
+})();</script><script defer="defer" data-domain="ashes-of-ulthar.7tonshark.com" src="https://plausible.io/js/script.js"></script></body></html>
