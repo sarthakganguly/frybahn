@@ -1,0 +1,34 @@
+# Build & Dependencies
+node_modules/
+dist/
+build/
+.cache/
+.parcel-cache/
+
+# OS Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDEs & Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Project Specific
+*.zip
+downloads/
+.env
+.gemini/
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs/
+*.log
