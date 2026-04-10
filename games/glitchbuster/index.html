@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Glitch Buster</title>
+        <meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1.01'>
+        <style>
+            body { margin: 0; padding: 0; background-color: #000; color: #fff; display: flex; align-items: center; justify-content: center; height: 100vh; overflow: hidden; }
+            #t { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; }
+            #c { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+            #cc { position: relative; }
+            canvas { display: block; image-rendering: pixelated; }
+        </style>
+    </head>
+    <body>
+        <div id="t">
+            <div id="c">
+                <div id="cc">
+                    <canvas></canvas>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // Constants from config/constants.json
+            const D = document;
+            const w = window;
+            const CANVAS_WIDTH = 640;
+            const CANVAS_HEIGHT = 920;
+            const TILE_SIZE = 80;
+            const CHARACTER_WIDTH = 40;
+            const CHARACTER_HEIGHT = 52;
+            const WORLD_PADDING = 5;
+            const MASK_ROWS = 10;
+            const MASK_COLS = 10;
+            const VOID_ID = 0;
+            const TILE_ID = 1;
+            const UNBREAKABLE_TILE_ID = 2;
+            const PROBABLE_TILE_ID = 3;
+            const SPAWN_ID = 4;
+            const EXIT_ID = 5;
+            const CEILING_SPIKE_ID = 6;
+            const FLOOR_SPIKE_ID = 7;
+            const RENDERABLE = 1;
+            const CYCLABLE = 2;
+            const KILLABLE = 4;
+            const HEALTH = 1;
+            const GRENADE = 2;
+            const PROBABLE_TILE_PROBABILITY = 0.5;
+            const SPIKE_DENSITY = 0.05;
+            const UP = 1;
+            const DOWN = 2;
+            const LEFT = 4;
+            const RIGHT = 8;
+            const GRAVITY = 7500;
+            const PLAYER_SPEED = 560;
+            const PLAYER_JUMP_ACCELERATION = -1700;
+            const PLAYER_INITIAL_HEALTH = 5;
+            const PLAYER_MAX_HEALTH = 8;
+            const GRENADE_RADIUS = 8;
+            const GRENADE_RADIUS_2 = 16;
+            const GRENADE_BOUNCE_FACTOR = 0.5;
+            const WALKING_ENEMY_SPEED = 120;
+            const JUMPING_ENEMY_SPEED = 480;
+            const ENEMY_PATH_MIN_LENGTH = 2;
+            const ENEMY_DENSITY = 0.2;
+            const NOISE_PATTERN_SIZE = 400;
+            const NOISE_PIXEL_SIZE = 4;
+            const HALO_SIZE = 160;
+            const HALO_SIZE_HALF = 80;
+            const DARK_HALO_SIZE = 1000;
+            const DARK_HALO_SIZE_HALF = 500;
+            const FILLSTYLE = 1;
+            const FILLRECT = 2;
+            const DRAWIMAGE = 4;
+            const SPIKE_HEIGHT = 24;
+            const SPIKES_PER_TILE = 4;
+            const ARROW_SIZE = 20;
+            const ARROW_Y_OFFSET = -10;
+            const ITEM_ARROW_Y_OFFSET = -40;
+            const ITEM_PICKUP_RADIUS = 40;
+            const ITEM_DENSITY = 0.05;
+            const ENEMY_DROP_PROBABILITY = 0.5;
+            const TIME_PER_LEVEL = 105;
+            const MOBILE_BUTTON_SIZE = 80;
+            const GAME_OVER_DEATH = 0;
+            const GAME_OVER_TIME = 1;
+            const GAME_OVER_SUCCESS = 2;
+            const DEBUG = false;
+        </script>
+
+        <script src="src/js/sound/jsfxr.js"></script>
+        <script src="src/js/util/expose-math.js"></script>
+        <script src="src/js/util/cache.js"></script>
+        <script src="src/js/util/pad.js"></script>
+        <script src="src/js/util/flatten.js"></script>
+        <script src="src/js/util/proto.js"></script>
+        <script src="src/js/util/globals.js"></script>
+        <script src="src/js/sound/sounds.js"></script>
+        <script src="src/js/graphics/particle.js"></script>
+        <script src="src/js/graphics/noise-pattern.js"></script>
+        <script src="src/js/graphics/halo.js"></script>
+        <script src="src/js/graphics/mobile-controls.js"></script>
+        <script src="src/js/graphics/font.js"></script>
+        <script src="src/js/graphics/spawn-animation.js"></script>
+        <script src="src/js/graphics/show-tiles-animation.js"></script>
+        <script src="src/js/graphics/code-pattern.js"></script>
+        <script src="src/js/world/masks.js"></script>
+        <script src="src/js/tutorial-level.js"></script>
+        <script src="src/js/util/rand.js"></script>
+        <script src="src/js/util/dist.js"></script>
+        <script src="src/js/util/resize.js"></script>
+        <script src="src/js/util/pick.js"></script>
+        <script src="src/js/util/between.js"></script>
+        <script src="src/js/util/remove.js"></script>
+        <script src="src/js/util/interp.js"></script>
+        <script src="src/js/util/format-time.js"></script>
+        <script src="src/js/menu/menu.js"></script>
+        <script src="src/js/menu/game-over.js"></script>
+        <script src="src/js/menu/main.js"></script>
+        <script src="src/js/menu/mode.js"></script>
+        <script src="src/js/item/item.js"></script>
+        <script src="src/js/item/grenade-item.js"></script>
+        <script src="src/js/item/health-item.js"></script>
+        <script src="src/js/world/mirror-mask.js"></script>
+        <script src="src/js/world/generate-world.js"></script>
+        <script src="src/js/world/grenade.js"></script>
+        <script src="src/js/world/world.js"></script>
+        <script src="src/js/world/camera.js"></script>
+        <script src="src/js/world/tile.js"></script>
+        <script src="src/js/character/character.js"></script>
+        <script src="src/js/character/enemy.js"></script>
+        <script src="src/js/character/walking-enemy.js"></script>
+        <script src="src/js/character/jumping-enemy.js"></script>
+        <script src="src/js/character/player.js"></script>
+        <script src="src/js/glitches/slice.js"></script>
+        <script src="src/js/glitches/noise.js"></script>
+        <script src="src/js/game.js"></script>
+        <script src="src/js/controls.js"></script>
+        <script src="src/js/main.js"></script>
+    </body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Extreme Mini Massacre</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            overflow: hidden;
+            user-select: none;
+            background-color: #000;
+        }
+        canvas {
+            outline: none;
+            margin: 0 auto;
+            display: block;
+            image-rendering: optimizeSpeed;
+        }
+    </style>
+</head>
+<body>
+<canvas id="c" width="800" height="480" tabindex="1" onclick="this.focus();" oncontextmenu="return false;"></canvas>
+
+<script type="text/javascript" src="src/utils.js"></script>
+<script type="text/javascript" src="src/core/astar.js"></script>
+<script type="text/javascript" src="src/core/collision.js"></script>
+<script type="text/javascript" src="src/core/graphics.js"></script>
+<script type="text/javascript" src="src/core/sfxr.js"></script>
+<script type="text/javascript" src="src/core/state.js"></script>
+<script type="text/javascript" src="src/game/bullet.js"></script>
+<script type="text/javascript" src="src/game/enemy.js"></script>
+<script type="text/javascript" src="src/game/map.js"></script>
+<script type="text/javascript" src="src/game/player.js"></script>
+<script type="text/javascript" src="src/game/portal.js"></script>
+<script type="text/javascript" src="src/game/room.js"></script>
+<script type="text/javascript" src="src/game/tile.js"></script>
+<script type="text/javascript" src="src/main.js"></script>
+</body>
+</html>

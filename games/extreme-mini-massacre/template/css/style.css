@@ -1,0 +1,15 @@
+body {
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+    text-align: center;
+    overflow: hidden;
+    user-select: none;
+    background-color: #000;
+}
+
+canvas {
+    outline: none;
+    margin: 0 auto;
+    display: block;
+    image-rendering: optimizeSpeed;
+}
