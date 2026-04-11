@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Swagshot</title>
+    <style>
+        body { margin: 0; background: #000; overflow: hidden; }
+        canvas { display: block; margin: 0 auto; }
+    </style>
+</head>
+<body>
+    <script>
+        window.nomangle = x => x;
+        window.evaluate = x => x;
+        const CANVAS_WIDTH = 1000;
+        const CANVAS_HEIGHT = 600;
+        const FIELD_OF_VIEW = Math.PI / 3;
+        const SLICE_WIDTH = 2;
+        const BLOCK_SIZE = 40;
+        let MOUSE_SENSITIVITY = 0.5;
+        const DEBUG = false;
+    </script>
+    <script src="src/js/sound/jsfxr.js"></script>
+    <script src="src/js/sound/sonantx.js"></script>
+    <script src="src/js/sound/song.js"></script>
+    <script src="src/js/sound/sounds.js"></script>
+    <script src="src/js/util/array-utils.js"></script>
+    <script src="src/js/util/interp.js"></script>
+    <script src="src/js/util/raycasting.js"></script>
+    <script src="src/js/util/resizer.js"></script>
+    <script src="src/js/math.js"></script>
+    <script src="src/js/globals.js"></script>
+    <script src="src/js/canvas-additions.js"></script>
+    <script src="src/js/score-keeper.js"></script>
+    <script src="src/js/graphics/assets.js"></script>
+    <script src="src/js/graphics/create-canvas.js"></script>
+    <script src="src/js/graphics/create-pattern.js"></script>
+    <script src="src/js/graphics/textures.js"></script>
+    <script src="src/js/graphics/enemy-sprites.js"></script>
+    <script src="src/js/graphics/environment-sprites.js"></script>
+    <script src="src/js/graphics/fire-sprites.js"></script>
+    <script src="src/js/graphics/item-sprites.js"></script>
+    <script src="src/js/graphics/weapon-sprites.js"></script>
+    <script src="src/js/world/generate.js"></script>
+    <script src="src/js/world/world.js"></script>
+    <script src="src/js/render/render-world-globals.js"></script>
+    <script src="src/js/render/render-world-utils.js"></script>
+    <script src="src/js/render/render-world.js"></script>
+    <script src="src/js/render/render-walls.js"></script>
+    <script src="src/js/render/render-sprite.js"></script>
+    <script src="src/js/render/render-floor.js"></script>
+    <script src="src/js/render/render-hud.js"></script>
+    <script src="src/js/render/render-menu.js"></script>
+    <script src="src/js/render/render-flare.js"></script>
+    <script src="src/js/render/render-minimap.js"></script>
+    <script src="src/js/render/render-debug.js"></script>
+    <script src="src/js/characters/character.js"></script>
+    <script src="src/js/characters/enemy.js"></script>
+    <script src="src/js/characters/player.js"></script>
+    <script src="src/js/projectiles/bullet.js"></script>
+    <script src="src/js/projectiles/drop-fire.js"></script>
+    <script src="src/js/projectiles/explosion.js"></script>
+    <script src="src/js/projectiles/fire.js"></script>
+    <script src="src/js/items/item.js"></script>
+    <script src="src/js/items/health-item.js"></script>
+    <script src="src/js/items/weapon-item.js"></script>
+    <script src="src/js/weapons/weapon.js"></script>
+    <script src="src/js/weapons/enemy-weapon.js"></script>
+    <script src="src/js/weapons/enemy-burst-weapon.js"></script>
+    <script src="src/js/weapons/enemy-fire-weapon.js"></script>
+    <script src="src/js/weapons/enemy-spread-weapon.js"></script>
+    <script src="src/js/weapons/machine-gun.js"></script>
+    <script src="src/js/weapons/pistol.js"></script>
+    <script src="src/js/weapons/rail-gun.js"></script>
+    <script src="src/js/weapons/rocket-launcher.js"></script>
+    <script src="src/js/weapons/shotgun.js"></script>
+    <script src="src/js/background-animation.js"></script>
+    <script src="src/js/keyboard.js"></script>
+    <script src="src/js/game.js"></script>
+    <script src="src/js/menu.js"></script>
+    <script src="src/js/main.js"></script>
+</body>
+</html>
