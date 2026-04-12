@@ -160,22 +160,6 @@
     "source": ""
   },
   {
-    "id": "c4d5e6f7-a8b9-c0d1-e2f3-a4b5-c6d7e8f9",
-    "title": "Breaklock",
-    "slug": "breaklock",
-    "category": "puzzle",
-    "thumbnail": "",
-    "emoji": "🔓",
-    "description": "A beautifully minimalist logic puzzle. Crack the pattern lock by deducing the correct sequence of nodes in this modern take on Mastermind.",
-    "players": 65300,
-    "rating": 4.8,
-    "badge": "new",
-    "path": "/games/breaklock/index.html",
-    "isPlayable": true,
-    "license": "MIT",
-    "source": ""
-  },
-  {
     "id": "f9a0b1c2-d3e4-f5a6-b7c8-d9e0-f1a2b3c4",
     "title": "Particle Clicker",
     "slug": "particle-clicker",
