@@ -105,6 +105,7 @@ The `index.html` must be fully self-contained (no server-side dependencies). The
   "rating": 4.5,
   "badge": "new",
   "path": "/games/mygame/index.html",
+  "source": "https://github.com/user/mygame",
   "isPlayable": true,
   "license": "MIT"
 }
@@ -125,6 +126,7 @@ The `index.html` must be fully self-contained (no server-side dependencies). The
 | `rating`     | number  | 0–5, one decimal place                             |
 | `badge`      | string  | `"new"` \| `"trending"` \| `"popular"` \| `""`    |
 | `path`       | string  | Absolute path to the game's `index.html`           |
+| `source`     | string  | URL to the game's source code (e.g., GitHub)       |
 | `isPlayable` | boolean | Set to `false` to show as "coming soon"            |
 | `license`    | string  | For attribution                                    |
 

@@ -12,7 +12,8 @@
     "badge": "popular",
     "path": "/games/pacman/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
@@ -27,7 +28,8 @@
     "badge": "trending",
     "path": "/games/tetris/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "c3d4e5f6-a7b8-9012-cdef-123456789012",
@@ -42,7 +44,8 @@
     "badge": "popular",
     "path": "/games/2048/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "e5f6a7b8-c9d0-1234-ef01-345678901234",
@@ -57,7 +60,8 @@
     "badge": "new",
     "path": "/games/hextris/index.html",
     "isPlayable": true,
-    "license": "GPL-3.0"
+    "license": "GPL-3.0",
+    "source": ""
   },
   {
     "id": "f6a7b8c9-d0e1-2345-f012-456789012345",
@@ -72,7 +76,8 @@
     "badge": "popular",
     "path": "/games/retro-racer/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "f6a7b8c9-d0e1-2345-f012-456789012341",
@@ -87,7 +92,8 @@
     "badge": "popular",
     "path": "/games/floppybird/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "f6a7b8c9-d0e1-2345-f012-456789012141",
@@ -102,7 +108,8 @@
     "badge": "popular",
     "path": "/games/washthecat/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "2d3e4f5a-6b7c-8d9e-0f1a-2b3c4d5e6f7a",
@@ -117,7 +124,8 @@
     "badge": "popular",
     "path": "/games/underrun/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "b1c2d3e4-f5a6-b7c8-d9e0-f1a2b3c4d5e6",
@@ -132,7 +140,8 @@
     "badge": "new",
     "path": "/games/radius-raid/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "e6f7a8b9-c0d1-e2f3-a4b5-c6d7e8f9a0b1",
@@ -147,7 +156,8 @@
     "badge": "trending",
     "path": "/games/space-huggers/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "c4d5e6f7-a8b9-c0d1-e2f3-a4b5-c6d7e8f9",
@@ -162,7 +172,8 @@
     "badge": "new",
     "path": "/games/breaklock/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "f9a0b1c2-d3e4-f5a6-b7c8-d9e0-f1a2b3c4",
@@ -177,7 +188,8 @@
     "badge": "popular",
     "path": "/games/particle-clicker/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "4b13107e-bd45-4e23-9658-99fe800e97aa",
@@ -192,7 +204,8 @@
     "badge": "new",
     "path": "/games/black-cat-squadron/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "a93b7b69-2ff1-464c-b99c-7200282fcd7b",
@@ -207,7 +220,8 @@
     "badge": "new",
     "path": "/games/catculus/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "239c9035-524e-46f2-b994-bae2ac131c85",
@@ -222,7 +236,8 @@
     "badge": "new",
     "path": "/games/ashes-of-ulthar/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "ab3b6366-264d-4ea3-bf7c-7dfbdef11a0e",
@@ -237,7 +252,8 @@
     "badge": "new",
     "path": "/games/feast-night/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "six-and-seven-id-placeholder",
@@ -252,7 +268,8 @@
     "badge": "new",
     "path": "/games/six-and-seven/docs/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "0a35a178-7cdd-47ac-bd86-19116fb1bf96",
@@ -267,7 +284,8 @@
     "badge": "new",
     "path": "/games/clawstrike/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "d573354b-dd50-4ab7-a195-2828dbe9c87a",
@@ -282,7 +300,8 @@
     "badge": "new",
     "path": "/games/battle-commander/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "95a79166-8a14-415b-bd5d-3d136254bbfa",
@@ -297,7 +316,8 @@
     "badge": "new",
     "path": "/games/triskaideka/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "98037f5d-0c98-41ea-8932-574bc143df7d",
@@ -312,7 +332,8 @@
     "badge": "new",
     "path": "/games/stunts/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "f8e88e29-7008-4f0c-b6fb-95a0f1a9e08a",
@@ -327,7 +348,8 @@
     "badge": "new",
     "path": "/games/witchcat/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "7d2f9e4b-6a1c-4b5d-8e7f-a1b2c3d4e5f6",
@@ -342,7 +364,8 @@
     "badge": "new",
     "path": "/games/extreme-mini-massacre/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "e9a0b1c2-d3e4-f5a6-b7c8-d9e0f1a2b3c7",
@@ -357,7 +380,8 @@
     "badge": "new",
     "path": "/games/boxes/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567891",
@@ -372,7 +396,8 @@
     "badge": "popular",
     "path": "/games/elematter/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "b1c2d3e4-f5a6-7890-bcde-f12345678902",
@@ -387,7 +412,8 @@
     "badge": "new",
     "path": "/games/lost/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "e9a0b1c2-d3e4-f5a6-b7c8-d9e0f1a2b3c8",
@@ -402,7 +428,8 @@
     "badge": "trending",
     "path": "/games/neon-runner-84/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "c3d4e5f6-a7b8-9012-cdef-123456789013",
@@ -417,7 +444,8 @@
     "badge": "popular",
     "path": "/games/super-pinto/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "f6a7b8c9-d0e1-2345-f012-456789012347",
@@ -432,7 +460,8 @@
     "badge": "popular",
     "path": "/games/airfury/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "e6f7a8b9-c0d1-e2f3-a4b5-c6d7e8f9a0b2",
@@ -447,7 +476,8 @@
     "badge": "trending",
     "path": "/games/evil-glitch/index.html",
     "isPlayable": true,
-    "license": "ISC"
+    "license": "ISC",
+    "source": ""
   },
   {
     "id": "c4d5e6f7-a8b9-c0d1-e2f3-a4b5-c6d7e8f10",
@@ -462,7 +492,8 @@
     "badge": "new",
     "path": "/games/glitchbuster/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "f9a0b1c2-d3e4-f5a6-b7c8-d9e0f1a2b3d1",
@@ -477,7 +508,8 @@
     "badge": "new",
     "path": "/games/amaz3d/index.html",
     "isPlayable": true,
-    "license": "ISC"
+    "license": "ISC",
+    "source": ""
   },
   {
     "id": "a93b7b69-2ff1-464c-b99c-7200282fcd7c",
@@ -492,7 +524,8 @@
     "badge": "new",
     "path": "/games/mauja/index.html",
     "isPlayable": true,
-    "license": "ISC"
+    "license": "ISC",
+    "source": ""
   },
   {
     "id": "f1a2b3c4-d5e6-7890-abcd-ef1234567892",
@@ -507,7 +540,8 @@
     "badge": "new",
     "path": "/games/first-contact/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "a2b3c4d5-e6f7-8901-bcde-f12345678903",
@@ -522,7 +556,8 @@
     "badge": "new",
     "path": "/games/island/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "b3c4d5e6-f7a8-9012-cdef-123456789014",
@@ -537,7 +572,8 @@
     "badge": "new",
     "path": "/games/biscuit/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "c4d5e6f7-a8b9-0123-def0-123456789015",
@@ -552,7 +588,8 @@
     "badge": "popular",
     "path": "/games/highway-404/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "d5e6f7a8-b9c0-1234-ef01-234567890126",
@@ -567,7 +604,8 @@
     "badge": "trending",
     "path": "/games/js13k-2021/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "e6f7a8b9-c0d1-2345-f012-345678901237",
@@ -582,7 +620,8 @@
     "badge": "new",
     "path": "/games/js13k-2022/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "f7a8b9c0-d1e2-3456-0123-456789012348",
@@ -597,7 +636,8 @@
     "badge": "popular",
     "path": "/games/last-spartan/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "a8b9c0d1-e2f3-4567-1234-567890123459",
@@ -612,7 +652,8 @@
     "badge": "new",
     "path": "/games/space-odyssey/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "b9c0d1e2-f3a4-5678-2345-678901234560",
@@ -627,7 +668,8 @@
     "badge": "popular",
     "path": "/games/norman/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "c0d1e2f3-a4b5-6789-3456-789012345671",
@@ -642,7 +684,8 @@
     "badge": "trending",
     "path": "/games/q1k3/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "d1e2f3a4-b5c6-7890-4567-890123456782",
@@ -657,7 +700,8 @@
     "badge": "new",
     "path": "/games/roll-tanks/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "e2f3a4b5-c6d7-8901-5678-901234567893",
@@ -672,7 +716,8 @@
     "badge": "new",
     "path": "/games/sojuz-404/index.html",
     "isPlayable": true,
-    "license": "Unlicense"
+    "license": "Unlicense",
+    "source": ""
   },
   {
     "id": "7d2f9e4b-6a1c-4b5d-8e7f-a1b2c3d4e5f7",
@@ -687,7 +732,8 @@
     "badge": "popular",
     "path": "/games/ninja/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "e9a0b1c2-d3e4-f5a6-b7c8-d9e0f1a2b3c9",
@@ -702,7 +748,8 @@
     "badge": "trending",
     "path": "/games/swagshot/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567894",
@@ -717,7 +764,8 @@
     "badge": "new",
     "path": "/games/tenacity/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "b1c2d3e4-f5a6-7890-bcde-f12345678905",
@@ -732,7 +780,8 @@
     "badge": "new",
     "path": "/games/two-ships/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "c3d4e5f6-a7b8-9012-cdef-123456789016",
@@ -747,7 +796,8 @@
     "badge": "popular",
     "path": "/games/callisto/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "d5e6f7a8-b9c0-1234-ef01-234567890127",
@@ -762,7 +812,8 @@
     "badge": "new",
     "path": "/games/minipunk/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "e6f7a8b9-c0d1-2345-f012-345678901238",
@@ -777,7 +828,8 @@
     "badge": "new",
     "path": "/games/stolen-sword/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567895",
@@ -792,7 +844,8 @@
     "badge": "new",
     "path": "/games/cat-goric/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "b1c2d3e4-f5a6-7890-bcde-f12345678906",
@@ -807,7 +860,8 @@
     "badge": "popular",
     "path": "/games/death-game/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "c3d4e5f6-a7b8-9012-cdef-123456789017",
@@ -822,7 +876,8 @@
     "badge": "popular",
     "path": "/games/galaxy-rider/index.html",
     "isPlayable": true,
-    "license": "MIT"
+    "license": "MIT",
+    "source": ""
   },
   {
     "id": "d5e6f7a8-b9c0-1234-ef01-234567890128",
@@ -837,6 +892,7 @@
     "badge": "new",
     "path": "/games/duszki/index.html",
     "isPlayable": true,
-    "license": "ISC"
+    "license": "ISC",
+    "source": ""
   }
 ]
