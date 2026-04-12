@@ -164,37 +164,39 @@ function handleKeyNav(e) {
   const cards = getAllCards();
   if (!cards.length) return;
 
-  const isCard = document.activeElement?.classList.contains('game-card');
+  const current = document.activeElement;
+  const isCard = current?.classList.contains('game-card');
+
+  if (!isCard && ['ArrowRight', 'ArrowLeft', 'ArrowDown', 'ArrowUp'].includes(e.key)) {
+    focusedCardIndex = 0;
+    cards[0]?.focus();
+    e.preventDefault();
+    return;
+  }
 
   switch (e.key) {
     case 'ArrowRight':
       e.preventDefault();
-      focusedCardIndex = isCard
-        ? Math.min(focusedCardIndex + 1, cards.length - 1)
-        : 0;
+      focusedCardIndex = Math.min(focusedCardIndex + 1, cards.length - 1);
       cards[focusedCardIndex]?.focus();
-      cards[focusedCardIndex]?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      cards[focusedCardIndex]?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       break;
 
     case 'ArrowLeft':
       e.preventDefault();
-      focusedCardIndex = isCard
-        ? Math.max(focusedCardIndex - 1, 0)
-        : 0;
+      focusedCardIndex = Math.max(focusedCardIndex - 1, 0);
       cards[focusedCardIndex]?.focus();
-      cards[focusedCardIndex]?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      cards[focusedCardIndex]?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       break;
 
     case 'ArrowDown':
       e.preventDefault();
-      if (!isCard) { focusedCardIndex = 0; cards[0]?.focus(); break; }
-      // Jump to same position in next row
-      scrollToNextRow(cards, focusedCardIndex, 1);
+      moveVertically(cards, current, 1);
       break;
 
     case 'ArrowUp':
       e.preventDefault();
-      scrollToNextRow(cards, focusedCardIndex, -1);
+      moveVertically(cards, current, -1);
       break;
 
     case '/':
@@ -204,19 +206,40 @@ function handleKeyNav(e) {
   }
 }
 
-function scrollToNextRow(cards, currentIdx, direction) {
-  const current = cards[currentIdx];
-  if (!current) return;
-  const currentRow = current.closest('.scroll-row');
-  const rows = qsa('.scroll-row');
-  const rowIdx = rows.indexOf(currentRow);
-  const nextRow = rows[rowIdx + direction];
-  if (!nextRow) return;
-  const nextCards = qsa('.game-card', nextRow);
-  const posInRow = Array.from(currentRow.querySelectorAll('.game-card')).indexOf(current);
-  const target = nextCards[Math.min(posInRow, nextCards.length - 1)];
-  if (!target) return;
-  focusedCardIndex = Array.from(cards).indexOf(target);
-  target.focus();
-  target.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+function moveVertically(cards, current, direction) {
+  const rect = current.getBoundingClientRect();
+  const centerX = rect.left + rect.width / 2;
+  
+  let bestMatch = null;
+  let minDistance = Infinity;
+
+  for (let i = 0; i < cards.length; i++) {
+    const card = cards[i];
+    if (card === current) continue;
+
+    const r = card.getBoundingClientRect();
+    const cX = r.left + r.width / 2;
+    
+    // Check if it's in the correct direction (above/below)
+    const isCorrectDirection = direction > 0 
+      ? r.top > rect.top + rect.height / 2 
+      : r.bottom < rect.bottom - rect.height / 2;
+
+    if (isCorrectDirection) {
+      const distance = Math.abs(cX - centerX) + Math.abs(r.top - rect.top) * 2; // Weight vertical distance
+      if (distance < minDistance) {
+        minDistance = distance;
+        bestMatch = i;
+      }
+    }
+  }
+
+  if (bestMatch !== null) {
+    focusedCardIndex = bestMatch;
+    cards[focusedCardIndex].focus();
+    cards[focusedCardIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  } else {
+    // If no match in current direction, maybe we are at the end/start
+    // Do nothing or jump to next/prev section if you prefer, but this is safer for grids
+  }
 }
