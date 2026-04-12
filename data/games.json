@@ -848,22 +848,6 @@
     "source": ""
   },
   {
-    "id": "c3d4e5f6-a7b8-9012-cdef-123456789017",
-    "title": "Galaxy Rider",
-    "slug": "galaxy-rider",
-    "category": "arcade",
-    "thumbnail": "",
-    "emoji": "🌌",
-    "description": "Ride through the cosmos in this stylish physics-based space skater. Collect stars and avoid black holes.",
-    "players": 1900,
-    "rating": 4.6,
-    "badge": "popular",
-    "path": "/games/galaxy-rider/index.html",
-    "isPlayable": true,
-    "license": "MIT",
-    "source": ""
-  },
-  {
     "id": "d5e6f7a8-b9c0-1234-ef01-234567890128",
     "title": "Duszki",
     "slug": "duszki",
