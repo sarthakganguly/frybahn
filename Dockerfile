@@ -12,7 +12,9 @@ RUN rm /etc/nginx/conf.d/default.conf
 COPY docker/nginx.conf /etc/nginx/nginx.conf
 
 # Copy static site content
-COPY index.html       /usr/share/nginx/html/index.html
+COPY *.html           /usr/share/nginx/html/
+COPY robots.txt       /usr/share/nginx/html/
+COPY sitemap.xml      /usr/share/nginx/html/
 COPY styles/          /usr/share/nginx/html/styles/
 COPY scripts/         /usr/share/nginx/html/scripts/
 COPY data/            /usr/share/nginx/html/data/
