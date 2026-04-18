@@ -22,11 +22,30 @@ export function openGameDetails(game) {
 
   // Dynamic SEO
   state.set('prevTitle', document.title);
-  document.title = `${game.title} — Play Free on Freibahn`;
+  const newTitle = `${game.title} — Play Free on Frybahn`;
+  document.title = newTitle;
+  
   const metaDesc = document.querySelector('meta[name="description"]');
   if (metaDesc) {
     state.set('prevDesc', metaDesc.content);
     metaDesc.content = game.description;
+  }
+
+  // Social tags
+  const ogTitle = document.querySelector('meta[property="og:title"]');
+  if (ogTitle) ogTitle.content = newTitle;
+  const ogDesc = document.querySelector('meta[property="og:description"]');
+  if (ogDesc) ogDesc.content = game.description;
+  const twTitle = document.querySelector('meta[property="twitter:title"]');
+  if (twTitle) twTitle.content = newTitle;
+  const twDesc = document.querySelector('meta[property="twitter:description"]');
+  if (twDesc) twDesc.content = game.description;
+  
+  if (game.thumbnail) {
+    const ogImg = document.querySelector('meta[property="og:image"]');
+    if (ogImg) ogImg.content = window.location.origin + game.thumbnail;
+    const twImg = document.querySelector('meta[property="twitter:image"]');
+    if (twImg) twImg.content = window.location.origin + game.thumbnail;
   }
 
   qs('#detail-close').focus();
@@ -45,11 +64,19 @@ export function closeGameDetails() {
 
   // Restore SEO
   if (state.get('prevTitle')) {
-    document.title = state.get('prevTitle');
+    const originalTitle = state.get('prevTitle');
+    document.title = originalTitle;
+    
+    document.querySelector('meta[property="og:title"]')?.setAttribute('content', originalTitle);
+    document.querySelector('meta[property="twitter:title"]')?.setAttribute('content', originalTitle);
   }
+  
   const metaDesc = document.querySelector('meta[name="description"]');
   if (metaDesc && state.get('prevDesc')) {
-    metaDesc.content = state.get('prevDesc');
+    const originalDesc = state.get('prevDesc');
+    metaDesc.content = originalDesc;
+    document.querySelector('meta[property="og:description"]')?.setAttribute('content', originalDesc);
+    document.querySelector('meta[property="twitter:description"]')?.setAttribute('content', originalDesc);
   }
 
   state.set('currentGame', null);

@@ -1,4 +1,4 @@
-# 🎮 Freibahn — Browser Gaming Portal
+# 🎮 Frybahn — Browser Gaming Portal
 
 A lightweight, PlayStation-style browser gaming portal. No login required. Runs entirely as a static site via nginx in Docker.
 
@@ -32,7 +32,7 @@ docker build -t game-portal .
 docker run -p 90:90 game-portal
 
 # Run detached
-docker run -d -p 90:90 --name Freibahn game-portal
+docker run -d -p 90:90 --name Frybahn game-portal
 ```
 
 ---
@@ -209,10 +209,10 @@ docker compose up -d --build  # Rebuild after changes
 ### CLI commands
 
 ```bash
-docker run -d -p 90:90 --name Freibahn game-portal   # Run detached
-docker logs -f Freibahn                               # Stream logs
-docker stop Freibahn                                  # Stop
-docker rm Freibahn                                    # Remove
+docker run -d -p 90:90 --name Frybahn game-portal   # Run detached
+docker logs -f Frybahn                               # Stream logs
+docker stop Frybahn                                  # Stop
+docker rm Frybahn                                    # Remove
 ```
 
 ---

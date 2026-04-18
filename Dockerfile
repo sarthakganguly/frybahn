@@ -1,5 +1,5 @@
 # =========================================
-# Freibahn — Dockerfile
+# Frybahn — Dockerfile
 # nginx:alpine static file server
 # =========================================
 
