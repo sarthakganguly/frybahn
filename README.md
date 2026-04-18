@@ -1,6 +1,6 @@
 # 🎮 Frybahn — Browser Gaming Portal
 
-A lightweight, PlayStation-style browser gaming portal. No login required. Runs entirely as a static site via nginx in Docker.
+A lightweight, PlayStation-style browser gaming portal. No login required. Runs entirely as a static site via nginx in Docker. Features a smooth intermediate detail view, dynamic SEO, and responsive design.
 
 ---
 
@@ -10,7 +10,7 @@ A lightweight, PlayStation-style browser gaming portal. No login required. Runs 
 
 ```bash
 # Start (builds automatically on first run)
-docker compose up -d
+docker compose up -d --build
 
 # Open in browser
 open http://localhost:90
@@ -22,55 +22,50 @@ docker compose logs -f
 docker compose down
 ```
 
-### Docker CLI (alternative)
-
-```bash
-# Build
-docker build -t game-portal .
-
-# Run
-docker run -p 90:90 game-portal
-
-# Run detached
-docker run -d -p 90:90 --name Frybahn game-portal
-```
-
 ---
 
 ## 📁 Project Structure
 
 ```
-game-portal/
-├── index.html              # Main SPA shell
+frybahn/
+├── index.html              # Main SPA shell (Grid + Hero + Info)
+├── about.html              # Static 'About Us' page
+├── faq.html               # Static 'FAQ' page
+├── developers.html        # Static 'For Developers' page
+├── privacy.html           # Static 'Privacy Center' page
+├── robots.txt             # Search engine crawler instructions
+├── sitemap.xml            # Search engine site map
 ├── styles/
-│   ├── main.css            # Core UI styles + design tokens
+│   ├── main.css            # Core UI styles + design tokens + detail view
 │   └── animations.css      # All keyframes + entrance animations
 ├── scripts/
-│   ├── app.js              # Entry point, overlay + search wiring
+│   ├── app.js              # Entry point, overlay + routing coordination
 │   ├── state.js            # Reactive state store (pub/sub)
 │   ├── gameLoader.js       # Loads games.json, filter/sort logic
 │   ├── router.js           # Lightweight hash-based SPA router
-│   ├── ui.js               # Card/grid rendering + keyboard nav
+│   ├── ui.js               # Card/grid rendering + keyboard nav + detail populate
 │   └── utils.js            # Shared helpers (debounce, DOM, etc.)
 ├── data/
-│   └── games.json          # Game catalogue — the single source of truth
+│   ├── games.json          # Game catalogue — the single source of truth
+│   └── icon.svg            # Brand logo (Road icon)
 ├── games/
-│   ├── pacman/             # Pac-Man clone (vanilla JS + Canvas)
-│   │   ├── index.html
-│   │   ├── style.css
-│   │   └── script.js
-│   └── tetris/             # Tetris clone (vanilla JS + Canvas)
-│       ├── index.html
-│       ├── style.css
-│       └── script.js
-├── assets/
-│   ├── images/             # Game thumbnails (optional — emoji used as fallback)
-│   └── icons/              # Favicon, PWA icons
+│   ├── pacman/             # Game folders...
+│   └── tetris/             # ...
 ├── docker/
-│   └── nginx.conf          # Custom nginx config with gzip + caching
+│   └── nginx.conf          # Custom nginx config with gzip + caching + SPA fallback
 ├── Dockerfile
 └── README.md
 ```
+
+---
+
+## ✨ Key Features
+
+- **Game Detail View:** An intermediate informational layer showing description, license, and source links before launching the game.
+- **Dynamic SEO:** Page titles, meta descriptions, and social tags (OG/Twitter) update automatically when viewing game details.
+- **Console-style UX:** Full keyboard navigation support (`arrows`, `Enter`, `Esc`, `/`).
+- **SEO Optimized:** Semantic HTML, sitemaps, robots.txt, and JSON-LD structured data.
+- **Zero-Code Scaling:** Add new games by simply updating a JSON file and adding a folder.
 
 ---
 
@@ -100,7 +95,7 @@ The `index.html` must be fully self-contained (no server-side dependencies). The
   "category": "arcade",
   "thumbnail": "",
   "emoji": "🚀",
-  "description": "A short description shown on the card.",
+  "description": "A detailed description shown in the intermediate view.",
   "players": 1000,
   "rating": 4.5,
   "badge": "new",
@@ -111,32 +106,11 @@ The `index.html` must be fully self-contained (no server-side dependencies). The
 }
 ```
 
-**Field reference:**
-
-| Field        | Type    | Notes                                              |
-|--------------|---------|----------------------------------------------------|
-| `id`         | string  | Any unique identifier (UUID recommended)           |
-| `title`      | string  | Display name                                       |
-| `slug`       | string  | Matches the folder name in `/games/`               |
-| `category`   | string  | Groups games into rows: `arcade`, `puzzle`, etc.   |
-| `thumbnail`  | string  | Path to image, or `""` to use emoji fallback       |
-| `emoji`      | string  | Shown when no thumbnail is provided                |
-| `description`| string  | Shown in future detail view                        |
-| `players`    | number  | Player count (display only)                        |
-| `rating`     | number  | 0–5, one decimal place                             |
-| `badge`      | string  | `"new"` \| `"trending"` \| `"popular"` \| `""`    |
-| `path`       | string  | Absolute path to the game's `index.html`           |
-| `source`     | string  | URL to the game's source code (e.g., GitHub)       |
-| `isPlayable` | boolean | Set to `false` to show as "coming soon"            |
-| `license`    | string  | For attribution                                    |
-
 ### Step 3 — Rebuild Docker
 
 ```bash
-docker build -t game-portal . && docker run -p 90:90 game-portal
+docker compose up -d --build
 ```
-
-That's it. The new game appears automatically in the correct category row.
 
 ---
 
@@ -147,83 +121,28 @@ That's it. The new game appears automatically in the correct category row.
 |------------------|---------------------------|
 | `← →`            | Navigate cards in a row   |
 | `↑ ↓`            | Jump between category rows |
-| `Enter`          | Launch focused game       |
-| `Esc`            | Close game overlay        |
+| `Enter`          | Open game details / Launch |
+| `Esc`            | Close overlay (Back)      |
 | `/`              | Focus search bar          |
-
-### In-Game (Pac-Man)
-| Key              | Action     |
-|------------------|------------|
-| `Arrow keys`     | Move       |
-| `W A S D`        | Move       |
-| `Space`          | Start/retry|
-| Swipe            | Mobile move|
-
-### In-Game (Tetris)
-| Key              | Action       |
-|------------------|--------------|
-| `← →`            | Move piece   |
-| `↑`              | Rotate       |
-| `↓`              | Soft drop    |
-| `Space`          | Hard drop    |
-| `P`              | Pause        |
-| Tap              | Rotate (mobile) |
-| Swipe ← →        | Move (mobile)   |
-| Swipe ↓          | Hard drop (mobile) |
-
----
-
-## 💰 Ad Placements
-
-The portal has three ad slots, ready to swap in your ad network tags:
-
-| Location            | Selector              | Size          |
-|---------------------|-----------------------|---------------|
-| Global top banner   | `.ad-banner`          | 728×90 leaderboard |
-| Game overlay top    | `.overlay-ad-top`     | 728×90 leaderboard |
-| Game overlay bottom | `.overlay-ad-bottom`  | Text / 320×50 mobile |
-
-Replace the placeholder content inside each element with your ad network embed code.
 
 ---
 
 ## 🐳 Docker Details
 
-- **Base image:** `nginx:1.25-alpine` (~25 MB)
+- **Base image:** `nginx:1.25-alpine`
 - **Port:** `90`
 - **Gzip:** enabled for JS, CSS, JSON, fonts, SVG
-- **Caching:** 1 year for static assets, no-cache for HTML
+- **SPA Fallback:** Nginx handles `try_files` to ensure static pages and SPA routes work together.
 - **Health check:** `wget` ping every 30s
-- **Restart policy:** `unless-stopped` (survives reboots)
-
-### Compose commands
-
-```bash
-docker compose up -d          # Start detached
-docker compose down           # Stop and remove container
-docker compose logs -f        # Stream logs
-docker compose restart        # Restart container
-docker compose up -d --build  # Rebuild after changes
-```
-
-### CLI commands
-
-```bash
-docker run -d -p 90:90 --name Frybahn game-portal   # Run detached
-docker logs -f Frybahn                               # Stream logs
-docker stop Frybahn                                  # Stop
-docker rm Frybahn                                    # Remove
-```
 
 ---
 
 ## 🏗️ Architecture Notes
 
-- **No build step.** The project uses ES6 modules loaded directly by the browser. No bundler, no transpiler.
-- **State management** is a tiny pub/sub store (`state.js`). All modules subscribe to keys they care about.
-- **Game loading** is fully data-driven. The UI reads `games.json` at startup and renders everything from that data.
-- **Keyboard navigation** mirrors PlayStation/Xbox console UIs: arrow keys move focus between cards; rows are navigated vertically.
-- **The game overlay** uses a sandboxed `<iframe sandbox="allow-scripts allow-same-origin">` to isolate game code from the portal.
+- **No build step.** Uses native ES6 modules.
+- **Routing:** Hash-based router (`#/game/:slug`, `#/play/:slug`, `#/category/:cat`) for SPA states.
+- **State management:** Pub/sub store (`state.js`) for reactive UI updates.
+- **Isolation:** Game overlays use `<iframe sandbox="allow-scripts allow-same-origin">`.
 
 ---
 
