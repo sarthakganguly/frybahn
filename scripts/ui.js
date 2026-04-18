@@ -143,14 +143,7 @@ export function renderNavCategories(games) {
     if (cat === state.get('activeCategory')) btn.classList.add('active');
 
     btn.addEventListener('click', () => {
-      state.set('activeCategory', cat);
-      qsa('.nav-cat-btn').forEach(b => b.classList.toggle('active', b.dataset.cat === cat));
-      import('./gameLoader.js').then(({ filterAndSort }) => {
-        const result = filterAndSort();
-        const grid = qs('#game-grid');
-        renderGrid(grid, result);
-        updateResultsCount(result.length);
-      });
+      navigate(`/category/${cat}`);
     });
 
     nav.appendChild(btn);

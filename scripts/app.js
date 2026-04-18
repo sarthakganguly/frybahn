@@ -156,6 +156,26 @@ function handleFocusTrap(e) {
   }
 }
 
+// ── CATEGORIES ───────────────────────────
+
+function switchCategory(cat) {
+  state.set('activeCategory', cat);
+  
+  // Update nav buttons active state
+  document.querySelectorAll('.nav-cat-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.cat === cat);
+  });
+
+  const result = filterAndSort();
+  renderGrid(qs('#game-grid'), result);
+  updateResultsCount(result.length);
+  
+  // Scroll to grid if we are on the home page
+  if (window.location.hash === '' || window.location.hash === '#' || window.location.hash.startsWith('#/category/')) {
+     qs('#game-grid')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
 // ── INIT ─────────────────────────────────
 
 async function init() {
@@ -217,9 +237,17 @@ async function init() {
     router.on('/', () => {
       closeGame();
       closeGameDetails();
+      switchCategory('all');
     });
 
-    // Route 2: Game Detail View
+    // Route 2: Category View
+    router.on('/category', (cat) => {
+      closeGame();
+      closeGameDetails();
+      switchCategory(cat);
+    });
+
+    // Route 3: Game Detail View
     router.on('/game', (slug) => {
       closeGame();
       const gameList = state.get('games');
@@ -231,7 +259,7 @@ async function init() {
       }
     });
 
-    // Route 3: Deep Link to a Game
+    // Route 4: Deep Link to a Game
     router.on('/play', (slug) => {
       closeGameDetails();
       const gameList = state.get('games');

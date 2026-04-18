@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Developers — Freibahn</title>
+  <link rel="stylesheet" href="/styles/main.css" />
+  <style>
+    .static-page { padding: 80px 32px; max-width: 800px; margin: 0 auto; }
+    .static-page h1 { font-family: var(--font-display); font-size: 42px; margin-bottom: 32px; background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .step-list { list-style: none; margin-bottom: 32px; }
+    .step-item { margin-bottom: 32px; display: flex; gap: 24px; align-items: flex-start; }
+    .step-num { width: 36px; height: 36px; background: var(--accent-blue); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 700; flex-shrink: 0; }
+    .step-content h3 { font-family: var(--font-display); color: var(--text-primary); margin-bottom: 8px; }
+    .step-content p { color: var(--text-secondary); line-height: 1.6; }
+    .back-home { display: inline-block; margin-bottom: 40px; color: var(--accent-blue); text-decoration: none; font-family: var(--font-display); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+  </style>
+</head>
+<body>
+  <div class="static-page">
+    <a href="/" class="back-home">← Back to Games</a>
+    <h1>For Developers</h1>
+    <div class="step-list">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h3>Build Your Game</h3>
+          <p>Create a self-contained HTML5 game using vanilla JavaScript or your favorite engine. Ensure it doesn't require server-side logic to run.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h3>Prepare Assets</h3>
+          <p>Package your index.html and assets in a folder. Provide a title, description, and an emoji or thumbnail for your entry.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h3>Submit to Freibahn</h3>
+          <p>Open a Pull Request on our GitHub repository to add your game to the data/games.json file and include your folder in /games.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
