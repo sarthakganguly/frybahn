@@ -87,6 +87,47 @@
 
   </div><!-- /#app -->
 
+  <!-- ── GAME DETAIL OVERLAY ── -->
+  <div
+    id="game-detail-overlay"
+    class="game-overlay detail-overlay"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="detail-game-title"
+  >
+    <div class="overlay-topbar">
+      <span id="detail-game-title" class="overlay-game-title">Game Details</span>
+      <button id="detail-close" class="overlay-close" aria-label="Close details">✕</button>
+    </div>
+
+    <div class="detail-body">
+      <div class="detail-container">
+        <div class="detail-header">
+          <div id="detail-visual" class="detail-visual"></div>
+          <div class="detail-info">
+            <h2 id="detail-title" class="detail-title"></h2>
+            <div class="detail-meta">
+              <span id="detail-rating" class="detail-rating"></span>
+              <span id="detail-players" class="detail-players"></span>
+              <span id="detail-license" class="badge"></span>
+            </div>
+            <a id="detail-play-btn" href="#" class="play-button-large">PLAY NOW</a>
+          </div>
+        </div>
+        <div class="detail-content">
+          <h3>Description</h3>
+          <p id="detail-description" class="detail-description"></p>
+          <div id="detail-source-wrap" class="detail-source-wrap">
+            <a id="detail-source-link" href="#" target="_blank" rel="noopener" class="source-link">
+              <span>View Source Code</span>
+              <span class="external-icon">↗</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ── GAME OVERLAY ── -->
   <div
     id="game-overlay"

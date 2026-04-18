@@ -4,14 +4,65 @@
 
 import state from './state.js';
 import { loadGames, filterAndSort } from './gameLoader.js';
-import { renderGrid, renderNavCategories, updateResultsCount, initKeyboardNav } from './ui.js';
+import { renderGrid, renderNavCategories, updateResultsCount, initKeyboardNav, populateGameDetail } from './ui.js';
 import { debounce, qs, escapeHtml } from './utils.js';
 import * as router from './router.js';
+
+// ── GAME DETAIL OVERLAY ──────────────────
+
+export function openGameDetails(game) {
+  closeGame(); // Close the game iframe if it's somehow open
+  
+  state.set('currentGame', game);
+  populateGameDetail(game);
+
+  const overlay = qs('#game-detail-overlay');
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  // Dynamic SEO
+  state.set('prevTitle', document.title);
+  document.title = `${game.title} — Play Free on Freibahn`;
+  const metaDesc = document.querySelector('meta[name="description"]');
+  if (metaDesc) {
+    state.set('prevDesc', metaDesc.content);
+    metaDesc.content = game.description;
+  }
+
+  qs('#detail-close').focus();
+}
+
+export function closeGameDetails() {
+  const overlay = qs('#game-detail-overlay');
+  if (!overlay?.classList.contains('open')) return;
+
+  overlay.classList.remove('open');
+  
+  // Only restore scroll if we are not going into "Playing" state
+  if (window.location.hash.indexOf('/play/') === -1) {
+    document.body.style.overflow = '';
+  }
+
+  // Restore SEO
+  if (state.get('prevTitle')) {
+    document.title = state.get('prevTitle');
+  }
+  const metaDesc = document.querySelector('meta[name="description"]');
+  if (metaDesc && state.get('prevDesc')) {
+    metaDesc.content = state.get('prevDesc');
+  }
+
+  state.set('currentGame', null);
+}
 
 // ── GAME OVERLAY ─────────────────────────
 
 export function openGame(game) {
   if (!game.isPlayable) return;
+  
+  // Close the detail view if it's open
+  qs('#game-detail-overlay').classList.remove('open');
+  
   state.set('currentGame', game);
 
   const overlay = qs('#game-overlay');
@@ -35,13 +86,17 @@ export function closeGame() {
 
   const iframe  = qs('#game-iframe');
   overlay.classList.remove('open');
-  document.body.style.overflow = '';
+  
+  // Only restore scroll if we are not going into "Detail" state
+  if (window.location.hash.indexOf('/game/') === -1) {
+    document.body.style.overflow = '';
+  }
 
   // NEW: Reveal the background to screen readers again
   qs('#app').removeAttribute('aria-hidden');
 
   setTimeout(() => { iframe.src = 'about:blank'; }, 400);
-  state.set('currentGame', null);
+  // Don't set currentGame to null yet if we might be going to /game
 }
 
 // ── SEARCH ───────────────────────────────
@@ -71,12 +126,15 @@ const FOCUSABLE_SELECTORS = 'button, [href], input, select, textarea, [tabindex]
 
 function handleFocusTrap(e) {
   const overlay = qs('#game-overlay');
+  const detailOverlay = qs('#game-detail-overlay');
   
-  // Exit immediately if the overlay isn't open, or if the key pressed wasn't Tab
-  if (!overlay.classList.contains('open') || e.key !== 'Tab') return;
+  const activeOverlay = overlay?.classList.contains('open') ? overlay : 
+                        (detailOverlay?.classList.contains('open') ? detailOverlay : null);
+
+  if (!activeOverlay || e.key !== 'Tab') return;
 
   // Find all focusable elements inside the modal
-  const focusableElements = Array.from(overlay.querySelectorAll(FOCUSABLE_SELECTORS));
+  const focusableElements = Array.from(activeOverlay.querySelectorAll(FOCUSABLE_SELECTORS));
   if (focusableElements.length === 0) return;
 
   const firstElement = focusableElements[0];
@@ -102,9 +160,24 @@ function handleFocusTrap(e) {
 
 async function init() {
   // Bind overlay close
-  qs('#overlay-close').addEventListener('click', () => router.navigate('/'));
+  qs('#overlay-close').addEventListener('click', () => {
+    const game = state.get('currentGame');
+    if (game) router.navigate(`/game/${game.slug}`);
+    else router.navigate('/');
+  });
+  
   qs('#game-overlay').addEventListener('click', e => {
-    if (e.target === qs('#game-overlay')) router.navigate('/');
+    if (e.target === qs('#game-overlay')) {
+      const game = state.get('currentGame');
+      if (game) router.navigate(`/game/${game.slug}`);
+      else router.navigate('/');
+    }
+  });
+
+  // Bind detail overlay close
+  qs('#detail-close').addEventListener('click', () => router.navigate('/'));
+  qs('#game-detail-overlay').addEventListener('click', e => {
+    if (e.target === qs('#game-detail-overlay')) router.navigate('/');
   });
 
   // Bind search
@@ -140,20 +213,33 @@ async function init() {
     updateResultsCount(games.length);
 
     // --- NEW ROUTER SETUP ---
-    // Route 1: The Root (closes the game)
+    // Route 1: The Root (closes the overlays)
     router.on('/', () => {
       closeGame();
+      closeGameDetails();
     });
 
-    // Route 2: Deep Link to a Game
+    // Route 2: Game Detail View
+    router.on('/game', (slug) => {
+      closeGame();
+      const gameList = state.get('games');
+      const game = gameList.find(g => g.slug === slug);
+      if (game) {
+        openGameDetails(game);
+      } else {
+        router.navigate('/');
+      }
+    });
+
+    // Route 3: Deep Link to a Game
     router.on('/play', (slug) => {
+      closeGameDetails();
       const gameList = state.get('games');
       const game = gameList.find(g => g.slug === slug);
       
       if (game) {
         openGame(game);
       } else {
-        // Fallback if game slug doesn't exist
         router.navigate('/'); 
       }
     });

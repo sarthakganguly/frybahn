@@ -10,15 +10,13 @@ import { navigate } from './router.js';
 // ── RENDER GAME CARD ────────────────────
 
 export function renderCard(game) {
-  const card = document.createElement('div');
+  const card = document.createElement('a');
   card.className = 'game-card';
-  card.setAttribute('tabindex', '0');
-  card.setAttribute('role', 'button');
-  card.setAttribute('aria-label', `Play ${escapeHtml(game.title)}`);
+  card.href = `#/game/${game.slug}`;
+  card.setAttribute('aria-label', `View details for ${escapeHtml(game.title)}`);
   card.dataset.slug = game.slug;
   card.dataset.id   = game.id;
 
-  const stars = '★'.repeat(Math.round(game.rating)) + '☆'.repeat(5 - Math.round(game.rating));
   const badgeHtml = game.badge
     ? `<span class="card-badge ${escapeHtml(game.badge)}">${escapeHtml(game.badge)}</span>`
     : '';
@@ -40,15 +38,41 @@ export function renderCard(game) {
     </div>
   `;
 
-  card.addEventListener('click', () => navigate(`/play/${game.slug}`));
-  card.addEventListener('keydown', e => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      navigate(`/play/${game.slug}`);
-    }
-  });
-
   return card;
+}
+
+// ── POPULATE GAME DETAIL ────────────────
+
+export function populateGameDetail(game) {
+  const visual = qs('#detail-visual');
+  const title = qs('#detail-title');
+  const rating = qs('#detail-rating');
+  const players = qs('#detail-players');
+  const license = qs('#detail-license');
+  const playBtn = qs('#detail-play-btn');
+  const description = qs('#detail-description');
+  const sourceLink = qs('#detail-source-link');
+  const sourceWrap = qs('#detail-source-wrap');
+
+  if (game.thumbnail) {
+    visual.innerHTML = `<img src="${escapeHtml(game.thumbnail)}" alt="${escapeHtml(game.title)}">`;
+  } else {
+    visual.innerHTML = `<span class="emoji">${escapeHtml(game.emoji)}</span>`;
+  }
+
+  title.textContent = game.title;
+  rating.textContent = `★ ${game.rating.toFixed(1)}`;
+  players.textContent = `${formatPlayers(game.players)} players`;
+  license.textContent = game.license || 'MIT';
+  playBtn.href = `#/play/${game.slug}`;
+  description.textContent = game.description;
+
+  if (game.source) {
+    sourceWrap.style.display = 'block';
+    sourceLink.href = game.source;
+  } else {
+    sourceWrap.style.display = 'none';
+  }
 }
 
 // ── RENDER CATEGORY ROW ─────────────────
@@ -153,8 +177,19 @@ function getAllCards() {
 }
 
 function handleKeyNav(e) {
-  const overlay = qs('.game-overlay');
-  if (overlay && overlay.classList.contains('open')) {
+  const overlay = qs('#game-overlay');
+  const detailOverlay = qs('#game-detail-overlay');
+
+  if (overlay?.classList.contains('open')) {
+    if (e.key === 'Escape') {
+      const game = state.get('currentGame');
+      if (game) navigate(`/game/${game.slug}`);
+      else navigate('/');
+    }
+    return;
+  }
+
+  if (detailOverlay?.classList.contains('open')) {
     if (e.key === 'Escape') {
       navigate('/');
     }
