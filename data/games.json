@@ -13,7 +13,7 @@
     "path": "/games/pacman/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": ""
+    "source": "https://github.com/GerardAlbajar/Pacman-js"
   },
   {
     "id": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
@@ -29,7 +29,7 @@
     "path": "/games/tetris/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": ""
+    "source": "https://github.com/jorisroovers/tetris"
   },
   {
     "id": "c3d4e5f6-a7b8-9012-cdef-123456789012",
@@ -45,7 +45,7 @@
     "path": "/games/2048/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": ""
+    "source": "https://github.com/gabrielecirulli/2048"
   },
   {
     "id": "e5f6a7b8-c9d0-1234-ef01-345678901234",
@@ -61,7 +61,7 @@
     "path": "/games/hextris/index.html",
     "isPlayable": true,
     "license": "GPL-3.0",
-    "source": ""
+    "source": "https://github.com/hextris/hextris/"
   },
   {
     "id": "f6a7b8c9-d0e1-2345-f012-456789012345",
@@ -77,7 +77,7 @@
     "path": "/games/retro-racer/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": ""
+    "source": "https://github.com/jakesgordon/javascript-racer"
   },
   {
     "id": "f6a7b8c9-d0e1-2345-f012-456789012341",
@@ -93,7 +93,7 @@
     "path": "/games/floppybird/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": ""
+    "source": "https://github.com/nebez/floppybird/"
   },
   {
     "id": "f6a7b8c9-d0e1-2345-f012-456789012141",
@@ -109,7 +109,7 @@
     "path": "/games/washthecat/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": ""
+    "source": "https://github.com/HomerDilpleu/WashTheCat"
   },
   {
     "id": "2d3e4f5a-6b7c-8d9e-0f1a-2b3c4d5e6f7a",
@@ -125,7 +125,7 @@
     "path": "/games/underrun/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": ""
+    "source": "https://github.com/phoboslab/underrun"
   },
   {
     "id": "b1c2d3e4-f5a6-b7c8-d9e0-f1a2b3c4d5e6",
@@ -141,7 +141,7 @@
     "path": "/games/radius-raid/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": ""
+    "source": "https://github.com/js13kGames/radius-raid"
   },
   {
     "id": "e6f7a8b9-c0d1-e2f3-a4b5-c6d7e8f9a0b1",
@@ -157,7 +157,7 @@
     "path": "/games/space-huggers/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": ""
+    "source": "https://github.com/KilledByAPixel/SpaceHuggers"
   },
   {
     "id": "f9a0b1c2-d3e4-f5a6-b7c8-d9e0-f1a2b3c4",
@@ -173,7 +173,7 @@
     "path": "/games/particle-clicker/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": ""
+    "source": "https://github.com/particle-clicker/particle-clicker/"
   },
   {
     "id": "4b13107e-bd45-4e23-9658-99fe800e97aa",
@@ -189,7 +189,7 @@
     "path": "/games/black-cat-squadron/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": ""
+    "source": "https://github.com/js13kGames/black-cat-squadron"
   },
   {
     "id": "a93b7b69-2ff1-464c-b99c-7200282fcd7b",
@@ -205,7 +205,7 @@
     "path": "/games/catculus/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": ""
+    "source": "https://github.com/anttihaavikko/catculus"
   },
   {
     "id": "239c9035-524e-46f2-b994-bae2ac131c85",
@@ -221,7 +221,7 @@
     "path": "/games/ashes-of-ulthar/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": ""
+    "source": "https://github.com/elliot-nelson/js13k-2025-ashes-of-ulthar"
   },
   {
     "id": "ab3b6366-264d-4ea3-bf7c-7dfbdef11a0e",
@@ -237,7 +237,7 @@
     "path": "/games/feast-night/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": ""
+    "source": "https://github.com/wololoa/js13k2023"
   },
   {
     "id": "six-and-seven-id-placeholder",
@@ -253,7 +253,7 @@
     "path": "/games/six-and-seven/docs/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": ""
+    "source": "https://github.com/herebefrogs/gamejam-boilerplate"
   },
   {
     "id": "0a35a178-7cdd-47ac-bd86-19116fb1bf96",
@@ -269,7 +269,7 @@
     "path": "/games/clawstrike/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": ""
+    "source": "https://github.com/js13kGames/clawstrike"
   },
   {
     "id": "d573354b-dd50-4ab7-a195-2828dbe9c87a",
@@ -285,7 +285,7 @@
     "path": "/games/battle-commander/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": ""
+    "source": "https://github.com/santiHerranz/js13k2023-Battle-commander-Middle-ages"
   },
   {
     "id": "95a79166-8a14-415b-bd5d-3d136254bbfa",
@@ -301,7 +301,7 @@
     "path": "/games/triskaideka/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": ""
+    "source": "https://github.com/DerBenniBanni/js13k2024_Triskaideka"
   },
   {
     "id": "98037f5d-0c98-41ea-8932-574bc143df7d",
@@ -317,7 +317,7 @@
     "path": "/games/stunts/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": ""
+    "source": "https://github.com/lopis/thirteen-terrible-stunts/"
   },
   {
     "id": "f8e88e29-7008-4f0c-b6fb-95a0f1a9e08a",
@@ -333,7 +333,7 @@
     "path": "/games/witchcat/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": ""
+    "source": "https://github.com/js13kGames/witchcat"
   },
   {
     "id": "7d2f9e4b-6a1c-4b5d-8e7f-a1b2c3d4e5f6",
@@ -349,7 +349,7 @@
     "path": "/games/extreme-mini-massacre/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": ""
+    "source": "https://github.com/js13kGames/extreme-mini-massacre"
   },
   {
     "id": "e9a0b1c2-d3e4-f5a6-b7c8-d9e0f1a2b3c7",
@@ -365,7 +365,7 @@
     "path": "/games/boxes/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": ""
+    "source": "https://github.com/js13kGames/its-raining-boxes"
   },
   {
     "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567891",
@@ -381,7 +381,7 @@
     "path": "/games/elematter/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": ""
+    "source": "https://github.com/jackrugile/elematter-js13k"
   },
   {
     "id": "b1c2d3e4-f5a6-7890-bcde-f12345678902",
@@ -397,7 +397,7 @@
     "path": "/games/lost/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": ""
+    "source": "https://github.com/tricsi/lost"
   },
   {
     "id": "e9a0b1c2-d3e4-f5a6-b7c8-d9e0f1a2b3c8",
@@ -413,7 +413,7 @@
     "path": "/games/neon-runner-84/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": ""
+    "source": "https://github.com/csubagio/js13k-neonrunner"
   },
   {
     "id": "c3d4e5f6-a7b8-9012-cdef-123456789013",
@@ -429,7 +429,7 @@
     "path": "/games/super-pinto/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": ""
+    "source": "https://github.com/js13kGames/super-pinto-rally-racer"
   },
   {
     "id": "f6a7b8c9-d0e1-2345-f012-456789012347",
@@ -445,7 +445,7 @@
     "path": "/games/airfury/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": ""
+    "source": "https://github.com/ferronsays/js13k-AirFury"
   },
   {
     "id": "e6f7a8b9-c0d1-e2f3-a4b5-c6d7e8f9a0b2",
@@ -461,7 +461,7 @@
     "path": "/games/evil-glitch/index.html",
     "isPlayable": true,
     "license": "ISC",
-    "source": ""
+    "source": "https://github.com/agar3s/devil-glitches"
   },
   {
     "id": "c4d5e6f7-a8b9-c0d1-e2f3-a4b5-c6d7e8f10",
@@ -477,7 +477,7 @@
     "path": "/games/glitchbuster/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": ""
+    "source": "https://github.com/remvst/glitchbuster"
   },
   {
     "id": "f9a0b1c2-d3e4-f5a6-b7c8-d9e0f1a2b3d1",
@@ -493,7 +493,7 @@
     "path": "/games/amaz3d/index.html",
     "isPlayable": true,
     "license": "ISC",
-    "source": ""
+    "source": "https://github.com/gre/js13k-2017"
   },
   {
     "id": "a93b7b69-2ff1-464c-b99c-7200282fcd7c",
@@ -509,7 +509,7 @@
     "path": "/games/mauja/index.html",
     "isPlayable": true,
     "license": "ISC",
-    "source": ""
+    "source": "https://github.com/vik-13/mauja"
   },
   {
     "id": "f1a2b3c4-d5e6-7890-abcd-ef1234567892",
@@ -525,7 +525,7 @@
     "path": "/games/first-contact/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": ""
+    "source": "https://github.com/mvasilkov/space2021"
   },
   {
     "id": "a2b3c4d5-e6f7-8901-bcde-f12345678903",
@@ -541,7 +541,7 @@
     "path": "/games/island/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": ""
+    "source": "https://github.com/ajbkr/back"
   },
   {
     "id": "b3c4d5e6-f7a8-9012-cdef-123456789014",
@@ -557,7 +557,7 @@
     "path": "/games/biscuit/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": ""
+    "source": "https://github.com/SalvatorePreviti/js13k-2020"
   },
   {
     "id": "c4d5e6f7-a8b9-0123-def0-123456789015",
@@ -573,7 +573,7 @@
     "path": "/games/highway-404/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": ""
+    "source": "https://github.com/herebefrogs/highway-404"
   },
   {
     "id": "d5e6f7a8-b9c0-1234-ef01-234567890126",
@@ -605,7 +605,7 @@
     "path": "/games/tindeath/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": ""
+    "source": "https://github.com/jonathan-vallet/lost-lost-soul"
   },
   {
     "id": "f7a8b9c0-d1e2-3456-0123-456789012348",
@@ -621,7 +621,7 @@
     "path": "/games/last-spartan/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": ""
+    "source": "https://github.com/ferronsays/js13k-TheLastSpartan"
   },
   {
     "id": "a8b9c0d1-e2f3-4567-1234-567890123459",
@@ -637,7 +637,7 @@
     "path": "/games/space-odyssey/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": ""
+    "source": "https://github.com/Hoffs/LostInSpace"
   },
   {
     "id": "b9c0d1e2-f3a4-5678-2345-678901234560",
@@ -653,7 +653,7 @@
     "path": "/games/norman/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": ""
+    "source": "https://github.com/danprince/norman-the-necromancer"
   },
   {
     "id": "c0d1e2f3-a4b5-6789-3456-789012345671",
@@ -669,7 +669,7 @@
     "path": "/games/q1k3/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": ""
+    "source": "https://github.com/phoboslab/q1k3"
   },
   {
     "id": "d1e2f3a4-b5c6-7890-4567-890123456782",
@@ -685,7 +685,7 @@
     "path": "/games/roll-tanks/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": ""
+    "source": "https://github.com/daviddurham/roll-tanks"
   },
   {
     "id": "e2f3a4b5-c6d7-8901-5678-901234567893",
@@ -701,7 +701,7 @@
     "path": "/games/sojuz-404/index.html",
     "isPlayable": true,
     "license": "Unlicense",
-    "source": ""
+    "source": "https://github.com/markusfisch/Sojuz404"
   },
   {
     "id": "7d2f9e4b-6a1c-4b5d-8e7f-a1b2c3d4e5f7",
@@ -717,7 +717,7 @@
     "path": "/games/ninja/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": ""
+    "source": "https://github.com/johnedvard/js13kgames2025"
   },
   {
     "id": "e9a0b1c2-d3e4-f5a6-b7c8-d9e0f1a2b3c9",
@@ -733,7 +733,7 @@
     "path": "/games/swagshot/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": ""
+    "source": "https://github.com/remvst/swagshot"
   },
   {
     "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567894",
@@ -749,7 +749,7 @@
     "path": "/games/tenacity/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": ""
+    "source": "https://github.com/GregPeck/tenacity"
   },
   {
     "id": "b1c2d3e4-f5a6-7890-bcde-f12345678905",
@@ -765,7 +765,7 @@
     "path": "/games/two-ships/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": ""
+    "source": "https://github.com/razh/js13k-2021"
   },
   {
     "id": "c3d4e5f6-a7b8-9012-cdef-123456789016",
@@ -781,7 +781,7 @@
     "path": "/games/callisto/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": ""
+    "source": "https://github.com/codyebberson/js13k-callisto"
   },
   {
     "id": "d5e6f7a8-b9c0-1234-ef01-234567890127",
@@ -797,7 +797,7 @@
     "path": "/games/minipunk/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": ""
+    "source": "https://github.com/codyebberson/js13k-minipunk"
   },
   {
     "id": "e6f7a8b9-c0d1-2345-f012-345678901238",
@@ -813,7 +813,7 @@
     "path": "/games/stolen-sword/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": ""
+    "source": "https://github.com/chiaogu/stolen-sword"
   },
   {
     "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567895",
@@ -829,7 +829,7 @@
     "path": "/games/cat-goric/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": ""
+    "source": "https://github.com/felladrin/js13k-2021"
   },
   {
     "id": "b1c2d3e4-f5a6-7890-bcde-f12345678906",
@@ -845,7 +845,7 @@
     "path": "/games/death-game/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": ""
+    "source": "https://github.com/lcapps-luke/js13k-death"
   },
   {
     "id": "d5e6f7a8-b9c0-1234-ef01-234567890128",
@@ -861,6 +861,6 @@
     "path": "/games/duszki/index.html",
     "isPlayable": true,
     "license": "ISC",
-    "source": ""
+    "source": "https://github.com/piesku/duszki"
   }
 ]
