@@ -577,8 +577,8 @@
   },
   {
     "id": "d5e6f7a8-b9c0-1234-ef01-234567890126",
-    "title": "JS13K 2021",
-    "slug": "js13k-2021",
+    "title": "Space Bouncer",
+    "slug": "space-bouncer",
     "category": "action",
     "thumbnail": "",
     "emoji": "🦾",
@@ -586,15 +586,15 @@
     "players": 3100,
     "rating": 4.8,
     "badge": "trending",
-    "path": "/games/js13k-2021/index.html",
+    "path": "/games/space-bouncer/index.html",
     "isPlayable": true,
     "license": "MIT",
     "source": ""
   },
   {
     "id": "e6f7a8b9-c0d1-2345-f012-345678901237",
-    "title": "JS13K 2022",
-    "slug": "js13k-2022",
+    "title": "Tindeath",
+    "slug": "tindeath",
     "category": "arcade",
     "thumbnail": "",
     "emoji": "🌲",
@@ -602,7 +602,7 @@
     "players": 1800,
     "rating": 4.5,
     "badge": "new",
-    "path": "/games/js13k-2022/index.html",
+    "path": "/games/tindeath/index.html",
     "isPlayable": true,
     "license": "MIT",
     "source": ""
