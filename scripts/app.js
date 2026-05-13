@@ -31,7 +31,48 @@ export function openGameDetails(game) {
     metaDesc.content = game.description;
   }
 
-  // Social tags
+  // Social tags and Canonical
+  const gameUrl = window.location.origin + `/game/${game.slug}`;
+  
+  const canonical = document.querySelector('link[rel="canonical"]');
+  if (canonical) {
+    state.set('prevCanonical', canonical.href);
+    canonical.href = gameUrl;
+  }
+
+  const ogUrl = document.querySelector('meta[property="og:url"]');
+  if (ogUrl) ogUrl.content = gameUrl;
+  const twUrl = document.querySelector('meta[property="twitter:url"]');
+  if (twUrl) twUrl.content = gameUrl;
+
+  // JSON-LD Schema
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": game.title,
+    "description": game.description,
+    "applicationCategory": "GameApplication",
+    "operatingSystem": "Web Browser",
+    "url": gameUrl,
+    "image": window.location.origin + (game.thumbnail || "/data/icon.svg"),
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": game.rating,
+      "bestRating": "5",
+      "ratingCount": game.players
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  };
+  const script = document.createElement('script');
+  script.type = 'application/ld+json';
+  script.id = 'dynamic-game-schema';
+  script.textContent = JSON.stringify(schema);
+  document.head.appendChild(script);
+
   const ogTitle = document.querySelector('meta[property="og:title"]');
   if (ogTitle) ogTitle.content = newTitle;
   const ogDesc = document.querySelector('meta[property="og:description"]');
@@ -58,7 +99,7 @@ export function closeGameDetails() {
   overlay.classList.remove('open');
   
   // Only restore scroll if we are not going into "Playing" state
-  if (window.location.hash.indexOf('/play/') === -1) {
+  if (window.location.pathname.indexOf('/play/') === -1) {
     document.body.style.overflow = '';
   }
 
@@ -78,6 +119,15 @@ export function closeGameDetails() {
     document.querySelector('meta[property="og:description"]')?.setAttribute('content', originalDesc);
     document.querySelector('meta[property="twitter:description"]')?.setAttribute('content', originalDesc);
   }
+
+  // Restore Canonical and Social URLs
+  const originalUrl = window.location.origin + '/';
+  document.querySelector('link[rel="canonical"]')?.setAttribute('href', state.get('prevCanonical') || originalUrl);
+  document.querySelector('meta[property="og:url"]')?.setAttribute('content', originalUrl);
+  document.querySelector('meta[property="twitter:url"]')?.setAttribute('content', originalUrl);
+
+  // Remove JSON-LD Schema
+  document.getElementById('dynamic-game-schema')?.remove();
 
   state.set('currentGame', null);
 }
@@ -115,7 +165,7 @@ export function closeGame() {
   overlay.classList.remove('open');
   
   // Only restore scroll if we are not going into "Detail" state
-  if (window.location.hash.indexOf('/game/') === -1) {
+  if (window.location.pathname.indexOf('/game/') === -1) {
     document.body.style.overflow = '';
   }
 
@@ -198,7 +248,7 @@ function switchCategory(cat) {
   updateResultsCount(result.length);
   
   // Scroll to grid if we are on the home page
-  if (window.location.hash === '' || window.location.hash === '#' || window.location.hash.startsWith('#/category/')) {
+  if (window.location.pathname === '/' || window.location.pathname.startsWith('/category/')) {
      qs('#game-grid')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 }
@@ -313,11 +363,11 @@ async function init() {
       </div>`;
   }
 
-  // Hide loading overlay
+  // Hide loading overlay immediately
   const loading = qs('#loading-overlay');
   if (loading) {
-    setTimeout(() => loading.classList.add('hidden'), 800);
-    setTimeout(() => loading.remove(), 1300);
+    loading.classList.add('hidden');
+    loading.remove();
   }
 }
 

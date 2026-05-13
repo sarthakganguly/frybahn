@@ -1,5 +1,5 @@
 // =========================================
-// ROUTER — Lightweight hash-based router
+// ROUTER — Lightweight path-based router
 // =========================================
 
 import state from './state.js';
@@ -11,31 +11,35 @@ export function on(path, handler) {
 }
 
 export function navigate(path) {
-  window.location.hash = path;
+  window.history.pushState({}, '', path);
+  dispatch();
+}
+
+function dispatch() {
+  const path = window.location.pathname || '/';
+  
+  // Match exact or parameterised
+  let handler = routes.get(path);
+  
+  if (!handler) {
+    for (const [pattern, fn] of routes) {
+      if (pattern !== '/' && path.startsWith(pattern + '/')) {
+        const param = path.slice(pattern.length + 1);
+        handler = () => fn(param);
+        break;
+      }
+    }
+  }
+
+  if (handler) handler(path);
+  else if (routes.has('/')) routes.get('/')();
 }
 
 export function init() {
-  function dispatch() {
-    const hash = window.location.hash.slice(1) || '/';
-    // Match exact or parameterised
-    let handler = routes.get(hash);
-    if (!handler) {
-      for (const [pattern, fn] of routes) {
-        if (hash.startsWith(pattern + '/')) {
-          const param = hash.slice(pattern.length + 1);
-          handler = () => fn(param);
-          break;
-        }
-      }
-    }
-    if (handler) handler(hash);
-    else if (routes.has('/')) routes.get('/')();
-  }
-
-  window.addEventListener('hashchange', dispatch);
+  window.addEventListener('popstate', dispatch);
   dispatch();
 }
 
 export function currentRoute() {
-  return window.location.hash.slice(1) || '/';
+  return window.location.pathname || '/';
 }

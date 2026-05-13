@@ -12,7 +12,7 @@ import { navigate } from './router.js';
 export function renderCard(game) {
   const card = document.createElement('a');
   card.className = 'game-card';
-  card.href = `#/game/${game.slug}`;
+  card.href = `/game/${game.slug}`;
   card.setAttribute('aria-label', `View details for ${escapeHtml(game.title)}`);
   card.dataset.slug = game.slug;
   card.dataset.id   = game.id;
@@ -64,7 +64,7 @@ export function populateGameDetail(game) {
   rating.textContent = `★ ${game.rating.toFixed(1)}`;
   players.textContent = `${formatPlayers(game.players)} players`;
   license.textContent = game.license || 'MIT';
-  playBtn.href = `#/play/${game.slug}`;
+  playBtn.href = `/play/${game.slug}`;
   description.textContent = game.description;
 
   if (game.source) {

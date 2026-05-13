@@ -1,29 +1,93 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Core Pages -->
   <url>
-    <loc>https://frybahn.pages.com/</loc>
-    <lastmod>2026-04-18</lastmod>
+    <loc>https://frybahn.com/</loc>
+    <lastmod>2025-05-13</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://frybahn.pages.com/about.html</loc>
-    <lastmod>2026-04-18</lastmod>
+    <loc>https://frybahn.com/about.html</loc>
+    <lastmod>2025-05-13</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://frybahn.pages.com/faq.html</loc>
-    <lastmod>2026-04-18</lastmod>
+    <loc>https://frybahn.com/faq.html</loc>
+    <lastmod>2025-05-13</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://frybahn.pages.com/developers.html</loc>
-    <lastmod>2026-04-18</lastmod>
+    <loc>https://frybahn.com/developers.html</loc>
+    <lastmod>2025-05-13</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://frybahn.pages.com/privacy.html</loc>
-    <lastmod>2026-04-18</lastmod>
+    <loc>https://frybahn.com/privacy.html</loc>
+    <lastmod>2025-05-13</lastmod>
     <priority>0.5</priority>
   </url>
+
+  <!-- Categories -->
+  <url><loc>https://frybahn.com/category/arcade</loc><lastmod>2025-05-13</lastmod><priority>0.9</priority></url>
+  <url><loc>https://frybahn.com/category/puzzle</loc><lastmod>2025-05-13</lastmod><priority>0.9</priority></url>
+  <url><loc>https://frybahn.com/category/action</loc><lastmod>2025-05-13</lastmod><priority>0.9</priority></url>
+  <url><loc>https://frybahn.com/category/racing</loc><lastmod>2025-05-13</lastmod><priority>0.9</priority></url>
+  <url><loc>https://frybahn.com/category/strategy</loc><lastmod>2025-05-13</lastmod><priority>0.9</priority></url>
+
+  <!-- Games -->
+  <url><loc>https://frybahn.com/game/pacman</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/tetris</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/2048</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/hextris</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/racer</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/floppybird</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/washthecat</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/underrun</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/radius-raid</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/space-huggers</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/particle-clicker</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/black-cat-squadron</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/catculus</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/ashes-of-ulthar</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/feast-night</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/six-and-seven</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/clawstrike</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/battle-commander</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/triskaideka</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/stunts</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/witchcat</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/extreme-mini-massacre</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/boxes</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/elematter</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/lost</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/neon-runner-84</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/super-pinto</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/airfury</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/evil-glitch</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/glitchbuster</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/amaz3d</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/mauja</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/first-contact</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/island</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/biscuit</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/highway-404</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/space-bouncer</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/tindeath</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/last-spartan</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/space-odyssey</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/norman</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/q1k3</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/roll-tanks</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/sojuz-404</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/ninja</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/swagshot</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/tenacity</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/two-ships</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/callisto</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/minipunk</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/stolen-sword</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/cat-goric</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/death-game</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
+  <url><loc>https://frybahn.com/game/duszki</loc><lastmod>2025-05-13</lastmod><priority>0.7</priority></url>
 </urlset>
