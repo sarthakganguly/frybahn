@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Developer Blog — Frybahn</title>
+  <meta name="description" content="Read our developer blog detailing our thoughts on Unity WebGL alternatives, dynamics of lightweight browser portals, and coding constraints." />
+  <link rel="canonical" href="https://frybahn.com/blog.html" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://frybahn.com/blog.html" />
+  <meta property="og:title" content="Developer Blog — Frybahn" />
+  <meta property="og:description" content="Read our developer blog detailing our thoughts on lightweight browser gaming, dynamic SEO, and coding constraints." />
+  <meta property="og:image" content="https://frybahn.com/data/icon.svg" />
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary" />
+  <meta property="twitter:title" content="Developer Blog — Frybahn" />
+  <meta property="twitter:description" content="Read our developer blog detailing our thoughts on lightweight browser gaming." />
+  <meta property="twitter:image" content="https://frybahn.com/data/icon.svg" />
+
+  <link rel="stylesheet" href="/styles/main.css" />
+  <style>
+    .static-page { padding: 80px 32px; max-width: 800px; margin: 0 auto; }
+    .static-page h1 { font-family: var(--font-display); font-size: 42px; margin-bottom: 40px; background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    
+    .back-home { display: inline-flex; align-items: center; margin-bottom: 40px; color: var(--accent-blue); text-decoration: none; font-family: var(--font-display); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; transition: color var(--transition-fast), transform var(--transition-fast); }
+    .back-home:hover { color: var(--accent-cyan); transform: translateX(-4px); }
+
+    .blog-post { margin-bottom: 56px; background: var(--glass); padding: 32px; border-radius: var(--radius-md); border: 1px solid var(--glass-border); transition: transform var(--transition-fast), border-color var(--transition-fast); }
+    .blog-post:hover { border-color: var(--accent-blue); transform: translateY(-2px); }
+    .post-meta { font-family: var(--font-display); font-size: 13px; font-weight: 600; color: var(--accent-pink); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+    .blog-post h2 { font-family: var(--font-display); font-size: 28px; color: var(--text-primary); margin-bottom: 16px; font-weight: 600; }
+    .post-content { color: var(--text-secondary); line-height: 1.8; font-size: 15.5px; }
+    .post-content p { margin-bottom: 16px; }
+    .post-content p:last-child { margin-bottom: 0; }
+    .post-content strong { color: var(--text-primary); }
+  </style>
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2987113216122318"
+     crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="static-page">
+    <a href="/" class="back-home">← Back to Games</a>
+    <h1>Developer Blog</h1>
+    
+    <article class="blog-post">
+      <div class="post-meta">June 11, 2026 · Essay</div>
+      <h2>Resisting the Bloat: Why We Built Frybahn</h2>
+      <div class="post-content">
+        <p>If you search for web gaming portals today, you will be met with a wall of commercial clones running heavy, closed-off builds that hog memory and take ages to load. Many of these portals rely on bloated WebGL engines that compile to hundreds of megabytes. Running a simple puzzle game should not send your CPU fan spinning into overdrive or require downloading a game engine run-time just to render a grid.</p>
+        <p><strong>Frybahn</strong> was born out of a desire for a cleaner, faster web. By hosting pure HTML5 and JavaScript creations—primarily those written under the tight constraints of game jams like JS13K—we offer games that load instantly and operate efficiently even on low-end hardware. We believe that web gaming should be open, inspectable, and incredibly lightweight.</p>
+      </div>
+    </article>
+
+    <article class="blog-post">
+      <div class="post-meta">May 28, 2026 · Technical</div>
+      <h2>Behind the Tech Stack: Dynamic SEO in a Single Page App</h2>
+      <div class="post-content">
+        <p>Building a Single Page Application (SPA) usually comes with a major SEO tradeoff. Crawlers often struggle with dynamically loaded content, leading to poor page ranking. In building Frybahn's game details overlay, we wanted a seamless path-based router that feels like an instant navigation overlay but remains completely friendly to search engines.</p>
+        <p>We solved this by pairing Nginx's fallback directive (<code>try_files</code>) with a custom ES6 router. When a user or crawler accesses a path like <code>/game/pacman</code> directly, Nginx transparently serves our main shell, and our routing module updates the document title, meta descriptions, and Open Graph tags. Finally, we dynamically append a JSON-LD structured data block to the document head to ensure search engines recognize the software configuration. The result is a clean, instant transition for users and indexable structured pages for bots.</p>
+      </div>
+    </article>
+
+    <article class="blog-post">
+      <div class="post-meta">April 15, 2026 · Game Dev</div>
+      <h2>The Magic of Constraints: What 13KB Can Teach Us</h2>
+      <div class="post-content">
+        <p>One of the most inspiring events in the modern gamedev landscape is the annual JS13KGames competition. Developers are challenged to build complete, playable web games within a zip file no larger than 13,312 bytes. With no external assets or remote libraries allowed, developers must squeeze textures, audio synths, maps, and logic into a space smaller than a standard email attachment.</p>
+        <p>This extreme limitation yields incredible creativity. Without the room for pre-built engines, developers write highly optimized 2D and WebGL renderers and build procedural generators that build landscapes and sounds on the fly. Games like <code>q1k3</code> (a fully featured 3D shooter reminiscent of Quake) or <code>underrun</code> (a sci-fi tactical twin-stick shooter) prove that limits are not barriers to quality; rather, they are a catalyst for building some of the most elegant, compact code on the web today.</p>
+      </div>
+    </article>
+
+  </div>
+</body>
+</html>
