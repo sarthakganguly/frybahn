@@ -67,7 +67,7 @@ export function populateGameDetail(game) {
   players.textContent = `${formatPlayers(game.players)} players`;
   license.textContent = game.license || 'MIT';
   playBtn.href = `/play/${game.slug}`;
-  description.textContent = game.description;
+  description.innerHTML = game.description;
 
   if (game.howToPlay) {
     howToPlayWrap.style.display = 'flex';

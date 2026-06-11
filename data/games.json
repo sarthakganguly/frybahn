@@ -65,7 +65,7 @@
     "isPlayable": true,
     "license": "GPL-3.0",
     "source": "https://github.com/hextris/hextris/",
-    "howToPlay": "Press Left/Right Arrows to rotate the hexagon. Match three blocks of the same color in a row to clear them before they overflow the gray border."
+    "howToPlay": "Press Left/Right Arrows or mouse clicks to rotate the hexagon. Match three blocks of the same color in a row to clear them before they overflow the gray border."
   },
   {
     "id": "f6a7b8c9-d0e1-2345-f012-456789012345",
