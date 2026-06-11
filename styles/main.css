@@ -1118,6 +1118,15 @@ body::before {
   line-height: 1.6;
 }
 
+.detail-how-to-play-wrap {
+  margin-top: 8px;
+  border-top: 1px dashed var(--glass-border);
+  padding-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
 .detail-source-wrap {
   margin-top: 16px;
   padding-top: 16px;

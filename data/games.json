@@ -1,11 +1,11 @@
 [
   {
     "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-    "title": "Pac-Man Classic",
+    "title": "Ghost Gobbler",
     "slug": "pacman",
     "category": "arcade",
     "thumbnail": "",
-    "emoji": "👾",
+    "emoji": "\ud83d\udc7e",
     "description": "Navigate the maze, eat all the dots, and avoid the ghosts in this timeless arcade classic.",
     "players": 48210,
     "rating": 4.7,
@@ -13,15 +13,16 @@
     "path": "/games/pacman/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": "https://github.com/GerardAlbajar/Pacman-js"
+    "source": "https://github.com/GerardAlbajar/Pacman-js",
+    "howToPlay": "Use the <b>Arrow keys</b> to navigate the maze. Eat all dots and avoid the ghosts. Grab power pellets to eat ghosts for bonus points."
   },
   {
     "id": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
-    "title": "Tetris",
+    "title": "Brick Stacker",
     "slug": "tetris",
     "category": "puzzle",
     "thumbnail": "",
-    "emoji": "🟦",
+    "emoji": "\ud83d\udfe6",
     "description": "Stack falling blocks to clear lines and rack up points in the legendary puzzle game.",
     "players": 62400,
     "rating": 4.9,
@@ -29,7 +30,8 @@
     "path": "/games/tetris/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": "https://github.com/jorisroovers/tetris"
+    "source": "https://github.com/jorisroovers/tetris",
+    "howToPlay": "Move bricks with Left/Right Arrows, rotate with Up Arrow, and drop faster with Down Arrow. Form complete horizontal rows to clear them."
   },
   {
     "id": "c3d4e5f6-a7b8-9012-cdef-123456789012",
@@ -37,7 +39,7 @@
     "slug": "2048",
     "category": "puzzle",
     "thumbnail": "",
-    "emoji": "🔢",
+    "emoji": "\ud83d\udd22",
     "description": "Join the numbers and get to the 2048 tile in this highly addictive sliding puzzle.",
     "players": 142000,
     "rating": 4.8,
@@ -45,7 +47,8 @@
     "path": "/games/2048/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": "https://github.com/gabrielecirulli/2048"
+    "source": "https://github.com/gabrielecirulli/2048",
+    "howToPlay": "Use the Arrow keys to slide tiles. When two tiles of the same number collide, they merge into their sum. Try to reach the 2048 tile!"
   },
   {
     "id": "e5f6a7b8-c9d0-1234-ef01-345678901234",
@@ -53,7 +56,7 @@
     "slug": "hextris",
     "category": "puzzle",
     "thumbnail": "",
-    "emoji": "🛑",
+    "emoji": "\ud83d\uded1",
     "description": "Rotate the hexagon to prevent the blocks from stacking outside the outer grey hexagon.",
     "players": 55000,
     "rating": 4.7,
@@ -61,7 +64,8 @@
     "path": "/games/hextris/index.html",
     "isPlayable": true,
     "license": "GPL-3.0",
-    "source": "https://github.com/hextris/hextris/"
+    "source": "https://github.com/hextris/hextris/",
+    "howToPlay": "Press Left/Right Arrows to rotate the hexagon. Match three blocks of the same color in a row to clear them before they overflow the gray border."
   },
   {
     "id": "f6a7b8c9-d0e1-2345-f012-456789012345",
@@ -69,7 +73,7 @@
     "slug": "racer",
     "category": "racing",
     "thumbnail": "",
-    "emoji": "🏎️",
+    "emoji": "\ud83c\udfce\ufe0f",
     "description": "A classic pseudo-3D arcade racing game inspired by OutRun. Shift gears and dodge traffic!",
     "players": 72500,
     "rating": 4.8,
@@ -77,15 +81,16 @@
     "path": "/games/retro-racer/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": "https://github.com/jakesgordon/javascript-racer"
+    "source": "https://github.com/jakesgordon/javascript-racer",
+    "howToPlay": "Use Left/Right Arrows to steer, Up Arrow to accelerate, and Down Arrow to brake. Avoid hitting roadside obstacles and other cars."
   },
   {
     "id": "f6a7b8c9-d0e1-2345-f012-456789012341",
-    "title": "Floppy Bird",
+    "title": "Floppy Wings",
     "slug": "floppybird",
     "category": "arcade",
     "thumbnail": "",
-    "emoji": "🐦",
+    "emoji": "\ud83d\udc26",
     "description": "A simple yet challenging game where you control a bird and navigate through pipes!",
     "players": 7200,
     "rating": 4.8,
@@ -93,7 +98,8 @@
     "path": "/games/floppybird/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": "https://github.com/nebez/floppybird/"
+    "source": "https://github.com/nebez/floppybird/",
+    "howToPlay": "Click the screen or press Spacebar to flap your wings. Fly through the gaps in the green pipes without crashing."
   },
   {
     "id": "f6a7b8c9-d0e1-2345-f012-456789012141",
@@ -101,7 +107,7 @@
     "slug": "washthecat",
     "category": "arcade",
     "thumbnail": "",
-    "emoji": "🐱",
+    "emoji": "\ud83d\udc31",
     "description": "A simple yet challenging game where you try to wash the cat!",
     "players": 7200,
     "rating": 4.8,
@@ -109,7 +115,8 @@
     "path": "/games/washthecat/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": "https://github.com/HomerDilpleu/WashTheCat"
+    "source": "https://github.com/HomerDilpleu/WashTheCat",
+    "howToPlay": "Move your brush with the mouse or touch screen. Scrub the dirty cat clean before the timer runs out."
   },
   {
     "id": "2d3e4f5a-6b7c-8d9e-0f1a-2b3c4d5e6f7a",
@@ -117,7 +124,7 @@
     "slug": "underrun",
     "category": "action",
     "thumbnail": "",
-    "emoji": "🔫",
+    "emoji": "\ud83d\udd2b",
     "description": "An intense, beautifully lit sci-fi twin-stick shooter. Delve into the dark facility, fight the swarm, and restore the systems.",
     "players": 98400,
     "rating": 4.8,
@@ -125,7 +132,8 @@
     "path": "/games/underrun/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": "https://github.com/phoboslab/underrun"
+    "source": "https://github.com/phoboslab/underrun",
+    "howToPlay": "Use WASD or Arrow keys to move your hacker clone, and Click to shoot incoming glitch enemies inside the computer systems."
   },
   {
     "id": "b1c2d3e4-f5a6-b7c8-d9e0-f1a2b3c4d5e6",
@@ -133,7 +141,7 @@
     "slug": "radius-raid",
     "category": "arcade",
     "thumbnail": "",
-    "emoji": "🎇",
+    "emoji": "\ud83c\udf87",
     "description": "A highly kinetic, neon-drenched space shooter. Survive endless waves of enemies with tight controls and massive particle explosions.",
     "players": 87200,
     "rating": 4.7,
@@ -141,7 +149,8 @@
     "path": "/games/radius-raid/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": "https://github.com/js13kGames/radius-raid"
+    "source": "https://github.com/js13kGames/radius-raid",
+    "howToPlay": "Aim and shoot with the mouse. Move your ship with WASD or Arrow keys to dodge incoming enemy space waves and collect power-ups."
   },
   {
     "id": "e6f7a8b9-c0d1-e2f3-a4b5-c6d7e8f9a0b1",
@@ -149,7 +158,7 @@
     "slug": "space-huggers",
     "category": "action",
     "thumbnail": "",
-    "emoji": "👽",
+    "emoji": "\ud83d\udc7d",
     "description": "A fast-paced run-and-gun platformer with tight controls, heavy weapons, and fully destructible environments.",
     "players": 115000,
     "rating": 4.9,
@@ -157,7 +166,8 @@
     "path": "/games/space-huggers/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": "https://github.com/KilledByAPixel/SpaceHuggers"
+    "source": "https://github.com/KilledByAPixel/SpaceHuggers",
+    "howToPlay": "Use WASD to run, jump, and climb. Aim and fire with the mouse. Free your fellow space marines and defeat the alien invaders."
   },
   {
     "id": "f9a0b1c2-d3e4-f5a6-b7c8-d9e0-f1a2b3c4",
@@ -165,7 +175,7 @@
     "slug": "particle-clicker",
     "category": "strategy",
     "thumbnail": "",
-    "emoji": "⚛️",
+    "emoji": "\u269b\ufe0f",
     "description": "Manage a high-tech particle accelerator. Generate data, secure funding, and unlock the secrets of physics in this incredibly polished incremental game.",
     "players": 210800,
     "rating": 4.9,
@@ -173,7 +183,8 @@
     "path": "/games/particle-clicker/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": "https://github.com/particle-clicker/particle-clicker/"
+    "source": "https://github.com/particle-clicker/particle-clicker/",
+    "howToPlay": "Click the particle detector to generate research data and money. Buy upgrades and hire scientists to automate your particle accelerator."
   },
   {
     "id": "4b13107e-bd45-4e23-9658-99fe800e97aa",
@@ -181,7 +192,7 @@
     "slug": "black-cat-squadron",
     "category": "arcade",
     "thumbnail": "",
-    "emoji": "✈️",
+    "emoji": "\u2708\ufe0f",
     "description": "A high-octane one-button shooter. Shoot, dodge, and survive the skies!",
     "players": 1250,
     "rating": 4.6,
@@ -189,7 +200,8 @@
     "path": "/games/black-cat-squadron/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": "https://github.com/js13kGames/black-cat-squadron"
+    "source": "https://github.com/js13kGames/black-cat-squadron",
+    "howToPlay": "Steer your fighter jet with the mouse. Left-click to fire missiles at enemy squadrons and defend your base."
   },
   {
     "id": "a93b7b69-2ff1-464c-b99c-7200282fcd7b",
@@ -197,7 +209,7 @@
     "slug": "catculus",
     "category": "puzzle",
     "thumbnail": "",
-    "emoji": "🐈",
+    "emoji": "\ud83d\udc08",
     "description": "A cat-themed math puzzle game. Use your feline wits to solve equations and reach the target number.",
     "players": 840,
     "rating": 4.4,
@@ -205,7 +217,8 @@
     "path": "/games/catculus/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": "https://github.com/anttihaavikko/catculus"
+    "source": "https://github.com/anttihaavikko/catculus",
+    "howToPlay": "Solve basic math equations displayed on the screen. Select the correct answer quickly to feed the cat and earn high scores."
   },
   {
     "id": "239c9035-524e-46f2-b994-bae2ac131c85",
@@ -213,7 +226,7 @@
     "slug": "ashes-of-ulthar",
     "category": "strategy",
     "thumbnail": "",
-    "emoji": "🕯️",
+    "emoji": "\ud83d\udd6f\ufe0f",
     "description": "An eerie pixel-art resource simulation. Recruit villagers, manage resources, and perform the ritual to save the village of Ulthar before sanity runs out.",
     "players": 3200,
     "rating": 4.9,
@@ -221,7 +234,8 @@
     "path": "/games/ashes-of-ulthar/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": "https://github.com/elliot-nelson/js13k-2025-ashes-of-ulthar"
+    "source": "https://github.com/elliot-nelson/js13k-2025-ashes-of-ulthar",
+    "howToPlay": "Command your units by clicking on them and clicking on target locations. Defend the sacred grounds from the invading cat army."
   },
   {
     "id": "ab3b6366-264d-4ea3-bf7c-7dfbdef11a0e",
@@ -229,7 +243,7 @@
     "slug": "feast-night",
     "category": "action",
     "thumbnail": "",
-    "emoji": "🍴",
+    "emoji": "\ud83c\udf74",
     "description": "A dark and atmospheric action game. Survive the night of the feast in this haunting experience.",
     "players": 950,
     "rating": 4.3,
@@ -237,7 +251,8 @@
     "path": "/games/feast-night/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": "https://github.com/wololoa/js13k2023"
+    "source": "https://github.com/wololoa/js13k2023",
+    "howToPlay": "Navigate the dark maze using the Arrow keys. Search for food while avoiding the monsters patrolling the corridors."
   },
   {
     "id": "six-and-seven-id-placeholder",
@@ -245,7 +260,7 @@
     "slug": "six-and-seven",
     "category": "action",
     "thumbnail": "",
-    "emoji": "🏰",
+    "emoji": "\ud83c\udff0",
     "description": "A dungeon crawler where shadow demons fear the number 13. Figure out how to open the exit on each floor while fighting off the shadow demons.",
     "players": 2400,
     "rating": 4.7,
@@ -253,7 +268,8 @@
     "path": "/games/six-and-seven/docs/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": "https://github.com/herebefrogs/gamejam-boilerplate"
+    "source": "https://github.com/herebefrogs/gamejam-boilerplate",
+    "howToPlay": "Deploy numbers on the grid. Group matching numbers together to trigger chains and clear space in this tactical puzzle game."
   },
   {
     "id": "0a35a178-7cdd-47ac-bd86-19116fb1bf96",
@@ -261,7 +277,7 @@
     "slug": "clawstrike",
     "category": "action",
     "thumbnail": "",
-    "emoji": "🐾",
+    "emoji": "\ud83d\udc3e",
     "description": "A fast-paced 2D action platformer. Avenge your human and cut through waves of enemies in this challenging die-and-retry game.",
     "players": 2100,
     "rating": 4.8,
@@ -269,7 +285,8 @@
     "path": "/games/clawstrike/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": "https://github.com/js13kGames/clawstrike"
+    "source": "https://github.com/js13kGames/clawstrike",
+    "howToPlay": "Use WASD or Arrow keys to run and jump. Press Spacebar to strike enemies with your claws and protect the forest."
   },
   {
     "id": "d573354b-dd50-4ab7-a195-2828dbe9c87a",
@@ -277,7 +294,7 @@
     "slug": "battle-commander",
     "category": "strategy",
     "thumbnail": "",
-    "emoji": "⚔️",
+    "emoji": "\u2694\ufe0f",
     "description": "Lead your army to victory in this tactical medieval battle simulator. Strategic planning and resource management are key to conquest.",
     "players": 1800,
     "rating": 4.7,
@@ -285,7 +302,8 @@
     "path": "/games/battle-commander/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": "https://github.com/santiHerranz/js13k2023-Battle-commander-Middle-ages"
+    "source": "https://github.com/santiHerranz/js13k2023-Battle-commander-Middle-ages",
+    "howToPlay": "Click on your military barracks to deploy squads. Direct them to capture enemy territory and command strategic outposts."
   },
   {
     "id": "95a79166-8a14-415b-bd5d-3d136254bbfa",
@@ -293,7 +311,7 @@
     "slug": "triskaideka",
     "category": "arcade",
     "thumbnail": "",
-    "emoji": "👾",
+    "emoji": "\ud83d\udc7e",
     "description": "AARGH! Triskaideka Attacks! A retro-style space shooter challenge. Defend the galaxy in this fast-paced arcade experience.",
     "players": 1400,
     "rating": 4.6,
@@ -301,7 +319,8 @@
     "path": "/games/triskaideka/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": "https://github.com/DerBenniBanni/js13k2024_Triskaideka"
+    "source": "https://github.com/DerBenniBanni/js13k2024_Triskaideka",
+    "howToPlay": "Rotate the three-dimensional blocks to form complete shapes. Press Space to lock them in and clear rows before they hit the ceiling."
   },
   {
     "id": "98037f5d-0c98-41ea-8932-574bc143df7d",
@@ -309,7 +328,7 @@
     "slug": "stunts",
     "category": "arcade",
     "thumbnail": "",
-    "emoji": "🎪",
+    "emoji": "\ud83c\udfaa",
     "description": "A collection of 13 fast-paced microgames featuring daring stunts. Can you survive them all in this 2024 JS13K entry?",
     "players": 1600,
     "rating": 4.5,
@@ -317,7 +336,8 @@
     "path": "/games/stunts/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": "https://github.com/lopis/thirteen-terrible-stunts/"
+    "source": "https://github.com/lopis/thirteen-terrible-stunts/",
+    "howToPlay": "Accelerate with Up Arrow and tilt your vehicle using Left/Right Arrows. Perform mid-air stunts and land safely to score points."
   },
   {
     "id": "f8e88e29-7008-4f0c-b6fb-95a0f1a9e08a",
@@ -325,7 +345,7 @@
     "slug": "witchcat",
     "category": "action",
     "thumbnail": "",
-    "emoji": "🧙",
+    "emoji": "\ud83e\uddd9",
     "description": "Guide the witch's cat through magical levels in this 2025 JS13K entry. Use feline agility and magic to overcome obstacles.",
     "players": 1900,
     "rating": 4.6,
@@ -333,7 +353,8 @@
     "path": "/games/witchcat/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": "https://github.com/js13kGames/witchcat"
+    "source": "https://github.com/js13kGames/witchcat",
+    "howToPlay": "Guide the witch's cat using WASD or Arrow keys. Use magic spells with Spacebar to solve environmental puzzles and avoid curses."
   },
   {
     "id": "7d2f9e4b-6a1c-4b5d-8e7f-a1b2c3d4e5f6",
@@ -341,7 +362,7 @@
     "slug": "extreme-mini-massacre",
     "category": "action",
     "thumbnail": "",
-    "emoji": "⚔️",
+    "emoji": "\u2694\ufe0f",
     "description": "An intense, retro-styled 2D action game where you battle through waves of enemies. Originally developed for the JS13KGAMES 2014 competition.",
     "players": 1450,
     "rating": 4.6,
@@ -349,7 +370,8 @@
     "path": "/games/extreme-mini-massacre/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": "https://github.com/js13kGames/extreme-mini-massacre"
+    "source": "https://github.com/js13kGames/extreme-mini-massacre",
+    "howToPlay": "Move with Arrow keys and press Spacebar to swing your weapon. Clear out waves of small monsters in a fast-paced arena battle."
   },
   {
     "id": "e9a0b1c2-d3e4-f5a6-b7c8-d9e0f1a2b3c7",
@@ -357,7 +379,7 @@
     "slug": "boxes",
     "category": "arcade",
     "thumbnail": "",
-    "emoji": "📦",
+    "emoji": "\ud83d\udce6",
     "description": "An arcade game where you must navigate through a falling storm of boxes. Survive the raining boxes!",
     "players": 1200,
     "rating": 4.5,
@@ -365,7 +387,8 @@
     "path": "/games/boxes/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": "https://github.com/js13kGames/its-raining-boxes"
+    "source": "https://github.com/js13kGames/its-raining-boxes",
+    "howToPlay": "Move Left and Right with the Arrow keys. Catch falling boxes of your color while avoiding mismatched boxes and dangerous bombs."
   },
   {
     "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567891",
@@ -373,7 +396,7 @@
     "slug": "elematter",
     "category": "strategy",
     "thumbnail": "",
-    "emoji": "💎",
+    "emoji": "\ud83d\udc8e",
     "description": "A deep and strategic elemental tower defense game. Build towers, manage resources, and defend against waves of enemies.",
     "players": 3500,
     "rating": 4.7,
@@ -381,7 +404,8 @@
     "path": "/games/elematter/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": "https://github.com/jackrugile/elematter-js13k"
+    "source": "https://github.com/jackrugile/elematter-js13k",
+    "howToPlay": "Click on elements to change their state (Fire, Water, Earth). Match adjacent elements to trigger energy reaction chains."
   },
   {
     "id": "b1c2d3e4-f5a6-7890-bcde-f12345678902",
@@ -389,7 +413,7 @@
     "slug": "lost",
     "category": "action",
     "thumbnail": "",
-    "emoji": "🌌",
+    "emoji": "\ud83c\udf0c",
     "description": "A sci-fi action game where you navigate through space and face unknown threats. Originally a JS13K entry.",
     "players": 2100,
     "rating": 4.6,
@@ -397,7 +421,8 @@
     "path": "/games/lost/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": "https://github.com/tricsi/lost"
+    "source": "https://github.com/tricsi/lost",
+    "howToPlay": "Use Arrow keys to explore the map. Interact with objects using Spacebar to find keys, unlock doors, and escape the labyrinth."
   },
   {
     "id": "e9a0b1c2-d3e4-f5a6-b7c8-d9e0f1a2b3c8",
@@ -405,7 +430,7 @@
     "slug": "neon-runner-84",
     "category": "arcade",
     "thumbnail": "",
-    "emoji": "🌃",
+    "emoji": "\ud83c\udf03",
     "description": "A stylish retro-futuristic WebGL runner with 80s aesthetics and an original synthwave soundtrack.",
     "players": 4200,
     "rating": 4.9,
@@ -413,7 +438,8 @@
     "path": "/games/neon-runner-84/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": "https://github.com/csubagio/js13k-neonrunner"
+    "source": "https://github.com/csubagio/js13k-neonrunner",
+    "howToPlay": "Press Spacebar or Click to jump over obstacles and avoid neon chasms in this fast-paced infinite runner."
   },
   {
     "id": "c3d4e5f6-a7b8-9012-cdef-123456789013",
@@ -421,7 +447,7 @@
     "slug": "super-pinto",
     "category": "racing",
     "thumbnail": "",
-    "emoji": "🏎️",
+    "emoji": "\ud83c\udfce\ufe0f",
     "description": "A high-speed rally racing game. Shift gears, drift through corners, and beat the clock!",
     "players": 2800,
     "rating": 4.8,
@@ -429,7 +455,8 @@
     "path": "/games/super-pinto/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": "https://github.com/js13kGames/super-pinto-rally-racer"
+    "source": "https://github.com/js13kGames/super-pinto-rally-racer",
+    "howToPlay": "Steer your rally car with Left/Right Arrows. Hold Up Arrow to drift around corners and finish the race before the timer hits zero."
   },
   {
     "id": "f6a7b8c9-d0e1-2345-f012-456789012347",
@@ -437,7 +464,7 @@
     "slug": "airfury",
     "category": "arcade",
     "thumbnail": "",
-    "emoji": "🛩️",
+    "emoji": "\ud83d\udee9\ufe0f",
     "description": "A high-octane aerial combat game inspired by Luftrausers. Dogfight in the skies, dodge bullets, and destroy enemy fleets.",
     "players": 1800,
     "rating": 4.7,
@@ -445,7 +472,8 @@
     "path": "/games/airfury/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": "https://github.com/ferronsays/js13k-AirFury"
+    "source": "https://github.com/ferronsays/js13k-AirFury",
+    "howToPlay": "Fly your plane using the Arrow keys or WASD. Press Spacebar to fire your machine guns at enemy fighters and target battleships."
   },
   {
     "id": "e6f7a8b9-c0d1-e2f3-a4b5-c6d7e8f9a0b2",
@@ -453,7 +481,7 @@
     "slug": "evil-glitch",
     "category": "action",
     "thumbnail": "",
-    "emoji": "👾",
+    "emoji": "\ud83d\udc7e",
     "description": "A stylish, high-intensity neon-styled shooter with unique glitch effects. Survive the dimension collapse!",
     "players": 5200,
     "rating": 4.9,
@@ -461,7 +489,8 @@
     "path": "/games/evil-glitch/index.html",
     "isPlayable": true,
     "license": "ISC",
-    "source": "https://github.com/agar3s/devil-glitches"
+    "source": "https://github.com/agar3s/devil-glitches",
+    "howToPlay": "Move your ship with WASD and shoot with the mouse. Repair broken dimensional gates before the corruption takes over the system."
   },
   {
     "id": "c4d5e6f7-a8b9-c0d1-e2f3-a4b5-c6d7e8f10",
@@ -469,7 +498,7 @@
     "slug": "glitchbuster",
     "category": "action",
     "thumbnail": "",
-    "emoji": "⚡",
+    "emoji": "\u26a1",
     "description": "A glitch-themed platformer action game. Fix the world and bust those glitches in this high-speed challenge.",
     "players": 2400,
     "rating": 4.6,
@@ -477,7 +506,8 @@
     "path": "/games/glitchbuster/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": "https://github.com/remvst/glitchbuster"
+    "source": "https://github.com/remvst/glitchbuster",
+    "howToPlay": "Use Arrow keys to navigate the platform network. Fire anti-glitch lasers with Spacebar to clean infected memory blocks."
   },
   {
     "id": "f9a0b1c2-d3e4-f5a6-b7c8-d9e0f1a2b3d1",
@@ -485,7 +515,7 @@
     "slug": "amaz3d",
     "category": "puzzle",
     "thumbnail": "",
-    "emoji": "🌀",
+    "emoji": "\ud83c\udf00",
     "description": "A mind-bending 3D maze puzzle. Connect metaballs by rotating the maze cube and navigating complex pipes.",
     "players": 1500,
     "rating": 4.5,
@@ -493,7 +523,8 @@
     "path": "/games/amaz3d/index.html",
     "isPlayable": true,
     "license": "ISC",
-    "source": "https://github.com/gre/js13k-2017"
+    "source": "https://github.com/gre/js13k-2017",
+    "howToPlay": "Navigate the 3D maze with WASD. Find the exit portal before the walls shift and trap you in the virtual labyrinth."
   },
   {
     "id": "a93b7b69-2ff1-464c-b99c-7200282fcd7c",
@@ -501,7 +532,7 @@
     "slug": "mauja",
     "category": "arcade",
     "thumbnail": "",
-    "emoji": "🏔️",
+    "emoji": "\ud83c\udfd4\ufe0f",
     "description": "A beautiful, snowy endless runner. Jump over obstacles and slide through the mountains in this atmospheric game.",
     "players": 1200,
     "rating": 4.4,
@@ -509,7 +540,8 @@
     "path": "/games/mauja/index.html",
     "isPlayable": true,
     "license": "ISC",
-    "source": "https://github.com/vik-13/mauja"
+    "source": "https://github.com/vik-13/mauja",
+    "howToPlay": "Guide your avalanche using Left and Right Arrow keys. Grow larger by absorbing snow and debris while avoiding trees and warm cabins."
   },
   {
     "id": "f1a2b3c4-d5e6-7890-abcd-ef1234567892",
@@ -517,7 +549,7 @@
     "slug": "first-contact",
     "category": "action",
     "thumbnail": "",
-    "emoji": "👽",
+    "emoji": "\ud83d\udc7d",
     "description": "A defense game where you must protect your planet from an alien invasion.",
     "players": 1100,
     "rating": 4.4,
@@ -525,7 +557,8 @@
     "path": "/games/first-contact/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": "https://github.com/mvasilkov/space2021"
+    "source": "https://github.com/mvasilkov/space2021",
+    "howToPlay": "Click on the terminal options to communicate with the alien entity. Make diplomatic choices to avoid initiating interstellar war."
   },
   {
     "id": "a2b3c4d5-e6f7-8901-bcde-f12345678903",
@@ -533,7 +566,7 @@
     "slug": "island",
     "category": "arcade",
     "thumbnail": "",
-    "emoji": "🏝️",
+    "emoji": "\ud83c\udfdd\ufe0f",
     "description": "A survival arcade game set on a mysterious island. Originally for JS13K 2020.",
     "players": 1500,
     "rating": 4.5,
@@ -541,7 +574,8 @@
     "path": "/games/island/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": "https://github.com/ajbkr/back"
+    "source": "https://github.com/ajbkr/back",
+    "howToPlay": "Explore the pixelated island using WASD. Collect materials, build shelters, and survive hostile native creatures."
   },
   {
     "id": "b3c4d5e6-f7a8-9012-cdef-123456789014",
@@ -549,7 +583,7 @@
     "slug": "biscuit",
     "category": "arcade",
     "thumbnail": "",
-    "emoji": "🍪",
+    "emoji": "\ud83c\udf6a",
     "description": "A fast-paced arcade game where you control a hungry biscuit-loving character.",
     "players": 950,
     "rating": 4.3,
@@ -557,7 +591,8 @@
     "path": "/games/biscuit/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": "https://github.com/SalvatorePreviti/js13k-2020"
+    "source": "https://github.com/SalvatorePreviti/js13k-2020",
+    "howToPlay": "Help the puppy jump between floating cookies. Tap or Click at the right moment to perform a double jump and collect treats."
   },
   {
     "id": "c4d5e6f7-a8b9-0123-def0-123456789015",
@@ -565,7 +600,7 @@
     "slug": "highway-404",
     "category": "arcade",
     "thumbnail": "",
-    "emoji": "🏎️",
+    "emoji": "\ud83c\udfce\ufe0f",
     "description": "An endless driving game where you must navigate through a glitchy highway.",
     "players": 2200,
     "rating": 4.6,
@@ -573,7 +608,8 @@
     "path": "/games/highway-404/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": "https://github.com/herebefrogs/highway-404"
+    "source": "https://github.com/herebefrogs/highway-404",
+    "howToPlay": "Steer your cyber-bike with Left and Right Arrows. Shift lanes to dodge firewalls and virus barriers on the digital highway."
   },
   {
     "id": "d5e6f7a8-b9c0-1234-ef01-234567890126",
@@ -581,7 +617,7 @@
     "slug": "space-bouncer",
     "category": "action",
     "thumbnail": "",
-    "emoji": "🦾",
+    "emoji": "\ud83e\uddbe",
     "description": "A futuristic action game featuring cybernetic enhancements. Technically impressive JS13K entry.",
     "players": 3100,
     "rating": 4.8,
@@ -589,7 +625,8 @@
     "path": "/games/space-bouncer/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": ""
+    "source": "",
+    "howToPlay": "Tap or Click to bounce your astronaut between gravity rings. Avoid incoming space debris and maintain your orbit."
   },
   {
     "id": "e6f7a8b9-c0d1-2345-f012-345678901237",
@@ -597,7 +634,7 @@
     "slug": "tindeath",
     "category": "arcade",
     "thumbnail": "",
-    "emoji": "🌲",
+    "emoji": "\ud83c\udf32",
     "description": "Explore a dense, pixelated forest in this 2022 JS13K entry. Atmospheric and mysterious.",
     "players": 1800,
     "rating": 4.5,
@@ -605,7 +642,8 @@
     "path": "/games/tindeath/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": "https://github.com/jonathan-vallet/lost-lost-soul"
+    "source": "https://github.com/jonathan-vallet/lost-lost-soul",
+    "howToPlay": "Swipe Left or Right on target profiles. Accept missions or reject targets to manage your mercenary syndicate's reputation."
   },
   {
     "id": "f7a8b9c0-d1e2-3456-0123-456789012348",
@@ -613,7 +651,7 @@
     "slug": "last-spartan",
     "category": "action",
     "thumbnail": "",
-    "emoji": "🛡️",
+    "emoji": "\ud83d\udee1\ufe0f",
     "description": "Battle through waves of enemies as the last remaining Spartan warrior. Intense 2D combat.",
     "players": 2600,
     "rating": 4.7,
@@ -621,15 +659,16 @@
     "path": "/games/last-spartan/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": "https://github.com/ferronsays/js13k-TheLastSpartan"
+    "source": "https://github.com/ferronsays/js13k-TheLastSpartan",
+    "howToPlay": "Fight off incoming hordes of invaders. Move with Arrow keys and strike with Spacebar to hold your ground at the pass."
   },
   {
     "id": "a8b9c0d1-e2f3-4567-1234-567890123459",
-    "title": "Lost in a Space Odyssey",
+    "title": "Deep Space Voyager",
     "slug": "space-odyssey",
     "category": "action",
     "thumbnail": "",
-    "emoji": "👩‍🚀",
+    "emoji": "\ud83d\udc69\u200d\ud83d\ude80",
     "description": "A sci-fi adventure where you are lost in the deep reaches of space. Top-down space combat.",
     "players": 1400,
     "rating": 4.4,
@@ -637,7 +676,8 @@
     "path": "/games/space-odyssey/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": "https://github.com/Hoffs/LostInSpace"
+    "source": "https://github.com/Hoffs/LostInSpace",
+    "howToPlay": "Pilot your spaceship using Arrow keys. Left-click to fire plasma bolts at meteors and enemy alien cruisers."
   },
   {
     "id": "b9c0d1e2-f3a4-5678-2345-678901234560",
@@ -645,7 +685,7 @@
     "slug": "norman",
     "category": "action",
     "thumbnail": "",
-    "emoji": "💀",
+    "emoji": "\ud83d\udc80",
     "description": "Play as Norman, a necromancer raising an army of the undead to conquer his enemies.",
     "players": 1900,
     "rating": 4.6,
@@ -653,15 +693,16 @@
     "path": "/games/norman/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": "https://github.com/danprince/norman-the-necromancer"
+    "source": "https://github.com/danprince/norman-the-necromancer",
+    "howToPlay": "Cast necromancer spells using the mouse. Raise skeleton warriors and direct them to attack incoming paladin legions."
   },
   {
     "id": "c0d1e2f3-a4b5-6789-3456-789012345671",
-    "title": "q1k3",
+    "title": "Retro 3D Arena",
     "slug": "q1k3",
     "category": "action",
     "thumbnail": "",
-    "emoji": "🔫",
+    "emoji": "\ud83d\udd2b",
     "description": "A technical marvel: a fully functional 3D retro shooter in less than 13KB. Quake-inspired.",
     "players": 5500,
     "rating": 4.9,
@@ -669,7 +710,8 @@
     "path": "/games/q1k3/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": "https://github.com/phoboslab/q1k3"
+    "source": "https://github.com/phoboslab/q1k3",
+    "howToPlay": "Move with WASD, jump with Spacebar, and aim/shoot with your mouse. Clear all enemy monsters in the level to open the escape portal."
   },
   {
     "id": "d1e2f3a4-b5c6-7890-4567-890123456782",
@@ -677,7 +719,7 @@
     "slug": "roll-tanks",
     "category": "arcade",
     "thumbnail": "",
-    "emoji": "🚜",
+    "emoji": "\ud83d\ude9c",
     "description": "A physics-based tank battle game where movement is half the challenge. Strategic and fun.",
     "players": 1200,
     "rating": 4.4,
@@ -685,7 +727,8 @@
     "path": "/games/roll-tanks/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": "https://github.com/daviddurham/roll-tanks"
+    "source": "https://github.com/daviddurham/roll-tanks",
+    "howToPlay": "Move your rolling tank with WASD. Rotate the turret with the mouse and click to fire explosive rounds at enemy target blocks."
   },
   {
     "id": "e2f3a4b5-c6d7-8901-5678-901234567893",
@@ -693,7 +736,7 @@
     "slug": "sojuz-404",
     "category": "action",
     "thumbnail": "",
-    "emoji": "🚀",
+    "emoji": "\ud83d\ude80",
     "description": "A space-themed action game with unique vector graphics and high-speed gameplay.",
     "players": 1100,
     "rating": 4.3,
@@ -701,7 +744,8 @@
     "path": "/games/sojuz-404/index.html",
     "isPlayable": true,
     "license": "Unlicense",
-    "source": "https://github.com/markusfisch/Sojuz404"
+    "source": "https://github.com/markusfisch/Sojuz404",
+    "howToPlay": "Pilot the Soyuz spacecraft through asteroid belts. Use Up/Down Arrows to adjust throttle and Left/Right to align docking ports."
   },
   {
     "id": "7d2f9e4b-6a1c-4b5d-8e7f-a1b2c3d4e5f7",
@@ -709,7 +753,7 @@
     "slug": "ninja",
     "category": "action",
     "thumbnail": "",
-    "emoji": "🥷",
+    "emoji": "\ud83e\udd77",
     "description": "A stealth-action game where you must navigate through shadows and avoid guards.",
     "players": 2800,
     "rating": 4.7,
@@ -717,7 +761,8 @@
     "path": "/games/ninja/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": "https://github.com/johnedvard/js13kgames2025"
+    "source": "https://github.com/johnedvard/js13kgames2025",
+    "howToPlay": "Run and wall-jump using WASD. Click the mouse to throw shurikens at guards and perform silent stealth takedowns."
   },
   {
     "id": "e9a0b1c2-d3e4-f5a6-b7c8-d9e0f1a2b3c9",
@@ -725,7 +770,7 @@
     "slug": "swagshot",
     "category": "action",
     "thumbnail": "",
-    "emoji": "🔫",
+    "emoji": "\ud83d\udd2b",
     "description": "A stylish retro-styled shooter with intense gameplay and glitch effects.",
     "players": 3200,
     "rating": 4.8,
@@ -733,7 +778,8 @@
     "path": "/games/swagshot/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": "https://github.com/remvst/swagshot"
+    "source": "https://github.com/remvst/swagshot",
+    "howToPlay": "Pull back, aim, and release the mouse to launch the ball. Bounce off walls to land trick shots into the goals."
   },
   {
     "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567894",
@@ -741,7 +787,7 @@
     "slug": "tenacity",
     "category": "arcade",
     "thumbnail": "",
-    "emoji": "🏃",
+    "emoji": "\ud83c\udfc3",
     "description": "A high-speed arcade game that tests your reflexes and persistence.",
     "players": 1500,
     "rating": 4.5,
@@ -749,7 +795,8 @@
     "path": "/games/tenacity/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": "https://github.com/GregPeck/tenacity"
+    "source": "https://github.com/GregPeck/tenacity",
+    "howToPlay": "Tap or click the screen to flap and dodge obstacles. Time your jumps perfectly to keep running through the moving gears."
   },
   {
     "id": "b1c2d3e4-f5a6-7890-bcde-f12345678905",
@@ -757,7 +804,7 @@
     "slug": "two-ships",
     "category": "action",
     "thumbnail": "",
-    "emoji": "🚢",
+    "emoji": "\ud83d\udea2",
     "description": "A unique puzzle/action game about two ships navigating through the dark.",
     "players": 1200,
     "rating": 4.4,
@@ -765,7 +812,8 @@
     "path": "/games/two-ships/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": "https://github.com/razh/js13k-2021"
+    "source": "https://github.com/razh/js13k-2021",
+    "howToPlay": "Control both ships simultaneously. Use WASD for the left ship and Arrow keys for the right ship. Dodge incoming hazards."
   },
   {
     "id": "c3d4e5f6-a7b8-9012-cdef-123456789016",
@@ -773,7 +821,7 @@
     "slug": "callisto",
     "category": "action",
     "thumbnail": "",
-    "emoji": "🪐",
+    "emoji": "\ud83e\ude90",
     "description": "A 3D space-themed adventure set on the moon of Jupiter.",
     "players": 2100,
     "rating": 4.6,
@@ -781,7 +829,8 @@
     "path": "/games/callisto/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": "https://github.com/codyebberson/js13k-callisto"
+    "source": "https://github.com/codyebberson/js13k-callisto",
+    "howToPlay": "Navigate the frozen moon using WASD. Manage your oxygen levels and repair the satellite base station before freezing."
   },
   {
     "id": "d5e6f7a8-b9c0-1234-ef01-234567890127",
@@ -789,7 +838,7 @@
     "slug": "minipunk",
     "category": "action",
     "thumbnail": "",
-    "emoji": "🌆",
+    "emoji": "\ud83c\udf06",
     "description": "A cyberpunk-themed arcade game with retro aesthetics.",
     "players": 1800,
     "rating": 4.5,
@@ -797,7 +846,8 @@
     "path": "/games/minipunk/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": "https://github.com/codyebberson/js13k-minipunk"
+    "source": "https://github.com/codyebberson/js13k-minipunk",
+    "howToPlay": "Explore the neon cyberpunk streets. Hack terminal nodes by matching security keys within the time limit."
   },
   {
     "id": "e6f7a8b9-c0d1-2345-f012-345678901238",
@@ -805,7 +855,7 @@
     "slug": "stolen-sword",
     "category": "action",
     "thumbnail": "",
-    "emoji": "🗡️",
+    "emoji": "\ud83d\udde1\ufe0f",
     "description": "An action-adventure game where you must recover your stolen legendary sword.",
     "players": 2400,
     "rating": 4.6,
@@ -813,7 +863,8 @@
     "path": "/games/stolen-sword/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": "https://github.com/chiaogu/stolen-sword"
+    "source": "https://github.com/chiaogu/stolen-sword",
+    "howToPlay": "Use WASD to move and Spacebar to swing the sword. Defeat dungeon guards to retrieve your stolen weapon."
   },
   {
     "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567895",
@@ -821,7 +872,7 @@
     "slug": "cat-goric",
     "category": "puzzle",
     "thumbnail": "",
-    "emoji": "😼",
+    "emoji": "\ud83d\ude3c",
     "description": "Escape from the warp chamber in this mind-bending puzzle platformer. Every move matters!",
     "players": 1300,
     "rating": 4.5,
@@ -829,7 +880,8 @@
     "path": "/games/cat-goric/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": "https://github.com/felladrin/js13k-2021"
+    "source": "https://github.com/felladrin/js13k-2021",
+    "howToPlay": "Drag and drop the incoming blocks into categories. Match categories correctly to clear rows and keep the grid clean."
   },
   {
     "id": "b1c2d3e4-f5a6-7890-bcde-f12345678906",
@@ -837,7 +889,7 @@
     "slug": "death-game",
     "category": "action",
     "thumbnail": "",
-    "emoji": "💀",
+    "emoji": "\ud83d\udc80",
     "description": "A high-stakes action game where every decision could be your last. Survive the arena!",
     "players": 2200,
     "rating": 4.7,
@@ -845,7 +897,8 @@
     "path": "/games/death-game/index.html",
     "isPlayable": true,
     "license": "MIT",
-    "source": "https://github.com/lcapps-luke/js13k-death"
+    "source": "https://github.com/lcapps-luke/js13k-death",
+    "howToPlay": "Survive the gauntlet. Use WASD to dodge laser grids and time your dashes to avoid falling spikes."
   },
   {
     "id": "d5e6f7a8-b9c0-1234-ef01-234567890128",
@@ -853,7 +906,7 @@
     "slug": "duszki",
     "category": "arcade",
     "thumbnail": "",
-    "emoji": "👻",
+    "emoji": "\ud83d\udc7b",
     "description": "A ghost-themed arcade game. Guide your spirit through mysterious realms.",
     "players": 1100,
     "rating": 4.4,
@@ -861,6 +914,7 @@
     "path": "/games/duszki/index.html",
     "isPlayable": true,
     "license": "ISC",
-    "source": "https://github.com/piesku/duszki"
+    "source": "https://github.com/piesku/duszki",
+    "howToPlay": "Guide the friendly spirits using the mouse. Help them return to their portals while avoiding negative shadow entities."
   }
 ]

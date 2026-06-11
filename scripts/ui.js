@@ -51,6 +51,8 @@ export function populateGameDetail(game) {
   const license = qs('#detail-license');
   const playBtn = qs('#detail-play-btn');
   const description = qs('#detail-description');
+  const howToPlay = qs('#detail-how-to-play');
+  const howToPlayWrap = qs('#detail-how-to-play-wrap');
   const sourceLink = qs('#detail-source-link');
   const sourceWrap = qs('#detail-source-wrap');
 
@@ -66,6 +68,13 @@ export function populateGameDetail(game) {
   license.textContent = game.license || 'MIT';
   playBtn.href = `/play/${game.slug}`;
   description.textContent = game.description;
+
+  if (game.howToPlay) {
+    howToPlayWrap.style.display = 'flex';
+    howToPlay.innerHTML = game.howToPlay;
+  } else {
+    howToPlayWrap.style.display = 'none';
+  }
 
   if (game.source) {
     sourceWrap.style.display = 'block';
