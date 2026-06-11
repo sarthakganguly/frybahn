@@ -23,41 +23,144 @@
   <link rel="stylesheet" href="/styles/main.css" />
   <style>
     .static-page { padding: 80px 32px; max-width: 800px; margin: 0 auto; }
-    .static-page h1 { font-family: var(--font-display); font-size: 42px; margin-bottom: 32px; background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .static-page h1 { font-family: var(--font-display); font-size: 42px; margin-bottom: 16px; background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .subtitle { color: var(--text-secondary); font-size: 18px; margin-bottom: 40px; line-height: 1.6; }
+    
+    .section-title { font-family: var(--font-display); font-size: 24px; color: var(--text-primary); margin: 40px 0 16px 0; border-bottom: 1px solid var(--glass-border); padding-bottom: 8px; letter-spacing: 1px; text-transform: uppercase; }
+    
+    .requirements-list { list-style: none; margin-bottom: 32px; }
+    .requirement-item { margin-bottom: 20px; background: var(--glass); padding: 20px; border-radius: var(--radius-md); border: 1px solid var(--glass-border); transition: transform var(--transition-fast), border-color var(--transition-fast); }
+    .requirement-item:hover { transform: translateY(-2px); border-color: var(--accent-blue); }
+    .requirement-item h3 { font-family: var(--font-display); color: var(--text-primary); font-size: 18px; margin-bottom: 8px; }
+    .requirement-item p { color: var(--text-secondary); line-height: 1.6; font-size: 14.5px; }
+    
     .step-list { list-style: none; margin-bottom: 32px; }
     .step-item { margin-bottom: 32px; display: flex; gap: 24px; align-items: flex-start; }
-    .step-num { width: 36px; height: 36px; background: var(--accent-blue); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 700; flex-shrink: 0; }
-    .step-content h3 { font-family: var(--font-display); color: var(--text-primary); margin-bottom: 8px; }
-    .step-content p { color: var(--text-secondary); line-height: 1.6; }
-    .back-home { display: inline-block; margin-bottom: 40px; color: var(--accent-blue); text-decoration: none; font-family: var(--font-display); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+    .step-num { width: 36px; height: 36px; background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple)); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 700; flex-shrink: 0; box-shadow: var(--glow-blue); }
+    .step-content { flex: 1; }
+    .step-content h3 { font-family: var(--font-display); color: var(--text-primary); font-size: 20px; margin-bottom: 8px; }
+    .step-content p { color: var(--text-secondary); line-height: 1.6; margin-bottom: 12px; font-size: 14.5px; }
+    
+    pre { background: rgba(0, 0, 0, 0.4); border: 1px solid var(--glass-border); border-radius: var(--radius-sm); padding: 16px; overflow-x: auto; margin: 16px 0; }
+    code { font-family: 'Courier New', Courier, monospace; font-size: 13.5px; color: var(--accent-cyan); }
+    pre code { color: var(--text-primary); }
+    
+    .back-home { display: inline-flex; align-items: center; margin-bottom: 40px; color: var(--accent-blue); text-decoration: none; font-family: var(--font-display); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; transition: color var(--transition-fast), transform var(--transition-fast); }
+    .back-home:hover { color: var(--accent-cyan); transform: translateX(-4px); }
+    
+    .btn-link { display: inline-block; color: var(--accent-blue); text-decoration: none; font-weight: 500; transition: color var(--transition-fast); }
+    .btn-link:hover { color: var(--accent-cyan); text-decoration: underline; }
+    
+    .fallback-box { background: rgba(139, 92, 246, 0.08); border: 1px solid rgba(139, 92, 246, 0.2); border-radius: var(--radius-md); padding: 24px; margin-top: 40px; text-align: center; }
+    .fallback-box h3 { font-family: var(--font-display); color: var(--text-primary); font-size: 20px; margin-bottom: 8px; }
+    .fallback-box p { color: var(--text-secondary); line-height: 1.6; margin-bottom: 12px; font-size: 14.5px; }
+    .email-link { color: var(--accent-pink); font-weight: 600; text-decoration: none; transition: color var(--transition-fast); }
+    .email-link:hover { color: var(--accent-blue); text-decoration: underline; }
   </style>
 </head>
 <body>
   <div class="static-page">
     <a href="/" class="back-home">← Back to Games</a>
     <h1>For Developers</h1>
+    <p class="subtitle">
+      Frybahn runs as a static site and loads HTML5 games in sandboxed iframes. If you've built a web-compatible game, you can list it here by sending a Pull Request to our catalog.
+    </p>
+
+    <h2 class="section-title">Submission Requirements</h2>
+    <div class="requirements-list">
+      <div class="requirement-item">
+        <h3>1. Fully Self-Contained</h3>
+        <p>Your game must run entirely on the client side. No external server logic, backend database connections, or outside hosting are allowed. Ensure all assets (audio, images, scripts, CSS) use relative paths so they resolve correctly inside your game's subfolder.</p>
+      </div>
+      <div class="requirement-item">
+        <h3>2. Controls & Responsiveness</h3>
+        <p>Frybahn is designed for a console-style experience. Games should support key mappings (arrow keys, WASD, space bar) or offer clean, responsive touch layouts for mobile players.</p>
+      </div>
+      <div class="requirement-item">
+        <h3>3. Asset Licensing</h3>
+        <p>You must hold the distribution rights for all files, libraries, artwork, and sound clips included in your folder. Open-source licenses (MIT, GPL, Apache, BSD) are highly preferred.</p>
+      </div>
+      <div class="requirement-item">
+        <h3>4. Sandboxing Compatibility</h3>
+        <p>Games are loaded inside an <code>&lt;iframe&gt;</code> configured with <code>sandbox="allow-scripts allow-same-origin"</code>. Your code must run normally under these constraints and not attempt to access the parent window.</p>
+      </div>
+    </div>
+
+    <h2 class="section-title">Step-by-Step Submission Guide</h2>
     <div class="step-list">
       <div class="step-item">
         <div class="step-num">1</div>
         <div class="step-content">
-          <h3>Build Your Game</h3>
-          <p>Create a self-contained HTML5 game using vanilla JavaScript or your favorite engine. Ensure it doesn't require server-side logic to run.</p>
+          <h3>Fork and Clone</h3>
+          <p>Go to the main <a href="https://github.com/sarthakganguly/frybahn" class="btn-link" target="_blank" rel="noopener">Frybahn GitHub Repository</a>, fork it to your account, and clone it locally on your computer.</p>
         </div>
       </div>
       <div class="step-item">
         <div class="step-num">2</div>
         <div class="step-content">
-          <h3>Prepare Assets</h3>
-          <p>Package your index.html and assets in a folder. Provide a title, description, and an emoji or thumbnail for your entry.</p>
+          <h3>Create Your Game Folder</h3>
+          <p>Create a new subfolder in <code>/games</code> using a lower-case, URL-friendly slug (e.g., <code>games/my-awesome-game/</code>). Put your built files inside. The directory must contain an <code>index.html</code> as its entry point.</p>
+          <pre><code>games/
+└── my-awesome-game/
+    ├── index.html
+    ├── style.css
+    ├── main.js
+    └── assets/
+        └── sprites.png</code></pre>
         </div>
       </div>
       <div class="step-item">
         <div class="step-num">3</div>
         <div class="step-content">
-          <h3>Submit to Frybahn</h3>
-          <p>Open a Pull Request on our GitHub repository to add your game to the data/games.json file and include your folder in /games.</p>
+          <h3>Register in the Catalog</h3>
+          <p>Open <a href="/data/games.json" class="btn-link">data/games.json</a> and add a JSON entry for your game at the end of the array. Follow the schema format below:</p>
+          <pre><code>{
+  "id": "generate-a-unique-uuid-v4",
+  "title": "My Awesome Game",
+  "slug": "my-awesome-game",
+  "category": "arcade",
+  "thumbnail": "",
+  "emoji": "🚀",
+  "description": "Short description of the gameplay. Under 200 characters.",
+  "players": 1000,
+  "rating": 4.8,
+  "badge": "new",
+  "path": "/games/my-awesome-game/index.html",
+  "source": "https://github.com/username/my-awesome-game",
+  "isPlayable": true,
+  "license": "MIT"
+}</code></pre>
+          <p><em>Note: If you do not have a thumbnail image, leave the thumbnail field empty. The system will fall back to using your custom emoji.</em></p>
         </div>
       </div>
+      <div class="step-item">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <h3>Test Locally</h3>
+          <p>Run a local server or start the project container using Docker to confirm the game loads and plays without asset errors:</p>
+          <pre><code>docker compose up -d --build</code></pre>
+          <p>Visit <code>http://localhost:90</code> in your browser and check the developer console to confirm no resources failed to load (404 errors).</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <h3>Submit a Pull Request</h3>
+          <p>Commit your changes to a separate branch, push it to your fork, and open a Pull Request against our master branch. We will test the game's performance and merge it if it is stable.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="fallback-box">
+      <h3>Need Help or Found a Bug?</h3>
+      <p>
+        If you run into issues, want to discuss new features, or find a bug in the portal, please open a ticket on the 
+        <a href="https://github.com/sarthakganguly/frybahn/issues" class="btn-link" target="_blank" rel="noopener">Frybahn Issue Tracker</a>.
+      </p>
+      <p>
+        For direct developer inquiries or private fallback communication, feel free to email the maintainer at 
+        <a href="mailto:sganguly@sgownblog.com" class="email-link">sganguly@sgownblog.com</a>.
+      </p>
     </div>
   </div>
 </body>

@@ -856,6 +856,17 @@ body::before {
   letter-spacing: 1px;
 }
 
+.footer-bottom a {
+  color: var(--accent-blue);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.footer-bottom a:hover {
+  color: var(--accent-cyan);
+  text-decoration: underline;
+}
+
 @media (max-width: 768px) {
   .footer-container {
     flex-direction: column;

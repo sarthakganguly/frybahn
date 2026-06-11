@@ -27,6 +27,8 @@
     .faq-item { margin-bottom: 32px; background: var(--glass); padding: 24px; border-radius: var(--radius-md); border: 1px solid var(--glass-border); }
     .faq-item h3 { font-family: var(--font-display); font-size: 20px; color: var(--text-primary); margin-bottom: 12px; }
     .faq-item p { color: var(--text-secondary); line-height: 1.6; }
+    .faq-item p a { color: var(--accent-blue); text-decoration: none; transition: color var(--transition-fast); }
+    .faq-item p a:hover { color: var(--accent-cyan); text-decoration: underline; }
     .back-home { display: inline-block; margin-bottom: 40px; color: var(--accent-blue); text-decoration: none; font-family: var(--font-display); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
   </style>
 </head>
@@ -47,12 +49,12 @@
 
     <div class="faq-item">
       <h3>Can I play on mobile?</h3>
-      <p>Absolutely. Most of our games are built with responsive web technologies and support touch controls for gaming on the go.</p>
+      <p>Absolutely. Some of the games are built with responsive web technologies and support touch controls for gaming on the go.</p>
     </div>
 
     <div class="faq-item">
       <h3>How can I add my game to Frybahn?</h3>
-      <p>Check out our Developers page for information on how to submit your title to our catalogue.</p>
+      <p>Check out our <a href="/developers.html">Developers page</a> for step-by-step guidelines on packaging your game, catalog syntax, and opening a Pull Request.</p>
     </div>
   </div>
 </body>
