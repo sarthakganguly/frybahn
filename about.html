@@ -23,18 +23,86 @@
   <link rel="stylesheet" href="/styles/main.css" />
   <style>
     .static-page { padding: 80px 32px; max-width: 800px; margin: 0 auto; }
-    .static-page h1 { font-family: var(--font-display); font-size: 42px; margin-bottom: 32px; background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .content-block { margin-bottom: 32px; color: var(--text-secondary); line-height: 1.8; font-size: 18px; }
-    .back-home { display: inline-block; margin-bottom: 40px; color: var(--accent-blue); text-decoration: none; font-family: var(--font-display); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+    .static-page h1 { font-family: var(--font-display); font-size: 42px; margin-bottom: 24px; background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    
+    .section-title { font-family: var(--font-display); font-size: 24px; color: var(--text-primary); margin: 40px 0 16px 0; border-bottom: 1px solid var(--glass-border); padding-bottom: 8px; letter-spacing: 1px; text-transform: uppercase; }
+    .content-block { color: var(--text-secondary); line-height: 1.8; font-size: 16.5px; margin-bottom: 24px; }
+    .content-block p { margin-bottom: 16px; }
+    .content-block p strong { color: var(--text-primary); }
+    
+    .link-list { list-style: none; padding: 0; margin: 20px 0; }
+    .link-list li { margin-bottom: 12px; display: flex; align-items: center; gap: 10px; font-size: 16px; }
+    .link-list li::before { content: "⚡"; color: var(--accent-blue); font-size: 12px; }
+    
+    a { color: var(--accent-blue); text-decoration: none; transition: color var(--transition-fast); }
+    a:hover { color: var(--accent-cyan); text-decoration: underline; }
+    
+    .back-home { display: inline-flex; align-items: center; margin-bottom: 40px; color: var(--accent-blue); text-decoration: none; font-family: var(--font-display); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; transition: color var(--transition-fast), transform var(--transition-fast); }
+    .back-home:hover { color: var(--accent-cyan); transform: translateX(-4px); }
+    
+    .card-box { background: var(--glass); border: 1px solid var(--glass-border); border-radius: var(--radius-md); padding: 24px; margin: 32px 0; }
+    .card-box h3 { font-family: var(--font-display); color: var(--text-primary); font-size: 18px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+    .card-box p { color: var(--text-secondary); line-height: 1.6; font-size: 15px; margin-bottom: 12px; }
+    
+    .contact-box { border-top: 1px dashed var(--glass-border); padding-top: 32px; margin-top: 48px; text-align: center; }
+    .contact-box p { color: var(--text-secondary); font-size: 15px; margin-bottom: 12px; }
+    .email-link { color: var(--accent-pink); font-weight: 600; text-decoration: none; transition: color var(--transition-fast); }
+    .email-link:hover { color: var(--accent-blue); text-decoration: underline; }
   </style>
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2987113216122318"
+     crossorigin="anonymous"></script>
 </head>
 <body>
   <div class="static-page">
     <a href="/" class="back-home">← Back to Games</a>
     <h1>About Frybahn</h1>
+    
     <div class="content-block">
-      <p>Frybahn was born from a simple idea: gaming should be instant, free, and accessible to everyone with a web browser. Our mission is to bridge the gap between high-quality indie titles and players looking for immediate entertainment.</p>
-      <p>Inspired by the sleek, immersive interfaces of modern gaming consoles, we built Frybahn to be more than just a list of links. It's a curated experience designed to showcase the incredible talent of the browser gaming community.</p>
+      <p>
+        If you search for a "web gaming portal" on any search engine, you'll run into a familiar pattern: dozens of identical, ad-heavy mirror sites loaded with massive Unity builds. They take forever to load, hog your CPU, and are completely compiled and closed off from anyone who wants to see how they work. To make matters worse, they are often packed with intrusive video ads.
+      </p>
+      <p>
+        <strong>Frybahn</strong> was built to solve a personal itch. I wanted a clean, lightweight space to play classic browser games coded in pure HTML and JavaScript—such as the creations built for the annual JS13K game jams. These are games you can actually inspect, tweak, and learn from.
+      </p>
+    </div>
+
+    <h2 class="section-title">How It Was Created</h2>
+    <div class="content-block">
+      <p>
+        The project started simple: a handful of MIT or unlicensed web games served from a local Python HTTP server, shared with friends via an ngrok tunnel. 
+      </p>
+      <p>
+        Scaling it up from there was straightforward. I package the games inside a static directory layout, list their metadata in a single JSON file (<code>data/games.json</code>) which serves as our "database", and render them inside sandboxed iframes using a PlayStation-inspired dark glassmorphism UI. The portal is so lightweight that it can comfortably run on a Pentium 3 PC running Puppy Linux.
+      </p>
+    </div>
+
+    <div class="card-box">
+      <h3>The Full Write-Up</h3>
+      <p>If you're interested in the back-story, developer rants on Unity bloatware, and the step-by-step setup behind the portal, you can read the article on Dev.to:</p>
+      <a href="https://dev.to/sarthakganguly/unity-begone-56kc" target="_blank" rel="noopener">Read "Unity begone" on Dev.to →</a>
+    </div>
+
+    <h2 class="section-title">Documentation & Resources</h2>
+    <p class="content-block" style="margin-bottom: 0;">
+      If you want to explore the project code or contribute your own games to the catalog:
+    </p>
+    <ul class="link-list">
+      <li>Read the project <a href="/README.md">README.md</a></li>
+      <li>Check out our <a href="/developers.html">Developer Submission Guide</a></li>
+      <li>Browse the Frequently Asked Questions on the <a href="/faq.html">FAQ Page</a></li>
+    </ul>
+
+    <div class="contact-box">
+      <p>
+        Have questions, feedback, or want to discuss code changes? Open a ticket on our GitHub repository.
+      </p>
+      <p>
+        For direct inquiries or fallback developer contact, email me at 
+        <a href="mailto:sganguly@sgownblog.com" class="email-link">sganguly@sgownblog.com</a> or visit my website at 
+        <a href="https://thecodepost.org/" target="_blank" rel="noopener">thecodepost.org</a>.
+      </p>
     </div>
   </div>
 </body>
