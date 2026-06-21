@@ -95,4 +95,12 @@
   <url><loc>https://frybahn.com/game/cat-goric</loc><lastmod>2026-06-21</lastmod><priority>0.7</priority></url>
   <url><loc>https://frybahn.com/game/death-game</loc><lastmod>2026-06-21</lastmod><priority>0.7</priority></url>
   <url><loc>https://frybahn.com/game/duszki</loc><lastmod>2026-06-21</lastmod><priority>0.7</priority></url>
+
+  <!-- Blog Posts -->
+  <url><loc>https://frybahn.com/blog/posts/behind-the-tech-stack</loc><lastmod>2026-06-21</lastmod><priority>0.6</priority></url>
+  <url><loc>https://frybahn.com/blog/posts/resisting-the-bloat</loc><lastmod>2026-06-21</lastmod><priority>0.6</priority></url>
+  <url><loc>https://frybahn.com/blog/posts/the-magic-of-constraints</loc><lastmod>2026-06-21</lastmod><priority>0.6</priority></url>
+
+  <!-- Author Profiles -->
+  <url><loc>https://frybahn.com/author/sarthak-ganguly</loc><lastmod>2026-06-21</lastmod><priority>0.5</priority></url>
 </urlset>

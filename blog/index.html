@@ -3,20 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Developer Blog — Frybahn</title>
-  <meta name="description" content="Read our developer blog detailing our thoughts on Unity WebGL alternatives, dynamics of lightweight browser portals, and coding constraints." />
+  <title>Developer Blog — Page 1 — Frybahn</title>
+  <meta name="description" content="Read our developer blog detailing our thoughts on Unity WebGL alternatives, lightweight browser gaming, and coding constraints. Page 1." />
   <link rel="canonical" href="https://frybahn.com/blog" />
 
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://frybahn.com/blog" />
-  <meta property="og:title" content="Developer Blog — Frybahn" />
-  <meta property="og:description" content="Read our developer blog detailing our thoughts on lightweight browser gaming, dynamic SEO, and coding constraints." />
+  <meta property="og:title" content="Developer Blog — Page 1 — Frybahn" />
+  <meta property="og:description" content="Read our developer blog detailing our thoughts on lightweight browser gaming and dynamic SEO." />
   <meta property="og:image" content="https://frybahn.com/data/icon.svg" />
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Developer Blog — Frybahn" />
+  <meta name="twitter:title" content="Developer Blog — Page 1 — Frybahn" />
   <meta name="twitter:description" content="Read our developer blog detailing our thoughts on lightweight browser gaming." />
   <meta name="twitter:image" content="https://frybahn.com/data/icon.svg" />
 
@@ -40,6 +40,9 @@
     .post-content p { margin-bottom: 16px; }
     .post-content p:last-child { margin-bottom: 0; }
     .post-content strong { color: var(--text-primary); }
+    
+    .blog-pagination a { transition: color var(--transition-fast); }
+    .blog-pagination a:hover { color: var(--accent-cyan) !important; }
   </style>
 
   <!-- Google AdSense -->
@@ -51,33 +54,46 @@
     <a href="/" class="back-home">← Back to Games</a>
     <h1>Developer Blog</h1>
     
-    <article class="blog-post">
-      <div class="post-meta">June 11, 2026 · Essay</div>
-      <h2>Resisting the Bloat: Why We Built Frybahn</h2>
-      <div class="post-content">
-        <p>If you search for web gaming portals today, you will be met with a wall of commercial clones running heavy, closed-off builds that hog memory and take ages to load. Many of these portals rely on bloated WebGL engines that compile to hundreds of megabytes. Running a simple puzzle game should not send your CPU fan spinning into overdrive or require downloading a game engine run-time just to render a grid.</p>
-        <p><strong>Frybahn</strong> was born out of a desire for a cleaner, faster web. By hosting pure HTML5 and JavaScript creations—primarily those written under the tight constraints of game jams like JS13K—we offer games that load instantly and operate efficiently even on low-end hardware. We believe that web gaming should be open, inspectable, and incredibly lightweight.</p>
-      </div>
-    </article>
+    <div class="blog-posts-list">
+      
+      <article class="blog-post">
+        <div class="post-meta">2026-06-11 · Essay</div>
+        <h2><a href="/blog/posts/resisting-the-bloat" style="color: var(--text-primary); text-decoration: none; transition: color var(--transition-fast);">Resisting the Bloat: Why We Built Frybahn</a></h2>
+        <div class="post-content">
+          <p>If you search for web gaming portals today, you will be met with a wall of commercial clones running heavy, closed-off builds that hog memory. Here is why we built Frybahn.</p>
+          <p style="margin-top: 16px; font-size: 14px; font-weight: 600; color: var(--accent-blue);">
+            By <a href="/author/sarthak-ganguly" style="color: var(--accent-blue); text-decoration: none; border-bottom: 1px dashed rgba(64,156,255,0.4);">Sarthak Ganguly</a>
+          </p>
+        </div>
+      </article>
+    
 
-    <article class="blog-post">
-      <div class="post-meta">May 28, 2026 · Technical</div>
-      <h2>Behind the Tech Stack: Dynamic SEO in a Single Page App</h2>
-      <div class="post-content">
-        <p>Building a Single Page Application (SPA) usually comes with a major SEO tradeoff. Crawlers often struggle with dynamically loaded content, leading to poor page ranking. In building Frybahn's game details overlay, we wanted a seamless path-based router that feels like an instant navigation overlay but remains completely friendly to search engines.</p>
-        <p>We solved this by pairing Nginx's fallback directive (<code>try_files</code>) with a custom ES6 router. When a user or crawler accesses a path like <code>/game/pacman</code> directly, Nginx transparently serves our main shell, and our routing module updates the document title, meta descriptions, and Open Graph tags. Finally, we dynamically append a JSON-LD structured data block to the document head to ensure search engines recognize the software configuration. The result is a clean, instant transition for users and indexable structured pages for bots.</p>
-      </div>
-    </article>
+      <article class="blog-post">
+        <div class="post-meta">2026-05-28 · Technical</div>
+        <h2><a href="/blog/posts/behind-the-tech-stack" style="color: var(--text-primary); text-decoration: none; transition: color var(--transition-fast);">Behind the Tech Stack: Dynamic SEO in a Single Page App</a></h2>
+        <div class="post-content">
+          <p>Building a Single Page Application (SPA) usually comes with a major SEO tradeoff. Crawlers often struggle with dynamically loaded content. Here is how we solved it in Frybahn.</p>
+          <p style="margin-top: 16px; font-size: 14px; font-weight: 600; color: var(--accent-blue);">
+            By <a href="/author/sarthak-ganguly" style="color: var(--accent-blue); text-decoration: none; border-bottom: 1px dashed rgba(64,156,255,0.4);">Sarthak Ganguly</a>
+          </p>
+        </div>
+      </article>
+    
 
-    <article class="blog-post">
-      <div class="post-meta">April 15, 2026 · Game Dev</div>
-      <h2>The Magic of Constraints: What 13KB Can Teach Us</h2>
-      <div class="post-content">
-        <p>One of the most inspiring events in the modern gamedev landscape is the annual JS13KGames competition. Developers are challenged to build complete, playable web games within a zip file no larger than 13,312 bytes. With no external assets or remote libraries allowed, developers must squeeze textures, audio synths, maps, and logic into a space smaller than a standard email attachment.</p>
-        <p>This extreme limitation yields incredible creativity. Without the room for pre-built engines, developers write highly optimized 2D and WebGL renderers and build procedural generators that build landscapes and sounds on the fly. Games like <code>q1k3</code> (a fully featured 3D shooter reminiscent of Quake) or <code>underrun</code> (a sci-fi tactical twin-stick shooter) prove that limits are not barriers to quality; rather, they are a catalyst for building some of the most elegant, compact code on the web today.</p>
-      </div>
-    </article>
+      <article class="blog-post">
+        <div class="post-meta">2026-04-15 · Game Dev</div>
+        <h2><a href="/blog/posts/the-magic-of-constraints" style="color: var(--text-primary); text-decoration: none; transition: color var(--transition-fast);">The Magic of Constraints: What 13KB Can Teach Us</a></h2>
+        <div class="post-content">
+          <p>One of the most inspiring events in the modern gamedev landscape is the annual JS13KGames competition. Developers are challenged to build complete, playable web games within a zip file no larger than 13,312 bytes.</p>
+          <p style="margin-top: 16px; font-size: 14px; font-weight: 600; color: var(--accent-blue);">
+            By <a href="/author/sarthak-ganguly" style="color: var(--accent-blue); text-decoration: none; border-bottom: 1px dashed rgba(64,156,255,0.4);">Sarthak Ganguly</a>
+          </p>
+        </div>
+      </article>
+    
+    </div>
 
+    
   </div>
 
   <!-- ── FOOTER ── -->

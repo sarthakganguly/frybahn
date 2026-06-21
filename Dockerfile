@@ -19,6 +19,8 @@ COPY styles/          /usr/share/nginx/html/styles/
 COPY scripts/         /usr/share/nginx/html/scripts/
 COPY data/            /usr/share/nginx/html/data/
 COPY games/           /usr/share/nginx/html/games/
+COPY blog/            /usr/share/nginx/html/blog/
+COPY author/          /usr/share/nginx/html/author/
 
 # Expose port
 EXPOSE 90

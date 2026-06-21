@@ -65,6 +65,30 @@ for (const game of games) {
   }
 }
 
+// 4. Dynamic blog post deep link endpoints node list
+const blogPostsDir = path.resolve(__dirname, '../blog/posts');
+if (fs.existsSync(blogPostsDir)) {
+  const posts = fs.readdirSync(blogPostsDir).filter(f => f.endsWith('.html')).map(f => f.slice(0, -5));
+  if (posts.length > 0) {
+    xml += '\n  <!-- Blog Posts -->\n';
+    for (const post of posts) {
+      xml += `  <url><loc>${BASE_URL}/blog/posts/${post}</loc><lastmod>${today}</lastmod><priority>0.6</priority></url>\n`;
+    }
+  }
+}
+
+// 5. Dynamic author profile endpoints node list
+const authorDir = path.resolve(__dirname, '../author');
+if (fs.existsSync(authorDir)) {
+  const authorsList = fs.readdirSync(authorDir).filter(f => f.endsWith('.html')).map(f => f.slice(0, -5));
+  if (authorsList.length > 0) {
+    xml += '\n  <!-- Author Profiles -->\n';
+    for (const author of authorsList) {
+      xml += `  <url><loc>${BASE_URL}/author/${author}</loc><lastmod>${today}</lastmod><priority>0.5</priority></url>\n`;
+    }
+  }
+}
+
 xml += '</urlset>\n';
 
 // Write target build output
