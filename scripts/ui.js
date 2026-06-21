@@ -145,13 +145,15 @@ export function renderNavCategories(games) {
   nav.innerHTML = '';
 
   cats.forEach(cat => {
-    const btn = document.createElement('button');
+    const btn = document.createElement('a');
     btn.className = 'nav-cat-btn';
     btn.textContent = cat === 'all' ? 'All Games' : cat.charAt(0).toUpperCase() + cat.slice(1);
     btn.dataset.cat  = cat;
+    btn.href = `/category/${cat}`;
     if (cat === state.get('activeCategory')) btn.classList.add('active');
 
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
       navigate(`/category/${cat}`);
     });
 

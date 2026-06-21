@@ -4,20 +4,20 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Privacy Center — Frybahn</title>
-  <meta name="description" content="Your privacy matters. Learn how Frybahn handles your data and our commitment to a tracker-free gaming experience." />
+  <meta name="description" content="Your privacy matters. Learn how Frybahn handles your data, third-party cookies, Google AdSense, and CCPA/GDPR compliance." />
   <link rel="canonical" href="https://frybahn.com/privacy.html" />
 
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://frybahn.com/privacy.html" />
   <meta property="og:title" content="Privacy Center — Frybahn" />
-  <meta property="og:description" content="Your privacy matters. Learn how Frybahn handles your data." />
+  <meta property="og:description" content="Your privacy matters. Learn how Frybahn handles your data, third-party advertising cookies, and CCPA/GDPR consumer rights." />
   <meta property="og:image" content="https://frybahn.com/data/icon.svg" />
 
   <!-- Twitter -->
   <meta property="twitter:card" content="summary" />
   <meta property="twitter:title" content="Privacy Center — Frybahn" />
-  <meta property="twitter:description" content="Your privacy matters. Learn how Frybahn handles your data." />
+  <meta property="twitter:description" content="Your privacy matters. Learn how Frybahn handles your data, third-party advertising cookies, and CCPA/GDPR consumer rights." />
   <meta property="twitter:image" content="https://frybahn.com/data/icon.svg" />
 
   <link rel="stylesheet" href="/styles/main.css" />
@@ -26,7 +26,12 @@
     .static-page h1 { font-family: var(--font-display); font-size: 42px; margin-bottom: 32px; background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     .privacy-block { margin-bottom: 32px; background: var(--glass); padding: 24px; border-radius: var(--radius-md); border: 1px solid var(--glass-border); }
     .privacy-block h3 { font-family: var(--font-display); font-size: 20px; color: var(--text-primary); margin-bottom: 12px; }
-    .privacy-block p { color: var(--text-secondary); line-height: 1.6; }
+    .privacy-block p { color: var(--text-secondary); line-height: 1.6; margin-bottom: 12px; }
+    .privacy-block p:last-child { margin-bottom: 0; }
+    .privacy-block ul { margin-left: 20px; margin-bottom: 12px; color: var(--text-secondary); line-height: 1.6; }
+    .privacy-block ul li { margin-bottom: 6px; }
+    .privacy-block a { color: var(--accent-blue); text-decoration: none; transition: color var(--transition-fast); }
+    .privacy-block a:hover { color: var(--accent-cyan); text-decoration: underline; }
     .back-home { display: inline-block; margin-bottom: 40px; color: var(--accent-blue); text-decoration: none; font-family: var(--font-display); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
   </style>
 
@@ -40,18 +45,73 @@
     <h1>Privacy Center</h1>
     
     <div class="privacy-block">
-      <h3>No Registration, No Tracking</h3>
-      <p>Frybahn does not require you to create an account or provide any personal information. We do not use persistent tracking cookies or collect data on your gaming habits.</p>
+      <h3>No Registration & Personal Data Philosophy</h3>
+      <p>At Frybahn, we believe in instant, friction-free gaming. We do not require user accounts, email registration, logins, or the input of personal contact information to play any games on our portal. We do not natively collect, request, or store your name, email address, physical location, or billing details.</p>
     </div>
 
     <div class="privacy-block">
-      <h3>Local Storage</h3>
-      <p>Some games may use your browser's local storage to save high scores or game progress. This data remains on your device and is never sent to our servers.</p>
+      <h3>Google AdSense & Third-Party Advertising Disclosures</h3>
+      <p>We monetize Frybahn using advertisement links and banners served by Google AdSense and other third-party networks. To provide AdSense compliance, please review the following disclosures regarding how advertisements are served on this website:</p>
+      <ul>
+        <li><strong>DART Cookies:</strong> Google, as a third-party vendor, uses cookies to serve ads on Frybahn. Google's use of advertising cookies enables it and its partners to serve targeted advertisements to our users based on their visits to this site and other websites on the Internet.</li>
+        <li><strong>Personalized Advertising:</strong> Third-party advertising vendors and networks may serve advertisements on this website. These companies may use cookies, web beacons, and other tracking technologies to measure advertisement effectiveness and display ads tailored to your browsing interests.</li>
+      </ul>
     </div>
 
     <div class="privacy-block">
-      <h3>External Links</h3>
-      <p>Games may contain links to the developers' websites or source code. Please be aware that once you leave Frybahn, you are subject to the privacy policies of those external sites.</p>
+      <h3>Opt-Out Rights & Cookie Disabling Options</h3>
+      <p>You have full control over cookie tracking. You can choose to decline personalized advertising or block cookies entirely using the options below:</p>
+      <ul>
+        <li><strong>Google Ads Settings:</strong> You can opt out of Google's personalized advertising entirely by visiting the <a href="https://adssettings.google.com" target="_blank" rel="noopener">Google Ads Settings</a> page.</li>
+        <li><strong>Third-Party Opt-Out:</strong> You can opt out of a third-party vendor's use of cookies for personalized advertising by visiting the <a href="https://optout.aboutads.info" target="_blank" rel="noopener">AboutAds Info Portal</a> or the <a href="https://optout.networkadvertising.org" target="_blank" rel="noopener">Network Advertising Initiative (NAI) Opt-Out Page</a>.</li>
+        <li><strong>Browser Configuration:</strong> You can configure your browser (such as Google Chrome, Mozilla Firefox, Apple Safari, or Microsoft Edge) to refuse all cookies, or to notify you when a cookie is set. Consult your browser's "Help" documentation to adjust these configurations.</li>
+      </ul>
+    </div>
+
+    <div class="privacy-block">
+      <h3>Local Storage Utilisation</h3>
+      <p>Many of the single-page browser games featured on Frybahn utilize the browser's <code>localStorage</code> or <code>sessionStorage</code> API to save gameplay states, settings, and local high scores. This data is stored strictly on your local device and is never transmitted, processed, or saved on Frybahn's servers.</p>
+    </div>
+
+    <div class="privacy-block">
+      <h3>Log Files & Traffic Analytics</h3>
+      <p>Like most static file web servers, our host system automatically maintains standard access log files. These files log non-identifiable technical data, including:</p>
+      <ul>
+        <li>Internet Protocol (IP) addresses (anonymized in log structures)</li>
+        <li>Browser User-Agent strings and operating system types</li>
+        <li>Referring pages, exit pages, and date/time timestamps</li>
+      </ul>
+      <p>We use this data solely to monitor server health, mitigate malicious automated traffic, debug platform errors, and evaluate general category usage trends.</p>
+    </div>
+
+    <div class="privacy-block">
+      <h3>European Union General Data Protection Regulation (GDPR)</h3>
+      <p>For players residing within the European Economic Area (EEA), we process all data in compliance with GDPR. Under GDPR, you hold the following rights regarding any data third parties or trackers collect:</p>
+      <ul>
+        <li><strong>Right to Object:</strong> You can object to the processing of your browsing patterns for personalized advertising.</li>
+        <li><strong>Consent Management:</strong> You can revoke advertising consents at any time using the opt-out links listed in this policy or via our cookie consent settings.</li>
+        <li><strong>Information Queries:</strong> Because we hold no login or profile data, we cannot access, delete, or package individual records unless you supply a specific network identifier.</li>
+      </ul>
+    </div>
+
+    <div class="privacy-block">
+      <h3>California Consumer Privacy Act (CCPA)</h3>
+      <p>For California consumers, the CCPA grants you specific choices regarding your personal data. We do not sell your personal details. However, third-party advertising partners may collect device identifiers and browsing data to serve relevant ads. Under CCPA, you hold the following rights:</p>
+      <ul>
+        <li><strong>Right to Know:</strong> The categories of personal data collected about you (primarily device IDs and cookies for ad-tech).</li>
+        <li><strong>Right to Opt-Out:</strong> The right to direct third-party networks not to "sell" or "share" your personal information for targeted advertisements. You can exercise this opt-out option by adjusting your cookie selections or visiting the AboutAds CCPA portal.</li>
+        <li><strong>Right to Deletion & Non-Discrimination:</strong> Request deletion of collected browsing logs and receive equal access to all games without penalty.</li>
+      </ul>
+    </div>
+
+    <div class="privacy-block">
+      <h3>Third-Party Games & External Links</h3>
+      <p>This privacy center policy applies exclusively to Frybahn. The games listed on our platform are loaded inside sandboxed <code>&lt;iframe&gt;</code> frames to prevent unauthorized cross-origin access. However, some games may contain external links to developers' home pages or code repositories. We are not responsible for the privacy practices, content, or cookie tracking implemented on external domains.</p>
+    </div>
+
+    <div class="privacy-block">
+      <h3>Contact Information</h3>
+      <p>If you have any questions about this Privacy Policy, your CCPA/GDPR consumer choices, or the cookies used on our gaming portal, please contact us via email at: <a href="mailto:privacy@frybahn.com">privacy@frybahn.com</a>.</p>
     </div>
   </div>
 </body>
