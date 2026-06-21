@@ -199,17 +199,22 @@ posts.forEach((post, index) => {
     : '';
 
   // JSON-LD Structured Data Schema
+  const authorPerson = {
+    "@type": "Person",
+    "name": author.name,
+    "url": `${BASE_URL}/author/${author.slug}`
+  };
+  if (author.socials && Object.keys(author.socials).length > 0) {
+    authorPerson.sameAs = Object.values(author.socials);
+  }
+
   const schema = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": post.metadata.title,
     "description": post.metadata.description,
     "datePublished": post.metadata.date,
-    "author": {
-      "@type": "Person",
-      "name": author.name,
-      "url": `${BASE_URL}/author/${author.slug}`
-    },
+    "author": authorPerson,
     "publisher": {
       "@type": "Organization",
       "name": "Frybahn",
@@ -271,16 +276,21 @@ Object.values(authors).forEach(author => {
   }).join(' · ');
 
   // ProfilePage schema
+  const mainEntityPerson = {
+    "@type": "Person",
+    "name": author.name,
+    "jobTitle": author.role,
+    "description": author.bio,
+    "url": `${BASE_URL}/author/${author.slug}`
+  };
+  if (author.socials && Object.keys(author.socials).length > 0) {
+    mainEntityPerson.sameAs = Object.values(author.socials);
+  }
+
   const schema = {
     "@context": "https://schema.org",
     "@type": "ProfilePage",
-    "mainEntity": {
-      "@type": "Person",
-      "name": author.name,
-      "jobTitle": author.role,
-      "description": author.bio,
-      "url": `${BASE_URL}/author/${author.slug}`
-    }
+    "mainEntity": mainEntityPerson
   };
 
   const htmlOutput = authorTemplate
