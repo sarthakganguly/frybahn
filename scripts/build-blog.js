@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 // Constants
-const POSTS_PER_PAGE = 6;
+const POSTS_PER_PAGE = 20;
 const BASE_URL = 'https://frybahn.com';
 
 // Paths
@@ -309,6 +309,16 @@ for (let i = 1; i <= totalPages; i++) {
   const startIndex = (i - 1) * POSTS_PER_PAGE;
   const pagePosts = listingPosts.slice(startIndex, startIndex + POSTS_PER_PAGE);
 
+  // Compute rel link relation tags for pagination
+  let paginationHeaderTags = '';
+  if (i > 1) {
+    const prevUrl = i === 2 ? '/blog' : `/blog/page/${i - 1}`;
+    paginationHeaderTags += `  <link rel="prev" href="${BASE_URL}${prevUrl}" />\n`;
+  }
+  if (i < totalPages) {
+    paginationHeaderTags += `  <link rel="next" href="${BASE_URL}/blog/page/${i + 1}" />\n`;
+  }
+
   // Generate cards
   const postsCardsMarkup = pagePosts.map(p => {
     const author = authors[p.metadata.author] || { name: "Frybahn Editor", slug: "editor" };
@@ -350,6 +360,7 @@ for (let i = 1; i <= totalPages; i++) {
   <title>Developer Blog — Page ${i} — Frybahn</title>
   <meta name="description" content="Read our developer blog detailing our thoughts on Unity WebGL alternatives, lightweight browser gaming, and coding constraints. Page ${i}." />
   <link rel="canonical" href="https://frybahn.com/blog${i === 1 ? '' : `/page/${i}`}" />
+${paginationHeaderTags}
 
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
@@ -466,5 +477,67 @@ for (let i = 1; i <= totalPages; i++) {
     console.log(`Compiled paginated blog page ${i} at /blog/page/${i}.html`);
   }
 }
+
+// -------------------------------------------------------------
+// Auto-Sync Noscript Fallback List in index.html
+// -------------------------------------------------------------
+
+function syncIndexNoscriptFallback() {
+  const gamesJsonPath = path.resolve(__dirname, '../data/games.json');
+  const indexHtmlPath = path.resolve(__dirname, '../index.html');
+  
+  if (!fs.existsSync(gamesJsonPath) || !fs.existsSync(indexHtmlPath)) return;
+  
+  const games = JSON.parse(fs.readFileSync(gamesJsonPath, 'utf8'));
+  
+  const categoryLabels = {
+    arcade: "Arcade Games",
+    puzzle: "Puzzle Games",
+    racing: "Racing Games",
+    action: "Action Games",
+    strategy: "Strategy Games"
+  };
+  
+  const grouped = {};
+  for (const game of games) {
+    const cat = game.category || 'arcade';
+    if (!grouped[cat]) grouped[cat] = [];
+    grouped[cat].push(game);
+  }
+  
+  let noscriptHtml = '        <noscript>\n';
+  noscriptHtml += '          <div class="noscript-fallback">\n';
+  noscriptHtml += '            <h2>All Available Games (No-JS Fallback List)</h2>\n';
+  
+  const categoriesOrder = ['arcade', 'puzzle', 'racing', 'action', 'strategy'];
+  for (const cat of categoriesOrder) {
+    const catGames = grouped[cat] || [];
+    if (catGames.length === 0) continue;
+    
+    const label = categoryLabels[cat] || (cat.charAt(0).toUpperCase() + cat.slice(1) + " Games");
+    noscriptHtml += `            <h3>${label}</h3>\n`;
+    noscriptHtml += '            <ul>\n';
+    for (const game of catGames) {
+      noscriptHtml += `              <li><a href="/game/${game.slug}">${game.emoji} ${game.title}</a></li>\n`;
+    }
+    noscriptHtml += '            </ul>\n';
+  }
+  
+  noscriptHtml += '          </div>\n';
+  noscriptHtml += '        </noscript>';
+  
+  let indexHtml = fs.readFileSync(indexHtmlPath, 'utf8');
+  const noscriptRegex = /<noscript>[\s\S]*?<\/noscript>/;
+  if (noscriptRegex.test(indexHtml)) {
+    indexHtml = indexHtml.replace(noscriptRegex, noscriptHtml);
+    fs.writeFileSync(indexHtmlPath, indexHtml, 'utf8');
+    console.log('Successfully auto-synchronized games <noscript> fallback in index.html');
+  } else {
+    console.warn('Warning: Could not find <noscript> block in index.html to sync.');
+  }
+}
+
+// Run sync
+syncIndexNoscriptFallback();
 
 console.log('Blog compilation build completed successfully!');
