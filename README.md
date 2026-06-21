@@ -30,11 +30,13 @@ docker compose down
 frybahn/
 ├── index.html              # Main SPA shell (Grid + Hero + Info)
 ├── about.html              # Static 'About Us' page
-├── faq.html               # Static 'FAQ' page
+├── faq.html               # Static 'FAQ' page with FAQPage schema
 ├── developers.html        # Static 'For Developers' page
-├── privacy.html           # Static 'Privacy Center' page
+├── privacy.html           # Static 'Privacy Center' page (AdSense compliant)
 ├── robots.txt             # Search engine crawler instructions
 ├── sitemap.xml            # Search engine site map
+├── posts/                  # Source blog posts in raw Markdown format
+├── templates/              # Blog post and author profile master templates
 ├── styles/
 │   ├── main.css            # Core UI styles + design tokens + detail view
 │   └── animations.css      # All keyframes + entrance animations
@@ -42,18 +44,20 @@ frybahn/
 │   ├── app.js              # Entry point, overlay + routing coordination
 │   ├── state.js            # Reactive state store (pub/sub)
 │   ├── gameLoader.js       # Loads games.json, filter/sort logic
-│   ├── router.js           # Lightweight hash-based SPA router
+│   ├── router.js           # History API path-based clean router
 │   ├── ui.js               # Card/grid rendering + keyboard nav + detail populate
-│   └── utils.js            # Shared helpers (debounce, DOM, etc.)
+│   ├── utils.js            # Shared helpers (changeTagName, stripHtml, etc.)
+│   ├── build-blog.js       # Blog compiler: markdown parsing, E-E-A-T builder
+│   └── generate-sitemap.js # Sitemap generator: dynamic compilation
 ├── data/
 │   ├── games.json          # Game catalogue — the single source of truth
-│   └── icon.svg            # Brand logo (Road icon)
+│   ├── authors.json        # E-E-A-T author profile database
+│   └── icon.svg            # Brand logo
 ├── games/
-│   ├── pacman/             # Game folders...
-│   └── tetris/             # ...
+│   └── ...                 # Sandboxed game directories
 ├── docker/
 │   └── nginx.conf          # Custom nginx config with gzip + caching + SPA fallback
-├── Dockerfile
+├── Dockerfile              # Multi-stage compilation and deploy configurations
 └── README.md
 ```
 
@@ -129,18 +133,19 @@ docker compose up -d --build
 
 ## 🐳 Docker Details
 
-- **Base image:** `nginx:1.25-alpine`
+- **Compilation Pipeline:** Uses Stage 1 builder (`node:20-alpine`) to automate blog builds, fallback checklists auto-syncing, and sitemap generation dynamically on container launch.
+- **Serving Layer:** Uses Stage 2 runner (`nginx:1.25-alpine`) to host compiled static assets.
 - **Port:** `90`
 - **Gzip:** enabled for JS, CSS, JSON, fonts, SVG
-- **SPA Fallback:** Nginx handles `try_files` to ensure static pages and SPA routes work together.
+- **SPA Fallback:** Nginx handles `try_files` to ensure static directories (like `/blog` or `/author`) and client-side SPA paths resolve together.
 - **Health check:** `wget` ping every 30s
 
 ---
 
 ## 🏗️ Architecture Notes
 
-- **No build step.** Uses native ES6 modules.
-- **Routing:** Hash-based router (`#/game/:slug`, `#/play/:slug`, `#/category/:cat`) for SPA states.
+- **Static Build step:** Compiles markdown files and templates to physical files on Docker creation or deploy commands, preserving zero-backend serving constraints.
+- **Routing:** History API clean-url routing (`/game/:slug`, `/play/:slug`, `/category/:cat`) for SPA states, backed by Nginx fallbacks.
 - **State management:** Pub/sub store (`state.js`) for reactive UI updates.
 - **Isolation:** Game overlays use `<iframe sandbox="allow-scripts allow-same-origin">`.
 

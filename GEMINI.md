@@ -51,19 +51,21 @@ Below is the directory tree of the repository:
 frybahn/
 ├── index.html              # Main SPA (Single Page Application) shell
 ├── about.html              # Static Page: About Us
-├── faq.html               # Static Page: Frequently Asked Questions
+├── faq.html               # Static Page: Frequently Asked Questions & SEO Q&As
 ├── developers.html        # Static Page: Developer Submission Portal Guide
-├── privacy.html           # Static Page: Privacy Center Policy
-├── blog.html              # Static Page: Developer Dev Blog
-├── robots.txt             # SEO: Crawler Instructions
-├── sitemap.xml            # SEO: Sitemap indexes
-├── Dockerfile             # Containerization file (nginx-alpine based)
+├── privacy.html           # Static Page: Privacy Center Policy (AdSense compliant)
+├── robots.txt             # SEO: Crawler Instructions with iframe block
+├── sitemap.xml            # SEO: Generated sitemap indexes
+├── Dockerfile             # Containerization file (Multi-stage node + nginx builder)
 ├── docker-compose.yml     # Docker Compose orchestration
 ├── docker/
 │   └── nginx.conf          # Custom Nginx configuration with compression + routing
 ├── data/
 │   ├── games.json          # Main database of game meta information
+│   ├── authors.json        # Central E-E-A-T author profile database
 │   └── icon.svg            # Frybahn Vector Brand Logo
+├── posts/                  # Source blog posts in raw Markdown format
+├── templates/              # Blog post and author profile master templates
 ├── styles/
 │   ├── main.css            # Dark glassmorphism styles, CSS tokens, layout classes
 │   └── animations.css      # Keyframes for fade-ins, scales, and keyboard indicators
@@ -73,7 +75,9 @@ frybahn/
 │   ├── gameLoader.js       # JSON loader, category builders, sorters, filters
 │   ├── router.js           # History API pathname-based client-side router
 │   ├── ui.js               # Grid renderer, detail view populator, keyboard navigation
-│   └── utils.js            # General DOM manipulation & search input debouncing helpers
+│   ├── utils.js            # General DOM manipulation, changeTagName, and stripHtml helpers
+│   ├── build-blog.js       # Build script: Markdown-to-HTML parser, index builder & fallback auto-sync
+│   └── generate-sitemap.js # Build script: parses sitemap dynamically from games, posts and authors
 └── games/                  # Self-contained game directories (e.g. pacman, tetris, 2048)
 ```
 
@@ -327,9 +331,11 @@ Frybahn runs inside a lightweight Alpine container behind an optimized static fi
     This fallback maps path routes (e.g. `/game/pacman` or `/category/arcade`) directly back to the index shell, letting the client-side router handle the view logic.
 
 ### Containerization (`Dockerfile` & `docker-compose.yml`)
-*   **Base Layer**: `nginx:1.25-alpine`.
+*   **Multi-Stage Build Architecture**:
+    *   **Stage 1 (Build Stage)**: Uses `node:20-alpine` to compile content. It copies all project assets, executes the blog/index builder (`node scripts/build-blog.js`), and generates the sitemap (`node scripts/generate-sitemap.js`). Any fallback lists (like the `<noscript>` game catalog inside `index.html`) are dynamically updated in place.
+    *   **Stage 2 (Serve Stage)**: Uses `nginx:1.25-alpine`. It extracts only the compiled HTML templates, script structures, layouts, and game files directly from Stage 1 into the serving root `/usr/share/nginx/html/`.
 *   **Healthcheck Directive**:
-    *   `HEALTHCHECK` calls `wget -qO- http://localhost:90/ || exit 1` every 30 seconds to monitor status.
+    *   `HEALTHCHECK` calls `wget -qO- http://localhost:90/ || exit 1` every 30 seconds to monitor container status.
 *   **Docker Compose Mapping**:
     *   Maps host port `90` to container port `90` for routing. Sets container restart policy to `unless-stopped`.
 
