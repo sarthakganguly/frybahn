@@ -51,3 +51,21 @@ export function el(tag, attrs = {}, ...children) {
   }
   return node;
 }
+
+export function stripHtml(str) {
+  if (!str) return '';
+  return str.replace(/<[^>]*>/g, '').trim();
+}
+
+export function changeTagName(el, newTagName) {
+  if (!el) return null;
+  const newEl = document.createElement(newTagName);
+  for (const attr of el.attributes) {
+    newEl.setAttribute(attr.name, attr.value);
+  }
+  while (el.firstChild) {
+    newEl.appendChild(el.firstChild);
+  }
+  el.parentNode.replaceChild(newEl, el);
+  return newEl;
+}

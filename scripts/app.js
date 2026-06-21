@@ -5,8 +5,49 @@
 import state from './state.js';
 import { loadGames, filterAndSort } from './gameLoader.js';
 import { renderGrid, renderNavCategories, updateResultsCount, initKeyboardNav, populateGameDetail } from './ui.js';
-import { debounce, qs, escapeHtml } from './utils.js';
+import { debounce, qs, escapeHtml, stripHtml, changeTagName } from './utils.js';
 import * as router from './router.js';
+
+const CATEGORY_META = {
+  all: {
+    title: "Play Free Browser Games Online — Frybahn",
+    description: "Play hundreds of free browser games instantly on Frybahn. No login, no downloads. Arcade, puzzle, racing, action, and strategy games."
+  },
+  arcade: {
+    title: "Free Arcade Games — Play Online on Frybahn",
+    description: "Relive the golden age of arcade gaming. Play free classic-style browser arcade games instantly on Frybahn, from grid-chasers to retro flight simulators."
+  },
+  puzzle: {
+    title: "Free Puzzle Games — Play Online on Frybahn",
+    description: "Challenge your brain with free online puzzle games on Frybahn. Play grid-sliding games, block-stacking challenges, and spatial reasoning puzzles."
+  },
+  racing: {
+    title: "Free Racing Games — Play Online on Frybahn",
+    description: "Speed down pseudo-3D highways and race against checkpoints. Play free browser racing games instantly on Frybahn."
+  },
+  action: {
+    title: "Free Action & Shooter Games — Play Online on Frybahn",
+    description: "Jump into the action with free retro shooters, platformers, and twin-stick challenges. Instant play browser action games on Frybahn."
+  },
+  strategy: {
+    title: "Free Strategy & Clicker Games — Play Online on Frybahn",
+    description: "Test your tactical skills with free online strategy games on Frybahn. Clicker games, battlefield commanders, and resource management puzzles."
+  }
+};
+
+function getCategoryMetadata(cat) {
+  if (CATEGORY_META[cat]) {
+    return CATEGORY_META[cat];
+  }
+  const formattedCat = cat
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+  return {
+    title: `Free ${formattedCat} Games — Play Online on Frybahn`,
+    description: `Play the best free browser-based ${formattedCat.toLowerCase()} games instantly on Frybahn. No downloads, no registration, no installation required.`
+  };
+}
 
 // ── GAME DETAIL OVERLAY ──────────────────
 
@@ -28,7 +69,19 @@ export function openGameDetails(game) {
   const metaDesc = document.querySelector('meta[name="description"]');
   if (metaDesc) {
     state.set('prevDesc', metaDesc.content);
-    metaDesc.content = game.description;
+    metaDesc.content = stripHtml(game.description);
+  }
+
+  // Demote homepage H1 hero title to H2
+  const heroTitle = qs('.hero-title');
+  if (heroTitle && heroTitle.tagName === 'H1') {
+    changeTagName(heroTitle, 'h2');
+  }
+
+  // Promote game details H2 title to H1
+  const detailTitle = qs('#detail-title');
+  if (detailTitle && detailTitle.tagName === 'H2') {
+    changeTagName(detailTitle, 'h1');
   }
 
   // Social tags and Canonical
@@ -50,7 +103,7 @@ export function openGameDetails(game) {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     "name": game.title,
-    "description": game.description,
+    "description": stripHtml(game.description),
     "applicationCategory": "GameApplication",
     "operatingSystem": "Web Browser",
     "url": gameUrl,
@@ -76,11 +129,11 @@ export function openGameDetails(game) {
   const ogTitle = document.querySelector('meta[property="og:title"]');
   if (ogTitle) ogTitle.content = newTitle;
   const ogDesc = document.querySelector('meta[property="og:description"]');
-  if (ogDesc) ogDesc.content = game.description;
+  if (ogDesc) ogDesc.content = stripHtml(game.description);
   const twTitle = document.querySelector('meta[property="twitter:title"]');
   if (twTitle) twTitle.content = newTitle;
   const twDesc = document.querySelector('meta[property="twitter:description"]');
-  if (twDesc) twDesc.content = game.description;
+  if (twDesc) twDesc.content = stripHtml(game.description);
   
   if (game.thumbnail) {
     const ogImg = document.querySelector('meta[property="og:image"]');
@@ -120,6 +173,16 @@ export function closeGameDetails() {
     document.querySelector('meta[property="twitter:description"]')?.setAttribute('content', originalDesc);
   }
 
+  // Restore Heading Hierarchy
+  const detailTitle = qs('#detail-title');
+  if (detailTitle && detailTitle.tagName === 'H1') {
+    changeTagName(detailTitle, 'h2');
+  }
+  const heroTitle = qs('.hero-title');
+  if (heroTitle && heroTitle.tagName === 'H2') {
+    changeTagName(heroTitle, 'h1');
+  }
+
   // Restore Canonical and Social URLs
   const originalUrl = window.location.origin + '/';
   document.querySelector('link[rel="canonical"]')?.setAttribute('href', state.get('prevCanonical') || originalUrl);
@@ -151,6 +214,16 @@ export function openGame(game) {
   overlay.classList.add('open');
   document.body.style.overflow = 'hidden';
 
+  // Inject noindex robots metadata to block thin/duplicate iframe screens from indexation
+  let robots = document.querySelector('meta[name="robots"]');
+  if (!robots) {
+    robots = document.createElement('meta');
+    robots.name = 'robots';
+    document.head.appendChild(robots);
+  }
+  state.set('prevRobots', robots.content);
+  robots.content = 'noindex, nofollow';
+
   // NEW: Hide the background from screen readers
   qs('#app').setAttribute('aria-hidden', 'true');
 
@@ -167,6 +240,17 @@ export function closeGame() {
   // Only restore scroll if we are not going into "Detail" state
   if (window.location.pathname.indexOf('/game/') === -1) {
     document.body.style.overflow = '';
+  }
+
+  // Restore or clean up robots tag
+  const robots = document.querySelector('meta[name="robots"]');
+  if (robots) {
+    const prevRobots = state.get('prevRobots');
+    if (prevRobots) {
+      robots.content = prevRobots;
+    } else {
+      robots.remove();
+    }
   }
 
   // NEW: Reveal the background to screen readers again
@@ -251,6 +335,25 @@ function switchCategory(cat) {
   if (window.location.pathname === '/' || window.location.pathname.startsWith('/category/')) {
      qs('#game-grid')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
+
+  // Update Category Meta Headers and Canonical URLs
+  const meta = getCategoryMetadata(cat);
+  document.title = meta.title;
+  
+  const metaDesc = document.querySelector('meta[name="description"]');
+  if (metaDesc) metaDesc.content = meta.description;
+
+  const canonical = document.querySelector('link[rel="canonical"]');
+  const catUrl = window.location.origin + (cat === 'all' ? '/' : `/category/${cat}`);
+  if (canonical) canonical.href = catUrl;
+
+  document.querySelector('meta[property="og:title"]')?.setAttribute('content', meta.title);
+  document.querySelector('meta[property="og:description"]')?.setAttribute('content', meta.description);
+  document.querySelector('meta[property="og:url"]')?.setAttribute('content', catUrl);
+  
+  document.querySelector('meta[property="twitter:title"]')?.setAttribute('content', meta.title);
+  document.querySelector('meta[property="twitter:description"]')?.setAttribute('content', meta.description);
+  document.querySelector('meta[property="twitter:url"]')?.setAttribute('content', catUrl);
 }
 
 // ── INIT ─────────────────────────────────
