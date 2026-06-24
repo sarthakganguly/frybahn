@@ -55,6 +55,8 @@ function parseInline(text) {
   escaped = escaped.replace(/\*(.*?)\*/g, '<em>$1</em>');
   // Inline Code: `code`
   escaped = escaped.replace(/`(.*?)`/g, '<code>$1</code>');
+  // Images: ![alt](url)
+  escaped = escaped.replace(/!\[(.*?)\]\((.*?)\)/g, '<img src="$2" alt="$1" />');
   // Links: [text](url) -> URL might contain & which gets escaped to &amp;, but that's fine.
   // We need to parse links correctly: match standard markdown link format
   escaped = escaped.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>');
