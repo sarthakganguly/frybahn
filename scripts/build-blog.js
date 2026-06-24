@@ -18,6 +18,14 @@ fs.mkdirSync(blogPostsOutputDir, { recursive: true });
 fs.mkdirSync(authorOutputDir, { recursive: true });
 fs.mkdirSync(path.resolve(__dirname, '../blog/page'), { recursive: true });
 
+// Copy blog assets if they exist
+const postsAssetsDir = path.join(postsDir, 'assets');
+const outputAssetsDir = path.join(blogPostsOutputDir, 'assets');
+if (fs.existsSync(postsAssetsDir)) {
+  fs.cpSync(postsAssetsDir, outputAssetsDir, { recursive: true });
+  console.log('Successfully copied blog post assets to public output directory.');
+}
+
 // Load authors dataset
 let authors = {};
 try {

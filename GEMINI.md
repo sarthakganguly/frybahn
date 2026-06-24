@@ -275,33 +275,76 @@ When a user opens `/game/:slug`, `app.js` updates meta headers in real-time to p
 *   **State Restoration**: All original headers are cached inside `state` upon opening the modal, and restored once the user closes the overlay and returns to `/`.
 
 ### Structured Data (JSON-LD) Schema
-Upon opening a game's detail view, the system dynamically generates and injects a structured schema script into the `<head>` of `index.html`:
+Frybahn implements comprehensive, interconnected structured data schemas across its pages to reinforce E-E-A-T and Search Console compliance:
 
-```json
-{
-  "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  "name": "Ghost Gobbler",
-  "description": "...game description...",
-  "applicationCategory": "GameApplication",
-  "operatingSystem": "Web Browser",
-  "url": "https://frybahn.com/game/pacman",
-  "image": "https://frybahn.com/data/icon.svg",
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": 4.7,
-    "bestRating": "5",
-    "ratingCount": 48210
-  },
-  "offers": {
-    "@type": "Offer",
-    "price": "0",
-    "priceCurrency": "USD"
-  }
-}
-```
+1. **Homepage WebSite Schema (`index.html`)**:
+   Declares the site name, URL, search box integration, publisher (`Organization` "Frybahn" with logo), and creator/author (`Person` "Sarthak Ganguly") linked recursively to his profile page and verified social profiles using `sameAs` attributes:
+   ```json
+   {
+     "@context": "https://schema.org",
+     "@type": "WebSite",
+     "name": "Frybahn",
+     "url": "https://frybahn.com/",
+     "publisher": {
+       "@type": "Organization",
+       "name": "Frybahn",
+       "logo": {
+         "@type": "ImageObject",
+         "url": "https://frybahn.com/data/icon.svg"
+       }
+     },
+     "author": {
+       "@type": "Person",
+       "name": "Sarthak Ganguly",
+       "url": "https://frybahn.com/author/sarthak-ganguly",
+       "sameAs": [
+         "https://github.com/sarthakganguly",
+         "https://x.com/thecodepost",
+         "https://www.thecodepost.org"
+       ]
+     },
+     "potentialAction": {
+       "@type": "SearchAction",
+       "target": "https://frybahn.com/?q={search_term_string}",
+       "query-input": "required name=search_term_string"
+     }
+   }
+   ```
 
-The script is tagged with `id="dynamic-game-schema"` and is removed from the DOM upon modal exit.
+2. **About Page Schema (`about.html`)**:
+   Provides an `AboutPage` schema linking the platform's target audience, description, organization details, and the platform creator (`creator` / `Person` Sarthak Ganguly) with their external portfolios.
+
+3. **Blog Posts (`BlogPosting`) & Author Profiles (`ProfilePage`)**:
+   Compiled at build-time using `scripts/build-blog.js`.
+   - **ProfilePage**: Declares the primary author details under `mainEntity` (type `Person`) with matching professional roles and their verified `sameAs` handles.
+   - **BlogPosting**: Features structured headline, publishing dates, publisher organization details, and author mappings that align exactly with the main author entity.
+
+4. **Dynamic Game Schema (`SoftwareApplication`)**:
+   Upon opening a game's detail view, the system dynamically generates and injects a structured schema script into the `<head>` of `index.html`:
+   ```json
+   {
+     "@context": "https://schema.org",
+     "@type": "SoftwareApplication",
+     "name": "Ghost Gobbler",
+     "description": "...game description...",
+     "applicationCategory": "GameApplication",
+     "operatingSystem": "Web Browser",
+     "url": "https://frybahn.com/game/pacman",
+     "image": "https://frybahn.com/data/icon.svg",
+     "aggregateRating": {
+       "@type": "AggregateRating",
+       "ratingValue": 4.7,
+       "bestRating": "5",
+       "ratingCount": 48210
+     },
+     "offers": {
+       "@type": "Offer",
+       "price": "0",
+       "priceCurrency": "USD"
+     }
+   }
+   ```
+   The script is tagged with `id="dynamic-game-schema"` and is removed from the DOM upon modal exit.
 
 ### Accessibility Features
 *   **Screen Reader Isolation**: Setting `aria-hidden="true"` on `#app` when a game is running inside `#game-overlay` ensures screen readers do not read contents of the home page underneath the active modal.

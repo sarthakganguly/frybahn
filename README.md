@@ -144,7 +144,7 @@ docker compose up -d --build
 
 ## 🏗️ Architecture Notes
 
-- **Static Build step:** Compiles markdown files and templates to physical files on Docker creation or deploy commands, preserving zero-backend serving constraints.
+- **Static Build step:** Compiles markdown files and templates to physical files, and copies blog post image assets from `posts/assets/` to public `blog/posts/assets/` on Docker creation or deploy commands, preserving zero-backend serving constraints.
 - **Routing:** History API clean-url routing (`/game/:slug`, `/play/:slug`, `/category/:cat`) for SPA states, backed by Nginx fallbacks.
 - **State management:** Pub/sub store (`state.js`) for reactive UI updates.
 - **Isolation:** Game overlays use `<iframe sandbox="allow-scripts allow-same-origin">`.

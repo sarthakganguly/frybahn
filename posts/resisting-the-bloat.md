@@ -32,7 +32,7 @@ This is 2026 June. The listing will change when you check this later, as more ga
 
 ### Interact with Me
 
-![Interact with me HTML5 game screenshot](./assets/interact-with-me.png)
+[![Interact with me HTML5 game screenshot](./assets/interact-with-me.png)]
 The game is relatively lightweight since this is a visual interactive horror game, created with [Renpy](https://www.renpy.org/). The SDK is not cheap in terms of resources (at 150 MB), considering that this is just a visual engine. 
 
 The end game of course needs to load the entire SDK. The images are other resources are all baked in the game \- the larger the story, the greater the load times. 
