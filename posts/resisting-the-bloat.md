@@ -20,7 +20,7 @@ Let us take an unbiased look at some of these games on the itch platform.
 
 Searching for the most popular options gives the following search results. 
 
-![][image1]
+![HTML5 Games on Itch](./assets/HTML5-games-itch.png)
 
 This is 2026 June. The listing will change when you check this later, as more games get added and the popularity of games change. However, we can evaluate the top 3 games in the list and check the following parameters. 
 
@@ -32,7 +32,7 @@ This is 2026 June. The listing will change when you check this later, as more ga
 
 ### Interact with Me
 
-![Interact with me HTML5 game screenshot][image2]  
+![Interact with me HTML5 game screenshot](./assets/interact-with-me.png)
 The game is relatively lightweight since this is a visual interactive horror game, created with [Renpy](https://www.renpy.org/). The SDK is not cheap in terms of resources (at 150 MB), considering that this is just a visual engine. 
 
 The end game of course needs to load the entire SDK. The images are other resources are all baked in the game \- the larger the story, the greater the load times. 
@@ -49,14 +49,14 @@ Now we go to the next game in the list.
 
 ### Enter [Freak Circus](https://garula.itch.io/the-freak-circus)
 
-![The Freak Circus game screenshot][image3]  
+![The Freak Circus game screenshot](./assets/freak-circus.png)  
 This is yet another visual story based game that used the [exact same engine as the one before](https://www.renpy.org/). 
 
 The gameplay is a little more engaging, and there are more than one endings. You can play this in the browser as well. But the download size exceeds 400 MB for this one. 
 
 If you are short on system memory, you may be out of luck with this one. 
 
-![browser task manager][image4]  
+![browser task manager](./assets/task-manager-browser.png)  
 The browser task manager shows about a quarter of a GigaByte taken up to play just one browser game. 
 
 This is closed source as well. This will be a noticeable pattern here.
@@ -64,7 +64,7 @@ This is closed source as well. This will be a noticeable pattern here.
 ### TADC Mind Games
 
 This [one took the cake in being weird](https://pitchbox-studios.itch.io/tadc-mind-games) beyond imagination.   
-![TADC mind games screenshot][image5]  
+![TADC mind games screenshot](./assets/TADC-mind-games.png)  
 I am not sure what to think of this, but the exact same Renpy engine is used here as well. 
 
 The download size exceeds 200 MB for the whole game, the demo is a tad lighter. 
@@ -91,10 +91,10 @@ We can do a Google Search.
 
 ## Other HTML5 games
 
-![html5 games online][image6]  
+![html5 games online](./assets/html5-games-online.png)  
 Lets go to one of the top 2 games here. 
 
-![gamersnacks screenshot][image7]  
+![gamersnacks screenshot](./assets/gamesnacks.png)  
 I am lucky that my ad blocker is enabled. Otherwise, look at the sneaky ad placement in between two game rows. 
 
 I have nothing against having advertisements. But theming them to look like the rest of your website to ensure you get more clicks? 
@@ -105,7 +105,7 @@ My biggest gripe is this.
 
 Take any game. Click on any of them and wait till they load. 
 
-![][image8]
+![Parking rush screenshot](./assets/parking-rush.png)
 
 Any source code for this?
 
@@ -113,10 +113,13 @@ Nada.
 
 This is not new. The name of the game is Parking Rush. 
 
-![][image9]  
+![Parking Rush elsewhere on Google](./assets/google-parking-rush.png)  
 The same game is hosted in a million different places. 
 
 The portals make money simply by getting clicks on ads. That is the only objective. 
 
 In fact, you can play the exact same game [on YouTube as well!](https://www.youtube.com/playables/UgkxcSxLjNYf58a2lLk63i35dludNosUUk3K)  
 
+## Enter Frybahn
+
+This is why I thought of creating a simple portal where anyone can come, play and learn about the simplest technologies that make up the web and appreciate what is possible within just a few KBs and minimal resources.
